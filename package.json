@@ -1,0 +1,36 @@
+{
+  "name": "bc-worf-girl",
+  "version": "1.0.0",
+  "description": "A plugin script for BondageClub",
+  "author": "Saki Saotome, lyudmila",
+  "license": "MIT",
+  "packageManager": "yarn@4.0.2",
+  "scripts": {
+    "build": "rollup -c src/rollup.config.js --bundleConfigAsCjs",
+    "dev": "npm run build && lite-server -c public/lite-server.config.js"
+  },
+  "dependencies": {
+    "bondage-club-mod-sdk": "^1.1.0"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.23.7",
+    "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-typescript": "^11.1.6",
+    "@types/core-js": "^2.5.8",
+    "@types/jest": "^29.5.11",
+    "@types/node": "^20.11.0",
+    "javascript-obfuscator": "^4.1.0",
+    "jest": "^29.7.0",
+    "lite-server": "^2.6.1",
+    "rollup": "^4.9.5",
+    "rollup-obfuscator": "^4.1.1",
+    "rollup-plugin-cleanup": "^3.2.1",
+    "rollup-plugin-copy": "^3.5.0",
+    "rollup-plugin-progress": "^1.1.2",
+    "ts-jest": "^29.1.1",
+    "tslib": "^2.6.2",
+    "typescript": "^5.3.3"
+  }
+}
