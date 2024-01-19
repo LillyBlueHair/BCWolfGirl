@@ -1,6 +1,5 @@
 .yarn
 .pnp.*
-yarn.lock
 docs
 .vscode
 public

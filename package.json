@@ -7,6 +7,7 @@
   "packageManager": "yarn@4.0.2",
   "scripts": {
     "build:local": "rollup -c src/rollup.config.js --configDebug --configDeploy 'http://localhost:3042/'",
+    "build": "rollup -c src/rollup.config.js",
     "serve": "http-server ./public -p 3042 --cors"
   },
   "dependencies": {

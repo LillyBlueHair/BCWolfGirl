@@ -1,0 +1,14 @@
+pages:
+  image: node:lts-buster
+  stage: deploy
+  variables:
+    GIT_SUBMODULE_STRATEGY: recursive
+  script:
+    - yarn set version stable
+    - yarn install
+    - yarn build --configDeploy $CI_PAGES_URL
+  artifacts:
+    paths:
+      - public
+  rules:
+    - if: $CI_COMMIT_BRANCH == $CI_DEFAULT_BRANCH
