@@ -49,6 +49,7 @@ const config_default = {
 }
 
 module.exports = cliArgs => {
+    console.log(`Deploying to ${cliArgs.configDeploy}`);
     if (cliArgs.configDebug === true) {
         return { ...config_default, plugins: plugins_debug(cliArgs.configDeploy) };
     }
