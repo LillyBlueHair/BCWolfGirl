@@ -15,24 +15,22 @@ export type OutfitItemType = {
         Name: string;
         Group: string;
     };
-    Color: string[] | (() => string[]);
+    Color: string[] | string;
     Craft: {
         Name: string;
         Description: string;
-        Lock: string | null;
-        Property: string;
-        OverridePriority: null | number;
-        Private: boolean;
+        Lock?: string;
+        Property?: string;
+        OverridePriority?: number;
+        TypeRecord?: { [k: string]: number };
+        ItemProperty?: ItemProperty;
     };
-    Property?: (() => ItemProperty) | ItemProperty;
 }
 
 export enum OutfitWorkState {
     worked, finished, interrupted
 }
 
-export type OutfitWork = (player: Character) => OutfitWorkState;
-export abstract class OutfitWorkSet {
-    static UndressWork: OutfitWork;
-    static RedressWork: OutfitWork;
+export abstract class OutfitWork {
+    abstract run(player: Character): OutfitWorkState;
 }

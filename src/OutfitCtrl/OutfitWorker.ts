@@ -3,28 +3,31 @@ import { OutfitWork, OutfitWorkState } from "./OutfitTypes";
 
 export class OutfitWorker {
     private readonly works: OutfitWork[] = [];
-
-    private readonly action: ChatRoomAction;
-
-    private readonly timeout;
-
-    constructor(action: ChatRoomAction) {
-        this.action = action;
-        this.timeout = setInterval(() => {
-            if (this.works.length > 0) {
-                console.log(this.works[0]);
+    private readonly _timer;
+    constructor(readonly interval: number = 1000) {
+        this._timer = setInterval(() => {
+            if (Player && this.works.length > 0) {
+                const state = this.works[0].run(Player);
+                if (state === OutfitWorkState.finished) {
+                    this.works.shift();
+                } else if (state === OutfitWorkState.interrupted) {
+                    this.works.length = 0;
+                }
             }
-        }, 1000);
+        }, interval);
     }
 
     push(work: OutfitWork) {
         this.works.push(work);
     }
 
-    pushMessageWork(msg: string) {
-        this.works.push(() => {
-            this.action.ServerAction(msg);
-            return OutfitWorkState.finished;
-        })
+    private static _global: OutfitWorker | undefined;
+    static get global(): OutfitWorker {
+        return OutfitWorker._global as OutfitWorker;
+    }
+
+    static set global(work: OutfitWorker) {
+        if (OutfitWorker._global) clearInterval(OutfitWorker._global._timer);
+        OutfitWorker._global = work;
     }
 }

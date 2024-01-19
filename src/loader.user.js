@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name Bondage Club Suitcase Harvester Loader
+// @name BC Wolf Girl (Loader)
 // @namespace https://www.bondageprojects.com/
 // @version 1.0
-// @description Bondage Club Suitcase Harvester
+// @description Bondage Club Wolf Girl Roleplay Script Loader
 // @author Saki Saotome
 // @match bondageprojects.elementfx.com/*/BondageClub/*
 // @match www.bondageprojects.elementfx.com/*/BondageClub/*
@@ -15,8 +15,12 @@
 
 (function () {
     "use strict";
-    const src = `https://dynilath.gitlab.io/SaotomeToyStoreVendor/WolfGirl/main.js?v=${Date.now()}`;
-    const loadScript = (url, okay, failed) => fetch(url).then(r => {if(r.ok) return r.text();
-        else throw new Error("Failed to load script")} ).then(okay).catch(() => { setTimeout(() => {failed(url, okay, failed)}, 15000); });
-    loadScript(src, text => {if (typeof BCWorlGril_Loaded === "undefined") eval(text);}, loadScript);
+    const src = `__DEPLOY_SITE__?v=${Date.now()}`;
+    if (typeof BCWorlGirl_Loaded === "undefined") {
+        const n = document.createElement("script");
+        n.setAttribute("type", "text/javascript");
+        n.setAttribute("src", src);
+        n.setAttribute("id", "WolfGirlLoader");
+        document.head.appendChild(n);
+    }
 })();

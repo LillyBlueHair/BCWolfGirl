@@ -6,8 +6,8 @@
   "license": "MIT",
   "packageManager": "yarn@4.0.2",
   "scripts": {
-    "build": "rollup -c src/rollup.config.js --bundleConfigAsCjs",
-    "dev": "npm run build && lite-server -c public/lite-server.config.js"
+    "build:local": "rollup -c src/rollup.config.js --configDebug --configDeploy 'http://localhost:3042/'",
+    "serve": "http-server ./public -p 3042 --cors"
   },
   "dependencies": {
     "bondage-club-mod-sdk": "^1.1.0"
@@ -17,10 +17,12 @@
     "@rollup/plugin-babel": "^6.0.4",
     "@rollup/plugin-commonjs": "^25.0.7",
     "@rollup/plugin-node-resolve": "^15.2.3",
+    "@rollup/plugin-terser": "^0.4.4",
     "@rollup/plugin-typescript": "^11.1.6",
     "@types/core-js": "^2.5.8",
     "@types/jest": "^29.5.11",
     "@types/node": "^20.11.0",
+    "http-server": "^14.1.1",
     "javascript-obfuscator": "^4.1.0",
     "jest": "^29.7.0",
     "lite-server": "^2.6.1",

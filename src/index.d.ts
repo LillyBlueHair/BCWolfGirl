@@ -1,4 +1,4 @@
 
 interface Window {
-    BCWorlGril_Loaded?: boolean;
+    BCWorlGirl_Loaded?: boolean;
 }

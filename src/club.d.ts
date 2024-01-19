@@ -18,7 +18,7 @@ interface Character {
     Appearance: Item[];
     AllowItem: boolean;
     AssetFamily: string;
-    MemberNumber?: number;
+    MemberNumber: number;
     GhostList?: number[];
     BlackList?: number[];
     FriendList?: number[];
@@ -129,7 +129,11 @@ interface ItemProperty {
     Effect?: string[];
     Hide?: string[];
     HideItem?: string[];
-    Type?: string | null;
+
+    TypeRecord?: {
+        [k: string]: number
+    };
+
     Expression?: string | null;
     InsertedBeads?: number;
     OverrideAssetEffect?: boolean;
@@ -156,23 +160,25 @@ interface ItemProperty {
     OverridePriority?: number | { [key: string]: number; }
 }
 
-interface ItemCraft {
-    Item: string,
+interface CraftingItem {
+    Item: string;
+    Name: string;
+    Description: string;
+    MemberName?: string;
+    MemberNumber?: number;
     Property: string,
-    Lock: string | null,
     Color: string,
-    Name: string,
-    Description: string,
-    MemberName: string,
-    MemberNumber: number,
-    OverridePriority: null | number,
+    Lock: string | "",
     Private: boolean,
+    Type?: string | null;
+    OverridePriority?: null | number,
+    ItemProperty?: ItemProperty
 }
 
 interface Item {
     Asset: Asset;
     Color: Color;
-    Craft?: ItemCraft;
+    Craft?: CraftingItem;
     Difficulty?: number;
     Property?: ItemProperty;
 }

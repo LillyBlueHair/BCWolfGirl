@@ -9,9 +9,6 @@ export const HTMLIDPrefix = "BCWG_";
 export const DebugMode = false;
 
 export const SettingName = "BCWolfGrilSetting";
+export const DataKeyName = "BCWolfGrilData";
 
 export const CUSTOM_ACTION_TAG = "SSCustomAction";
-
-export const Repository = "https://github.com/dynilath/BCResponsive"
-
-export const DataKeyName = "BCWolfGrilData";
