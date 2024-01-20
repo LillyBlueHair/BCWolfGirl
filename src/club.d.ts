@@ -331,6 +331,7 @@ declare function DialogMenuButtonBuild(C: Character): void;
 declare function DialogInventoryAdd(C: Character, Item: Item, boolean: isWorn): void;
 declare function DialogInventorySort();
 declare var DialogMenuButton: string[]
+declare var DialogFocusItem: Item | null;
 
 //Female3DCG.js
 interface Pose {
