@@ -1,3 +1,4 @@
+
 export type OutfitDressType = {
     Asset: {
         Name: string;
@@ -22,15 +23,8 @@ export type OutfitItemType = {
         Lock?: string;
         Property?: string;
         OverridePriority?: number;
-        TypeRecord?: { [k: string]: number };
+        TypeRecord?: TypeRecord;
         ItemProperty?: ItemProperty;
     };
 }
 
-export enum OutfitWorkState {
-    worked, finished, interrupted
-}
-
-export abstract class OutfitWork {
-    abstract run(player: Character): OutfitWorkState;
-}

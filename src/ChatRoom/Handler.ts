@@ -14,7 +14,6 @@ export function ChatRoomChatRawHandler(player: Character, data: IChatRoomMessage
         if (!d) return;
         ChatRoomActivity(player, sender, d);
     }
-
 }
 
 function ChatRoomChat(player: Character, sender: Character, msg: string) {

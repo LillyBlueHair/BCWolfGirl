@@ -74,21 +74,6 @@ export const OutfitItems: OutfitItemType[] = [
         Craft: {
             Name: "狼女口套外层附加模组 Mk.II",
             Property: "Comfy",
-            ItemProperty: {
-                OverridePriority: {
-                    "Straps": 1,
-                    "Nose": 1,
-                    "Mask": 1,
-                    "IconLock": 42,
-                    "IconMute": 1,
-                    "IconX": 1
-                }
-            },
-            TypeRecord: {
-                "n": 0,
-                "h": 0,
-                "s": 1
-            },
             Description: "口套外层附加的保护系统，更换了新一代复合材料，虽然厚度相较于一代狼女外层口套略有增加，不过并不用担心会有额外的重量。内置了空气检测与过滤系统，有效防止狼女吸入空气中有毒有害物质，必要时可完全封闭对外气路并使用内部压缩气罐进行十五分钟的安全呼吸。内置金属丝网与凯夫拉衬层以保护脆弱的面部，可选配柔性液晶屏幕在狼女面部显示特定图案或文字便于必要情况下的沟通，警用型号则可选安装信息素分析系统以追踪特定目标",
         }
     },
@@ -101,7 +86,6 @@ export const OutfitItems: OutfitItemType[] = [
         Craft: {
             Name: "狼女口套 Mk.II",
             Property: "Comfy",
-            OverridePriority: 1,
             Description: "用来防止装备口球时狼女不受控制的唾液撒得到处都是的口套，内嵌隔水层与导水带防止唾液堆积，且新增了肛门控制模块相同的转换器，可将流出的唾液转换成能量供给组件工作，保证面部随时透气干爽。口部全覆盖设计能防止狼女私自进食或在外误食，但不用担心穿戴后的喂食问题，口部装有进食辅助模组，主人授权解锁后能在不解开口套的情况下补充水分并饲喂流食，但请不要喂食推荐类型以外的食物，否则可能导致模组损坏及可能的窒息危险",
         }
     },
@@ -152,12 +136,7 @@ export const OutfitItems: OutfitItemType[] = [
         Craft: {
             Name: "狼女训练内裤 Mk.II",
             Property: "Arousing",
-            TypeRecord: {
-                "c": 0,
-                "i": 0,
-                "o": 2,
-                "s": 0
-            },
+            TypeRecord: { "c": 0, "i": 0, "o": 2, "s": 0 },
             Description: "新一代训练内裤已适配并接入中央控制组件，避免了上一代产品需要二次配置的尴尬。内置振动器修改了埋入位置，更加合理，不会在长时间工作下导致皮肤出现挫伤，而电击器则同样限制了高功率电击，虽作为惩处并无不可，但肆意妄为发泄情绪完全不顾狼女身体健康令我们不齿。具有快感侦测与高潮控制模块，能使狼女在高潮边缘停留或者毁灭高潮使其没有一点满足，有助于驯服狼女。且贴心的设计了开口，在主人允许时不会影响排泄和自慰",
         }
     },
@@ -182,6 +161,7 @@ export const OutfitItems: OutfitItemType[] = [
         Craft: {
             Name: "狼女手套 Mk.II",
             Property: "Comfy",
+            TypeRecord: { "typed": 1 },
             Description: "采用NMRB技术的狼女手套，摒弃了复杂且高功耗的ERMR，更加可靠，轻盈且节能，切换无指手套与正常手套模式的速度提升近三倍，且避免了出现故障或模式转换时供能不足导致的异常。内部衬垫也相应进行升级，增强了温度管理，降低夏季高温与冬季低温的影响，而触觉阻碍模块已移动至手腕锁定环中，避免反复撞击模块导致其失效的事件发生。可选的吸附攀爬模块也已成为标准配置，还可使得狼女手部近乎完全失去摩擦力，无法抓握物品",
         }
     },
@@ -194,9 +174,6 @@ export const OutfitItems: OutfitItemType[] = [
         Craft: {
             Name: "狼女智能腿环 Mk.II",
             Property: "Comfy",
-            TypeRecord: {
-                "typed": 2
-            },
             Description: "新的脚踝部分的拘束控制系统取消了攻击性感应的自动连接锁定功能，节省出更多空间以安装肢体行动控制器，联动步伐控制器组件后可完全掌控下肢的行动能力。而额外的动作姿态稳定系统能够在几乎所有极端情况下避免绝大多数身体姿态失稳摔倒甚至摔落的情况，虽有助于在某些特殊场景下提供额外安全性，但EIL公司并不推荐这么使用，更不建议私自改装，否则将使保修条款失效，EIL公司也不会为该道具如此应用场景出现的意外进行赔付",
         }
     },
@@ -209,9 +186,7 @@ export const OutfitItems: OutfitItemType[] = [
         Craft: {
             Name: "狼女足部训练系统 Mk.II",
             Property: "Comfy",
-            TypeRecord: {
-                "typed": 1
-            },
+            TypeRecord: { "typed": 1 },
             Description: "金属线织入衬层的高跟鞋，鞋跟内置电动结构能依据调教进度或奖惩规则改变鞋跟高度，底部则嵌入厚重的金属板作为配重增加稳定性同时能够被动训练腿部肌肉，以免长期拘束下导致肌肉萎缩，也装有动作感应器统计运动量，配合其他组件采集数据辅助中央控制器决策修改训练计划并依此修改营养餐配方加入微量元素以更好的维持身体健康。附加的神经干涉模块既能作为奖励大幅减少穿着高跟鞋行走带来的痛楚，也能联动步伐控制器接管狼女的移动",
         }
     },
@@ -224,9 +199,6 @@ export const OutfitItems: OutfitItemType[] = [
         Craft: {
             Name: "狼女步伐姿态控制器 Mk.II",
             Property: "Comfy",
-            TypeRecord: {
-                "typed": 2
-            },
             Description: "训练优雅行走姿态的步伐控制器，作为控制系统的一部分能连接并完全固定，最大幅度减小挣扎与逃脱能力，内置电刺激模块升级成带有触觉模拟的版本，能按摩大腿肌肉给予奖励，也能提供对情欲的撩拨与挑弄，肌肉力量限制器则换为能精细调节输出的型号，结合其他腿部组件完全接管移动能力，以便主人更多的玩法。虽然二代狼女套装全面采用复合材料减轻重量，但该模块仍使用合金制造，作为额外重量辅助稳定并预防长期拘束引发肌肉血管问题",
         }
     },
@@ -272,9 +244,7 @@ export const OutfitItems: OutfitItemType[] = [
         Craft: {
             Name: "狼女复合运动胸衣 Mk.II",
             Property: "Comfy",
-            TypeRecord: {
-                "typed": 2
-            },
+            TypeRecord: { "typed": 2 },
             Description: "电束肌肉编制的胸衣，搭载动作传感器实时调节姿态，轻薄柔软避免上一代过度紧束感同时又能充足支持胸部避免高速运动中胸部晃动带来的重心不稳，检测到尝试通过胸部自慰时会束紧硬化阻止狼女获得一丝快感，且能够进行按摩与电刺激保持乳房健康，也能作为奖励提供快感。内置生命体征监测器，实时发送生理数据终端，便于主人随时查看狼女身体状况。虽在测试时观测到一定丰胸效果，但并不具备普遍性，请不要随意刷入非EIL推荐的固件",
         }
     },
@@ -291,3 +261,70 @@ export const OutfitItems: OutfitItemType[] = [
 
 
 export const OutfitItemMap = new Map<string, OutfitItemType>(OutfitItems.map(e => [e.Asset.Group, e]));
+
+export const ToolsCrate: OutfitItemType = {
+    Asset: {
+        Name: "FuturisticCrate",
+        Group: 'ItemDevices'
+    },
+    Color: ["#222222", "Default", "#444444", "Default", "Default", "#FF1199", "Default", "#444444", "#555555", "#3B7F2C", "Default", "Default", "#BBBBFF", "Default"],
+    Craft: {
+        Name: "狼女训练设施维护舱 Mk.II",
+        Property: "Comfy",
+        Description: "基础的狼女转运存储舱新增了手术模块与组件维护模块，并储有充足材料以现场快速制作拘束具，新一代机械臂与扫描矩阵的加入令操作更为精细，拘束具也更加贴身舒适，而手术模块的安装则使得狼女即使受到了严重的创伤也不用担心生命危险，不过由于注射型纳米手术机器人的产量与良率着实不甚理想导致的巨大采购价格与高昂的维护成本，进而造成了该维护舱价格在黑市上水涨船高甚至袭击EIL小组的现象，该组件现将由EIL进行远程投放",
+    }
+}
+
+export const ToolsVisor: OutfitItemType = {
+    Asset: {
+        Name: "InteractiveVisor",
+        Group: 'ItemHead'
+    },
+    Color: ["#3A3A3A"],
+    Craft: {
+        Name: "狼女训练师多用途辅助终端 Mk.II",
+        Property: "Thin",
+        Description: "标准的辅助护目镜，连接着EIL数据库以检视狼女的生理状态身份信息等数据，一侧镜腿中的传感器被拆除更换成了辅助定位系统以远程投放部署训练设施维护舱，方便训练师随时对狼女进行组件维护与额外训练道具的加装，自然也方便训练师狩猎新的目标。内置了生物锁与自毁系统，在该辅助终端被取下后会自动锁定，在非EIL注册人员使用时会进行自毁以避免权限与信息的外漏，有效提升了EIL内部网络的安全性"
+    }
+}
+
+export const ToolsInjector: OutfitItemType = {
+    Asset: {
+        Name: "MedicalInjector",
+        Group: "ItemHandheld"
+    },
+    Color: ["#8F8F8F"],
+    Craft: {
+        Name: "狼女训练师多用途注射枪 Mk.II",
+        Property: "Comfy",
+        Description: "多用途注射枪，多数时候填充的是一次性身份芯片以对新狼女进行训练套件的初次安装与信息注册，但可替换成各种药剂，甚至是维护舱中使用的注射型纳米手术机器人，以在必要的时候进行急救。先进的注射枪不会在皮肤上留下针眼，甚至能够透过衣物进行注射，而极高的注射速度也不用担心目标挣扎时出现意外",
+    }
+}
+
+export const Tools = [
+    ToolsCrate,
+    ToolsVisor,
+    ToolsInjector,
+    {
+        Asset: {
+            Name: "GlassFilled",
+            Group: 'ItemHandheld'
+        },
+        Color: "Default",
+        Craft: {
+            Name: "情欲之水",
+            Description: "一杯水？大概吧"
+        }
+    },
+    {
+        Asset: {
+            Name: "GlassFilled",
+            Group: 'ItemHandheld'
+        },
+        Color: "Default",
+        Craft: {
+            Name: "特种红牛",
+            Description: "红牛，酒精，咖啡因，类固醇，大猩猩睾丸提取物等的混合物，Power！",
+        }
+    }
+]

@@ -121,6 +121,10 @@ interface Asset {
     Extended?: boolean;
 }
 
+interface TypeRecord {
+    [k: string]: number
+}
+
 interface ItemProperty {
     AllowActivity?: string[];
     Attribute?: string[];
@@ -130,9 +134,7 @@ interface ItemProperty {
     Hide?: string[];
     HideItem?: string[];
 
-    TypeRecord?: {
-        [k: string]: number
-    };
+    TypeRecord?: TypeRecord;
 
     Expression?: string | null;
     InsertedBeads?: number;
@@ -177,7 +179,7 @@ interface CraftingItem {
 
 interface Item {
     Asset: Asset;
-    Color: Color;
+    Color?: Color;
     Craft?: CraftingItem;
     Difficulty?: number;
     Property?: ItemProperty;
@@ -195,11 +197,13 @@ declare function LoginMaidItems(): void;
 declare function InventoryIsWorn(C: Character, AssetName: string, AssetGroup: string): boolean;
 declare function InventoryLock(C: Character, Item: Item, Lock: string, MemberNumber: number, Update: boolean = true)
 declare function InventoryShockExpression(C: Character): void;
+declare function InventoryGet(Character: Character, BodyPart: String): Item | null;
+
+declare function ExtendedItemSetOptionByRecord(C: Character, itemOrGroupName: Item | string, typeRecord?: TypeRecord, option?: { push?: boolean, C_Source?: Character, refresh?: boolean, properties?: ItemProperty }): void;
 
 declare function ServerSend(Message: string, Data: any): void;
 declare function CommonTime(): number;
 declare function ChatRoomSendLocal(Content: string, Timeout?: number): void;
-declare function InventoryGet(Character: Character, BodyPart: String): Item | null;
 declare function SpeechGetTotalGagLevel(C: Character, NoDeaf?: boolean): number;
 
 declare function LogQuery(QueryLogName: string, QueryLogGroup: string): boolean;
@@ -308,6 +312,8 @@ declare function CommonSetScreen(Module: string, Screen: string): void;
 
 //Dialog.js
 declare function DialogMenuButtonBuild(C: Character): void;
+declare function DialogInventoryAdd(C: Character, Item: Item, boolean: isWorn): void;
+declare function DialogInventorySort();
 declare var DialogMenuButton: string[]
 
 //Female3DCG.js
@@ -327,6 +333,8 @@ declare var AssetFemale3DCGExtended: ({ [k: string]: { [k: string]: any } });
 type ExtendedArchetype = 'modular' | 'typed' | 'vibrating' | 'variableheight';
 
 declare function InventoryAdd(C: Character, item: string, group: string, Push?: boolean = true);
+declare function DialogCanUseCraftedItem(C: Character, craft: CraftingItem): boolean;
+
 
 // Cafe.js
 declare var CafeIsHeadMaid: boolean;
@@ -351,22 +359,6 @@ declare function SpeechGarble(C: Character, CD: string, NoDeaf?: boolean): strin
 //Reputation.js
 declare function ReputationGet(RepType: string): number;
 declare function ReputationProgress(RepType: string, Value: number): void;
-
-//Draw.js
-declare var MouseX: number;
-declare var MouseY: number;
-declare var MainCanvas: CanvasRenderingContext2D;
-declare function DrawGetImage(Source: string): HTMLImageElement;
-declare function DrawButton(Left: number, Top: number, Width: number, Height: number, Label: string, Color: string, Image?: string, HoveringText?: string, Disabled?: boolean): void;
-declare function DrawCheckbox(Left: number, Top: number, Width: number, Height: number, Text: string, IsChecked: boolean, Disabled?: boolean, TextColor?: string, CheckImage?: string): void;
-declare function DrawText(Text: string, X: number, Y: number, Color: string, BackColor?: string): void;
-declare function DrawTextFit(Text: string, X: number, Y: number, Width: number, Color: string, BackColor?: string): void;
-declare function DrawTextWrap(Text: string, X: number, Y: number, Width: number, Height: number, ForeColor: string, BackColor?: string, MaxLine?: number): void;
-declare function DrawBackNextButton(Left: number, Top: number, Width: number, Height: number, Label: string, Color: string, Image?: string, BackText?: () => string, NextText?: () => string, Disabled?: boolean, ArrowWidth?: number): void;
-declare function DrawButtonHover(Left: number, Top: number, Width: number, Height: number, HoveringText: string): void;
-declare function DrawEmptyRect(Left: number, Top: number, Width: number, Height: number, Color: string, Thickness?: number): void;
-declare function DrawRect(Left: number, Top: number, Width: number, Height: number, Color: string): void;
-declare function DrawCharacter(C: Character, X: number, Y: number, Zoom: number, IsHeightResizeAllowed: boolean, DrawCanvas: CanvasRenderingContext2D): void;
 
 // skill.js
 declare function SkillProgress(SkillType: string, SkillProgress: number): void;
