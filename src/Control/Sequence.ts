@@ -138,7 +138,7 @@ function DressSequence(net: EILNetwork, player: Character, target: Character) {
             { group: 'ItemHands', option: { typed: 0 } }
         ]),
         new DelayWork(5000),
-        new MessageWork("action", "维护舱仓门打开，机械臂将狼女{target}推出，随后开始渐渐变得扭曲，透明，而狼女{target_id}身后小小的辅助定位信标则自动回到了训练师{player}的狼女训练师多用途辅助眼镜中", target),
+        new MessageWork("action", "维护舱仓门打开，机械臂将狼女{target_id}推出，随后开始渐渐变得扭曲，透明，而狼女{target_id}身后小小的辅助定位信标则自动回到了训练师{player}的狼女训练师多用途辅助眼镜中", target),
         new ItemRemoveWork(target, [ToolsCrate]),
     ]
     TimedWorker.global.push(work_sequence);

@@ -16,6 +16,12 @@ export class ArousalCtrl extends IController {
         else if (type === "deny") {
             oldtype["o"] = 2;
         }
+        const oldLock = pelvis.Property?.LockedBy;
+        const oldMember = pelvis.Property?.LockMemberNumber;
         ExtendedItemSetOptionByRecord(player, pelvis, oldtype);
+
+        // record setting is not correct for some reason
+        ExtendedItemInit(player, pelvis);
+        if (oldLock && oldMember) InventoryLock(player, pelvis, oldLock, oldMember);
     }
 }
