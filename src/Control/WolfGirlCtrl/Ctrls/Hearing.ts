@@ -1,6 +1,7 @@
 import { ModSDKModAPI } from "bondage-club-mod-sdk";
 import { IsPlayerWolfGirl } from "../Check";
 import { CtrlType, IController } from "../ICtrl";
+import { BCX_ORIGINAL_MESSAGE } from "../../../BCInterface";
 
 export class HearingCtrl extends IController {
     readonly target_item = ["ItemEars"];
@@ -19,7 +20,7 @@ export class HearingCtrl extends IController {
                 if (Player && Player.MemberNumber && IsPlayerWolfGirl(Player)) {
                     const item = Player.Appearance.find(e => e.Asset.Group.Name === "ItemEars") as Item;
                     const typed = item?.Property?.TypeRecord?.typed;
-                    if (typed !== undefined && typed > 1 && data.Dictionary) {
+                    if (typed !== undefined && typed > 0 && data.Dictionary) {
                         data.Dictionary = data.Dictionary.filter(e => e.Tag !== BCX_ORIGINAL_MESSAGE);
                     }
                 }
