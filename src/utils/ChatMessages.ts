@@ -41,13 +41,13 @@ export class ChatRoomAction {
     }
 
     public readonly LocalAction: (Content: string) => void;
-    public readonly ServerAction: (Content: string) => void;
-    public readonly ServerChat: (Content: string) => void;
+    public readonly SendAction: (Content: string) => void;
+    public readonly SendChat: (Content: string) => void;
 
     constructor(readonly CUSTOM_ACTION_TAG: string) {
         const DictItem = (Content: string) => { return { Tag: `MISSING PLAYER DIALOG: ${CUSTOM_ACTION_TAG}`, Text: Content } };
 
-        this.ServerAction = (Content: string) => {
+        this.SendAction = (Content: string) => {
             if (!Content || !Player || !Player.MemberNumber) return;
             ServerSend("ChatRoomChat", {
                 Content: CUSTOM_ACTION_TAG,
@@ -56,7 +56,7 @@ export class ChatRoomAction {
             });
         }
 
-        this.ServerChat = (Content: string) => {
+        this.SendChat = (Content: string) => {
             if (!Content || !Player || !Player.MemberNumber) return;
             ServerSend("ChatRoomChat", {
                 Content: Content,

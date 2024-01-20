@@ -3,15 +3,15 @@ import { TimedWork, TimedWorkState } from "./Worker";
 
 
 export class DelayWork extends TimedWork {
-    _delay: number;
+    _timeout: number;
     constructor(delay: number) {
         super();
-        this._delay = delay;
+        this._timeout = Date.now() + delay;
     }
 
     run(player: Character): TimedWorkState {
-        this._delay--;
-        return this._delay > 0 ? TimedWorkState.worked : TimedWorkState.finished;
+        if (Date.now() < this._timeout) return TimedWorkState.worked;
+        return TimedWorkState.finished;
     }
 }
 
@@ -38,8 +38,8 @@ export class CheckWork extends TimedWork {
         if (this.message) {
             const func = (() => {
                 if (this.message.mode === "local") return ChatRoomAction.instance.LocalAction;
-                if (this.message.mode === "chat") return ChatRoomAction.instance.ServerChat;
-                return ChatRoomAction.instance.ServerAction;
+                if (this.message.mode === "chat") return ChatRoomAction.instance.SendChat;
+                return ChatRoomAction.instance.SendAction;
             })()
             if (checked) func(this.message.passed);
             else func(this.message.failed)
