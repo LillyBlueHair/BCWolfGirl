@@ -8,7 +8,7 @@ type HandleFunction = (player: Character, sender: Character, data: ServerChatRoo
 export function ChatRoomHandler(): ChatRoomMessageHandler {
     return {
         Description: "WolfGirl Message Hook",
-        Priority: 400,
+        Priority: 10, // 100 = deprevation starts
         Callback: (data, sender, msg, metadata) => {
             if (Player && Player.MemberNumber) {
                 if (data.Type === "Chat" || data.Type === "Whisper") {

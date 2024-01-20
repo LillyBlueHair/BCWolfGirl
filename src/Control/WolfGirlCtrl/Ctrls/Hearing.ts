@@ -19,10 +19,8 @@ export class HearingCtrl extends IController {
                 if (Player && Player.MemberNumber && IsPlayerWolfGirl(Player)) {
                     const item = Player.Appearance.find(e => e.Asset.Group.Name === "ItemEars") as Item;
                     const typed = item?.Property?.TypeRecord?.typed;
-                    if (typed !== undefined) {
-                        if (typed > 1 && data.Dictionary)
-                            data.Dictionary = data.Dictionary.filter(e => e.Tag !== BCX_ORIGINAL_MESSAGE);
-                        else if (typed === 3) return;
+                    if (typed !== undefined && typed > 1 && data.Dictionary) {
+                        data.Dictionary = data.Dictionary.filter(e => e.Tag !== BCX_ORIGINAL_MESSAGE);
                     }
                 }
             }
