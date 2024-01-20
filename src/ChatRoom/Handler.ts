@@ -11,7 +11,7 @@ export function ChatRoomHandler(): ChatRoomMessageHandler {
         Priority: 400,
         Callback: (data, sender, msg, metadata) => {
             if (Player && Player.MemberNumber) {
-                if (data.Type === "Chat") {
+                if (data.Type === "Chat" || data.Type === "Whisper") {
                     if (!ChatRoomMapVisible || ChatRoomMapCharacterIsHearable(sender))
                         ChatRoomChat(Player, sender, data.Content);
                 }

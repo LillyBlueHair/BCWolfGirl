@@ -82,7 +82,7 @@ const cmds: CommandTemplate[] = [
 ]
 
 function Strip(src: string) {
-    return src.replace(/^[\s\p{P}]+/u, "");
+    return src.replace(/^[\s\p{P}]*/u, "");
 }
 
 export function RunCommands(player: Character, sender: number | Character, content: string) {

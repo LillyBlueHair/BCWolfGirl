@@ -21,6 +21,7 @@ function DressSequence(net: EILNetwork, player: Character, target: Character) {
             passed: "<INFO> 授权请求成功。",
             failed: "<ERROR> 授权失败，已中止过程。"
         }),
+        new DelayWork(5000),
         new MessageWork("chat-action", "已选定目标，检测到植入狼女身份芯片，正在打开远程设备连接"),
         new DelayWork(5000),
         new MessageWork("chat-action", "远程连接已激活，正在部署便携狼女训练设施维护舱"),
