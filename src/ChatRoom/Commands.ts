@@ -42,7 +42,7 @@ const cmds: CommandTemplate[] = [
     {
         match: /(关闭|基础|完全)手臂限制/,
         run(player, sender, content) {
-            return RunControls(player, "HandCtrl", (() => {
+            return RunControls(player, "HandsCtrl", (() => {
                 if (content[1] === "关闭") return "off";
                 if (content[1] === "基础") return "base";
                 return "total";

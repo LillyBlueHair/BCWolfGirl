@@ -1,7 +1,7 @@
 import { ModSDKModAPI } from "bondage-club-mod-sdk";
 import { ArousalCtrl } from "./Ctrls/Arousal";
 import { FeetCtrl } from "./Ctrls/Feet";
-import { HandCtrl } from "./Ctrls/Hand";
+import { HandsCtrl } from "./Ctrls/Hands";
 import { HearingCtrl } from "./Ctrls/Hearing";
 import { ToysCtrl } from "./Ctrls/Toys";
 import { VisionCtrl } from "./Ctrls/Vision";
@@ -9,14 +9,15 @@ import { VoiceCtrl } from "./Ctrls/Voice";
 import { CtrlType, IController } from "./ICtrl";
 import { FuturisticBypass } from "./FuturisticBypass";
 
-const CtrlList = [HearingCtrl, ArousalCtrl, FeetCtrl, HandCtrl, ToysCtrl, VisionCtrl, VoiceCtrl];
-
-export const WolfGirlCtrls: { name: string, ctrl: IController }[] = CtrlList.map(c => {
-    return {
-        name: c.name,
-        ctrl: new c
-    }
-})
+export const WolfGirlCtrls = [
+    { name: "HearingCtrl", ctrl: new HearingCtrl() },
+    { name: "ArousalCtrl", ctrl: new ArousalCtrl() },
+    { name: "FeetCtrl", ctrl: new FeetCtrl() },
+    { name: "HandsCtrl", ctrl: new HandsCtrl() },
+    { name: "ToysCtrl", ctrl: new ToysCtrl() },
+    { name: "VisionCtrl", ctrl: new VisionCtrl() },
+    { name: "VoiceCtrl", ctrl: new VoiceCtrl() },
+]
 
 export const WolfGirlCtrlMap = new Map(WolfGirlCtrls.map(c => [c.name, c.ctrl] as [string, IController]));
 
