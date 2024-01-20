@@ -23,7 +23,8 @@ export const WolfGirlCtrlMap = new Map(WolfGirlCtrls.map(c => [c.name, c.ctrl] a
 export function RunControls(player: Character, type: string, mode: CtrlType) {
     const ctrl = WolfGirlCtrlMap.get(type);
     if (!ctrl) return false;
-    const items = player.Appearance.filter(e => ctrl.target_item.includes(e.Asset.Group.Name));
+
+    const items = ctrl.target_item.map(e => InventoryGet(player, e)) as Item[];
     FuturisticBypass.instance.on = true;
     ctrl.set(player, items, mode);
     FuturisticBypass.instance.on = false;

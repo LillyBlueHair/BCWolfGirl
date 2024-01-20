@@ -6,7 +6,7 @@ export class HandCtrl extends IController {
         const [hand, arm] = item;
 
         if (type === "off") {
-            ExtendedItemSetOptionByRecord(player, hand, { typed: 0 });
+            ExtendedItemSetOptionByRecord(player, hand, { typed: 1 });
             ExtendedItemSetOptionByRecord(player, arm, { typed: 0 });
         }
         else if (type === "base") {
@@ -14,7 +14,7 @@ export class HandCtrl extends IController {
             ExtendedItemSetOptionByRecord(player, arm, { typed: 1 });
         }
         else if (type === "total") {
-            ExtendedItemSetOptionByRecord(player, hand, { typed: 1 });
+            ExtendedItemSetOptionByRecord(player, hand, { typed: 0 });
             ExtendedItemSetOptionByRecord(player, arm, { typed: 3 });
         }
     }
