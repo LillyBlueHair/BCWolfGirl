@@ -66,16 +66,24 @@ export class WaitResponseWork extends TimedWork {
 
     private _then: (player: Character, target: Character) => void;
 
+    private first_run: boolean = true;
+
     constructor(target: number | Character, options: WaitResponseWorkOptions, timeout: number, then: (player: Character, target: Character) => void,) {
         super();
         this._target = typeof target === "number" ? target : target.MemberNumber;
         this._options = options;
-        this._last_query = Date.now();
-        this._timeout = this._last_query + timeout;
+        this._last_query = 0;
+        this._timeout = timeout;
         this._then = then;
     }
 
     run(player: Character): TimedWorkState {
+        if (this.first_run) {
+            this.first_run = false;
+            this._timeout = Date.now() + this._timeout;
+            this._last_query = Date.now();
+        }
+
         const target = ChatRoomCharacter.find(c => c.MemberNumber === this._target);
         if (!target) return TimedWorkState.interrupted;
         if (ChatRoomChatLog == null) return TimedWorkState.interrupted;

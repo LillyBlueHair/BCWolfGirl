@@ -4,12 +4,18 @@ import { TimedWork, TimedWorkState } from "./Worker";
 
 export class DelayWork extends TimedWork {
     _timeout: number;
+    first_run: boolean = true;
     constructor(delay: number) {
         super();
-        this._timeout = Date.now() + delay;
+        this._timeout = delay;
     }
 
     run(player: Character): TimedWorkState {
+        if (this.first_run) {
+            this.first_run = false;
+            this._timeout = Date.now() + this._timeout;
+        }
+
         if (Date.now() < this._timeout) return TimedWorkState.worked;
         return TimedWorkState.finished;
     }
