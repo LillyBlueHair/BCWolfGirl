@@ -117,6 +117,8 @@ interface AssetGroup {
 interface Asset {
     Name: string;
     Description: string;
+    AllowLock: boolean;
+    Archetype: string;
     Group: AssetGroup;
     Extended?: boolean;
 }
@@ -278,23 +280,37 @@ interface ChatMessageDictionaryEntry {
 
 type ChatMessageDictionary = ChatMessageDictionaryEntry[];
 
-interface IChatRoomMessageBasic {
-    Content: MessageContentType;
-    Sender: number;
+interface ServerChatRoomMessageBase {
+    Sender?: number;
 }
 
-type MessageActionType = "Action" | "Chat" | "Whisper" | "Emote" | "Activity" | "Hidden" | "LocalMessage" | "ServerMessage" | "Status";
+type ServerChatRoomMessageType = "Action" | "Chat" | "Whisper" | "Emote" | "Activity" | "Hidden" |
+    "LocalMessage" | "ServerMessage" | "Status";
 
-interface IChatRoomMessage extends IChatRoomMessageBasic {
-    Type: MessageActionType;
+interface ServerChatRoomMessage extends ServerChatRoomMessageBase {
+    Target?: number;
+    Content: string;
+    Type: ServerChatRoomMessageType;
     Dictionary?: ChatMessageDictionary;
     Timeout?: number;
 }
 
 declare function ExtendedItemInit(C: Character, I: Item, Push: boolean = true, Refresh: boolean = true): boolean;
 
-declare function ChatRoomMessage(data: IChatRoomMessage): void;
+
+// ChatRoom
+interface ChatRoomMessageHandler {
+    Description?: string;
+    Priority: number;
+    Callback: (data: ServerChatRoomMessage, sender: Character, msg: string, metadata?: IChatRoomMessageMetadata)
+        => boolean | { msg?: string; skip?: (handler: ChatRoomMessageHandler) => boolean };
+}
+
+declare function ChatRoomRegisterMessageHandler(handler: ChatRoomMessageHandler): void;
+declare function ChatRoomMessage(data: ServerChatRoomMessage): void;
 declare function ChatRoomPublishCustomAction(msg: string, LeaveDialog: boolean, Dictionary: ChatMessageDictionary)
+declare var ChatRoomMapVisible: boolean;
+declare function ChatRoomMapCharacterIsHearable(C: Character): boolean;
 
 declare function PreferenceIsPlayerInSensDep(bypassblindness?: boolean): boolean;
 declare var InformationSheetPreviousModule: string;

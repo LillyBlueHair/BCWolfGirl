@@ -1,4 +1,3 @@
-import { EILManger } from "../../Asset";
 import { AppearanceUpdate } from "../../utils/Apperance";
 import { OutfitItemMap, OutfitItems } from "./Definition";
 import { OutfitItemType } from "./OutfitTypes";
@@ -14,21 +13,22 @@ function ExtractTarget(target: number | Character): number {
 export class ItemWearWork extends TimedWork {
     readonly _items: OutfitItemType[];
     readonly _target: number;
-    constructor(readonly items: string[] | OutfitItemType[], target: number | Character) {
+    readonly _craft?: { uid: number, name: string };
+    constructor(readonly items: string[] | OutfitItemType[], target: number | Character, craft?: { uid: number, name: string }) {
         super();
         if (items.length === 0) this._items = [];
         else if (typeof items[0] === "string") this._items = (items as string[]).map(e => OutfitItemMap.get(e) as OutfitItemType);
         else this._items = items as OutfitItemType[];
         this._target = ExtractTarget(target);
+        this._craft = craft;
     }
 
     run(player: Character): TimedWorkState {
         const target = ChatRoomCharacter.find(c => c.MemberNumber === this._target);
-        const crafter = EILManger.instance.getCraft();
-        if (!crafter || !target) return TimedWorkState.interrupted;
+        if (!target) return TimedWorkState.interrupted;
 
         this._items.forEach(outfit => {
-            const item = ItemFromOutfit(player, target, outfit, crafter);
+            const item = ItemFromOutfit(player, target, outfit, this._craft);
             if (!item) return;
             const oldIdx = target.Appearance.findIndex(e => e.Asset.Group === item.Asset.Group);
             if (oldIdx >= 0) target.Appearance[oldIdx] = item;
@@ -88,6 +88,7 @@ export class ItemRemoveWork extends TimedWork {
             })) new_app.push(e);
         });
         target.Appearance = new_app;
+        AppearanceUpdate(target);
         return TimedWorkState.finished;
     }
 }

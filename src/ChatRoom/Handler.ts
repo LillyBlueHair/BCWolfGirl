@@ -1,23 +1,40 @@
 import { InitDressSequence } from "../Control/Sequence";
+import { IsPlayerWolfGirl } from "../Control/WolfGirlCtrl";
 import { ActivityDeconstruct, ActivityInfo } from "../utils/ChatMessages";
+import { RunCommands } from "./Commands";
 
-type HandleFunction = (player: Character, sender: Character, data: IChatRoomMessage) => void;
+type HandleFunction = (player: Character, sender: Character, data: ServerChatRoomMessage) => void;
 
-export function ChatRoomChatRawHandler(player: Character, data: IChatRoomMessage) {
-    if (player.GhostList && player.GhostList.indexOf(data.Sender) >= 0) return;
-    let sender = ChatRoomCharacter.find(c => c.MemberNumber == data.Sender);
-    if (sender === undefined) return;
-    if (data.Type === "Chat") ChatRoomChat(player, sender, data.Content);
-    if (data.Type === "Activity") {
-        if (!data.Dictionary) return;
-        const d = ActivityDeconstruct(data.Dictionary);
-        if (!d) return;
-        ChatRoomActivity(player, sender, d);
+export function ChatRoomHandler(): ChatRoomMessageHandler {
+    return {
+        Description: "WolfGirl Message Hook",
+        Priority: 400,
+        Callback: (data, sender, msg, metadata) => {
+            if (Player && Player.MemberNumber) {
+                if (data.Type === "Chat") {
+                    if (!ChatRoomMapVisible || ChatRoomMapCharacterIsHearable(sender))
+                        ChatRoomChat(Player, sender, data.Content);
+                }
+                if (data.Type === "Activity" && data.Dictionary) {
+                    const d = ActivityDeconstruct(data.Dictionary);
+                    if (d) ChatRoomActivity(Player, sender, d);
+                }
+            }
+            return false;
+        },
     }
 }
 
-function ChatRoomChat(player: Character, sender: Character, msg: string) {
+export function BeepRawHandler(player: Character, data: { MemberNumber?: number, MemberName?: string, ChatRoom?: string, Message?: string }) {
+    if (!data.MemberName || !data.MemberNumber || !data.Message) return;
+    if (player.GhostList && player.GhostList.indexOf(data.MemberNumber) >= 0) return;
 
+    if (IsPlayerWolfGirl(player)) RunCommands(player, data.MemberNumber, data.Message);
+}
+
+
+function ChatRoomChat(player: Character, sender: Character, msg: string) {
+    if (IsPlayerWolfGirl(player)) RunCommands(player, sender, msg);
 }
 
 function ChatRoomActivity(player: Character, sender: Character, data: ActivityInfo) {

@@ -1,30 +1,23 @@
-import { EILManger } from "../Asset";
+import { EILNetwork } from "../Network";
+import { ChatRoomAction } from "../utils/ChatMessages";
 import { CheckWork, DelayWork } from "./CommonWork";
 import { MessageWork } from "./MessageWork";
-import { ToolsCrate, ToolsInjector, ToolsVisor } from "./OutfitCtrl/Definition";
-import { ClothRemoveWork, ClothRestoreWork, ItemLockWork, ItemOptionWork, ItemPropertyWork, ItemRemoveWork, ItemWearWork } from "./OutfitCtrl/OutfitWork";
-import { CheckItem } from "./OutfitCtrl/Utils";
+import { ToolsCrate, ToolsInjector, ToolsVisor } from "./OutfitCtrl";
+import { ClothRemoveWork, ClothRestoreWork, ItemLockWork, ItemOptionWork, ItemPropertyWork, ItemRemoveWork, ItemWearWork } from "./OutfitCtrl";
+import { CheckItem } from "./OutfitCtrl";
 import { TimedWork, TimedWorker } from "./Worker";
 
-export function InitDressSequence(player: Character, target: Character) {
-
-    if (!CheckItem(player, ToolsVisor) || !CheckItem(player, ToolsInjector)) return;
-
+function DressSequence(net: EILNetwork, player: Character, target: Character) {
     const clothing_stash: Item[] = [];
-
     TimedWorker.global.pause();
     const work_sequence: TimedWork[] = [
-        new MessageWork("local", "<INFO> 初始化 Wolf Girl 环境"),
-        new CheckWork(() => EILManger.isReady !== undefined, {
-            passed: "<INFO> 已经连接到 Wolf Girl 网络。",
-            failed: "<ERROR> Wolf Girl 网络断开，已中止过程。"
-        }),
         new CheckWork(() => {
-            if (EILManger.instance.isEIL(player.MemberNumber)) return true;
+            if (net.isEIL(player.MemberNumber)) return true;
             if (target.Ownership && target.Ownership.MemberNumber === player.MemberNumber) return true;
             if (target.Lovership && target.Lovership.some(e => e.MemberNumber === player.MemberNumber)) return true;
             return false;
         }, {
+            mode: "local",
             passed: "<INFO> 授权请求成功。",
             failed: "<ERROR> 授权失败，已中止过程。"
         }),
@@ -70,7 +63,7 @@ export function InitDressSequence(player: Character, target: Character) {
         new MessageWork("chat-action", "拘束自检中"),
         new DelayWork(5),
         new MessageWork("action", "一阵小小的震动为{target}带去些微微不足道的快感，锁定完成的滴声随即响起，这意味着什么呢？", target),
-        new ItemLockWork(['ItemVulvaPiercings', 'ItemVulva', 'ItemButt'], target),
+        new ItemLockWork(['ItemNipplesPiercings', 'ItemVulvaPiercings', 'ItemVulva', 'ItemButt'], target),
         new MessageWork("chat-action", "已确认安装到位并锁定"),
         new MessageWork("action", "如同托尼斯塔克在纽约的大楼外的自动维护廊道一般，机械臂们前后举起了数个似乎是战甲一样的装具，装具们早已有过预热，希望并不会为{target}带来寒意，也许吧？", target),
         new MessageWork("action", "胸部，躯干，胯部，温暖的包覆伴随着机械组合动作的细微震动，似乎只是一套极为贴身且足够舒适的内衣被采用这样的方式穿上了身体", target),
@@ -139,4 +132,16 @@ export function InitDressSequence(player: Character, target: Character) {
     ]
     TimedWorker.global.push(work_sequence);
     TimedWorker.global.resume();
+}
+
+
+export function InitDressSequence(player: Character, target: Character) {
+    if (!CheckItem(player, ToolsVisor) || !CheckItem(player, ToolsInjector)) return;
+    ChatRoomAction.instance.LocalAction("<INFO> 初始化 Wolf Girl 环境");
+    EILNetwork.Access().then(net => {
+        ChatRoomAction.instance.LocalAction("<INFO> 已经连接到 Wolf Girl 网络。");
+        DressSequence(net, player, target);
+    }).catch(e => {
+        ChatRoomAction.instance.LocalAction("<ERROR> Wolf Girl 网络断开，已中止过程。");
+    });
 }

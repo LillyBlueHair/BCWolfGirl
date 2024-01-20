@@ -15,7 +15,10 @@ export class DelayWork extends TimedWork {
     }
 }
 
+
+
 interface CheckWorkMessage {
+    mode: "local" | "chat" | "action";
     passed: string;
     failed: string;
 }
@@ -31,9 +34,15 @@ export class CheckWork extends TimedWork {
 
     run(player: Character): TimedWorkState {
         const checked = this._check(player);
+
         if (this.message) {
-            if (checked) ChatRoomAction.instance.LocalAction(this.message.passed);
-            else ChatRoomAction.instance.LocalAction(this.message.failed)
+            const func = (() => {
+                if (this.message.mode === "local") return ChatRoomAction.instance.LocalAction;
+                if (this.message.mode === "chat") return ChatRoomAction.instance.ServerChat;
+                return ChatRoomAction.instance.ServerAction;
+            })()
+            if (checked) func(this.message.passed);
+            else func(this.message.failed)
         }
         return checked ? TimedWorkState.finished : TimedWorkState.interrupted;
     }
