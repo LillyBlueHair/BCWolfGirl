@@ -45,7 +45,7 @@ function DressSequence(net: EILNetwork, player: Character, target: Character) {
         new DelayWork(5000),
         new MessageWork("chat-action", "{target}，请问你是否愿意接受训练成为一位狼女？请使用愿意与不愿意回答，而若愿意，这意味着你将失去足够多，但仍能保有少部分自主，亦或者对你而言，这意味着得到与拥有？", target),
         new WaitResponseWork(target, {
-            accept: /愿意/g,
+            accept: /([^不]|^)愿意/g,
             accept_msg: { mode: "chat-action", msg: "意愿已确认，正在继续安装流程" },
             reject: /不愿意/g,
             reject_msg: { mode: "action", msg: "而无论回答如何，维护舱终究仍在在忠实的执行程序，继续着安装进程" }

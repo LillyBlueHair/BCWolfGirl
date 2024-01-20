@@ -89,6 +89,7 @@ export class WaitResponseWork extends TimedWork {
                 result = 'reject';
                 break;
             }
+            this._last_query = Math.max(this._last_query, L.Time);
         };
 
         if (result === 'default' && Date.now() > this._timeout) {
