@@ -111,7 +111,7 @@ export class WaitResponseWork extends TimedWork {
 
         if (result === 'reject' && this._options.reject_msg) {
             SendByOptions(this._options.reject_msg);
-            return TimedWorkState.interrupted;
+            return TimedWorkState.finished;
         }
 
         if (result === 'timeout') {
