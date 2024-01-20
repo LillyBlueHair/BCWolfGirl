@@ -158,7 +158,7 @@ export class ItemLockWork extends TimedWork {
             if (target.Ownership && target.Ownership.MemberNumber === player.MemberNumber)
                 return "OwnerPadlock";
             if (target.Lovership && target.Lovership.some(e => e.MemberNumber === player.MemberNumber))
-                return "LoverPadlock";
+                return "LoversPadlock";
             return "ExclusivePadlock";
         })()
 
