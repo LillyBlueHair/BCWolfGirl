@@ -49,9 +49,14 @@ const config_default = {
 }
 
 module.exports = cliArgs => {
-    console.log(`Deploying to ${cliArgs.configDeploy}`);
+    // gitlab ci is not correctly passing project name
+    const deploy = cliArgs.configDeploy;
+    const name = cliArgs.configName;
+
+    const fix_deploy = deploy.substring(0, deploy.lastIndexOf("/")) + "/" + name;
+    console.log(`Deploying to ${fix_deploy}`);
     if (cliArgs.configDebug === true) {
-        return { ...config_default, plugins: plugins_debug(cliArgs.configDeploy) };
+        return { ...config_default, plugins: plugins_debug(fix_deploy) };
     }
-    return { ...config_default, plugins: plugins(cliArgs.configDeploy) };
+    return { ...config_default, plugins: plugins(fix_deploy) };
 };

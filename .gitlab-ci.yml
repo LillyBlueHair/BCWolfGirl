@@ -6,7 +6,7 @@ pages:
   script:
     - yarn set version stable
     - yarn install
-    - yarn build --configDeploy $CI_PAGES_URL
+    - yarn build --configDeploy $CI_PAGES_URL --configName $CI_PROJECT_NAME
   artifacts:
     paths:
       - public
