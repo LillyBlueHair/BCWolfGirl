@@ -6,22 +6,16 @@ import { HearingCtrl } from "./Ctrls/Hearing";
 import { ToysCtrl } from "./Ctrls/Toys";
 import { VisionCtrl } from "./Ctrls/Vision";
 import { VoiceCtrl } from "./Ctrls/Voice";
-import { CtrlType, IController } from "./ICtrl";
+import { ControllerType, CtrlType, IController } from "./ICtrl";
 import { FuturisticBypass } from "./FuturisticBypass";
+import { FCollarPublic } from "./Ctrls/FCollar";
 
-export const WolfGirlCtrls = [
-    { name: "HearingCtrl", ctrl: new HearingCtrl() },
-    { name: "ArousalCtrl", ctrl: new ArousalCtrl() },
-    { name: "FeetCtrl", ctrl: new FeetCtrl() },
-    { name: "HandsCtrl", ctrl: new HandsCtrl() },
-    { name: "ToysCtrl", ctrl: new ToysCtrl() },
-    { name: "VisionCtrl", ctrl: new VisionCtrl() },
-    { name: "VoiceCtrl", ctrl: new VoiceCtrl() },
-]
+const WolfGirlCtrls = [HearingCtrl, ArousalCtrl, FeetCtrl,
+    HandsCtrl, ToysCtrl, VisionCtrl, VoiceCtrl, FCollarPublic].map(c => new c);
 
-export const WolfGirlCtrlMap = new Map(WolfGirlCtrls.map(c => [c.name, c.ctrl] as [string, IController]));
+export const WolfGirlCtrlMap = new Map(WolfGirlCtrls.map(c => [c.type, c] as [ControllerType, IController]));
 
-export function RunControls(player: Character, type: string, mode: CtrlType) {
+export function RunControls(player: Character, type: ControllerType, mode: CtrlType) {
     const ctrl = WolfGirlCtrlMap.get(type);
     if (!ctrl) return false;
 
@@ -37,6 +31,6 @@ export function GetWolfGrilName(player: Character): string {
 }
 
 export function CtrlHook(mod: ModSDKModAPI) {
-    WolfGirlCtrls.forEach(item => item.ctrl.hook(mod));
+    WolfGirlCtrls.forEach(item => item.hook(mod));
     FuturisticBypass.init(mod);
 }

@@ -1,7 +1,8 @@
 import { CtrlType, IController } from "../ICtrl";
 
 export class VoiceCtrl extends IController {
-    target_item = ["ItemMouth"];
+    readonly type = "VoiceCtrl";
+    readonly target_item = ["ItemMouth"];
 
     set(player: Character, item: Item[], type: CtrlType): void {
         const [mouth] = item;

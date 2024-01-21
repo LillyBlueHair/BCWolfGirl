@@ -1,14 +1,10 @@
 import { AppearanceUpdate } from "../../utils/Apperance";
-import { OutfitItemMap, OutfitItems } from "./Definition";
+import { OutfitItemsMap, OutfitItems } from "./Definition";
 import { OutfitItemType } from "./OutfitTypes";
 import { TimedWork } from "../Worker";
 import { TimedWorkState } from "../Worker";
 import { ItemFromOutfit } from "./Utils";
-
-
-function ExtractTarget(target: number | Character): number {
-    return typeof target === "number" ? target : target.MemberNumber;
-}
+import { ExtractMemberNumber } from "../../utils/Character";
 
 export class ItemWearWork extends TimedWork {
     readonly _items: OutfitItemType[];
@@ -17,9 +13,9 @@ export class ItemWearWork extends TimedWork {
     constructor(readonly items: string[] | OutfitItemType[], target: number | Character, craft?: { uid: number, name: string }) {
         super();
         if (items.length === 0) this._items = [];
-        else if (typeof items[0] === "string") this._items = (items as string[]).map(e => OutfitItemMap.get(e) as OutfitItemType);
+        else if (typeof items[0] === "string") this._items = (items as string[]).map(e => OutfitItemsMap.get(e) as OutfitItemType);
         else this._items = items as OutfitItemType[];
-        this._target = ExtractTarget(target);
+        this._target = ExtractMemberNumber(target);
         this._craft = craft;
     }
 
@@ -50,7 +46,7 @@ export class ItemOptionWork extends TimedWork {
 
     constructor(target: number | Character, option: ItemOptionWorkItem[]) {
         super();
-        this._target = ExtractTarget(target);
+        this._target = ExtractMemberNumber(target);
         this._options = option;
     }
 
@@ -74,7 +70,7 @@ export class ItemRemoveWork extends TimedWork {
     constructor(target: number | Character, readonly items: (string | OutfitItemType)[]) {
         super();
         this._items = items;
-        this._target = ExtractTarget(target);
+        this._target = ExtractMemberNumber(target);
     }
 
     run(player: Character): TimedWorkState {
@@ -99,7 +95,7 @@ export class ClothRemoveWork extends TimedWork {
     constructor(target: number | Character, readonly stash: Item[]) {
         super();
         this._stash = stash;
-        this._target = ExtractTarget(target);
+        this._target = ExtractMemberNumber(target);
     }
 
     run(player: Character): TimedWorkState {
@@ -125,7 +121,7 @@ export class ClothRestoreWork extends TimedWork {
     constructor(target: number | Character, readonly stash: Item[]) {
         super();
         this._stash = stash;
-        this._target = ExtractTarget(target);
+        this._target = ExtractMemberNumber(target);
     }
 
     run(player: Character): TimedWorkState {
@@ -144,7 +140,7 @@ export class ItemLockWork extends TimedWork {
     constructor(readonly group: string[], target: number | Character, lock?: string) {
         super();
         this._group = group;
-        this._target = ExtractTarget(target);
+        this._target = ExtractMemberNumber(target);
         this._lock = lock;
     }
 
@@ -181,7 +177,7 @@ export class ItemPropertyWork extends TimedWork {
     readonly _items: ItemPropertyWorkItem[];
     constructor(target: number | Character, items: ItemPropertyWorkItem[]) {
         super();
-        this._target = ExtractTarget(target);
+        this._target = ExtractMemberNumber(target);
         this._items = items;
     }
 

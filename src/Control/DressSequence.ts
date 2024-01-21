@@ -9,13 +9,12 @@ import { TimedWork, TimedWorker } from "./Worker";
 
 function DressSequence(net: EILNetwork, player: Character, target: Character) {
     const clothing_stash: Item[] = [];
-    TimedWorker.global.pause();
     const work_sequence: TimedWork[] = [
         new CheckWork(() => {
-            if (net.isEIL(player.MemberNumber)) return true;
-            if (target.Ownership && target.Ownership.MemberNumber === player.MemberNumber) return true;
-            if (target.Lovership && target.Lovership.some(e => e.MemberNumber === player.MemberNumber)) return true;
-            return false;
+            if (net.isEIL(player.MemberNumber)) return CheckWork.Accepted;
+            if (target.Ownership && target.Ownership.MemberNumber === player.MemberNumber) return CheckWork.Accepted;
+            if (target.Lovership && target.Lovership.some(e => e.MemberNumber === player.MemberNumber)) return CheckWork.Accepted;
+            return CheckWork.Rejected;
         }, {
             mode: "local",
             passed: "<INFO> 授权请求成功。",
@@ -141,15 +140,14 @@ function DressSequence(net: EILNetwork, player: Character, target: Character) {
         new MessageWork("action", "维护舱仓门打开，机械臂将狼女{target_id}推出，随后开始渐渐变得扭曲，透明，而狼女{target_id}身后小小的辅助定位信标则自动回到了训练师{player}的狼女训练师多用途辅助眼镜中", target),
         new ItemRemoveWork(target, [ToolsCrate]),
     ]
-    TimedWorker.global.push(work_sequence);
-    TimedWorker.global.resume();
+    TimedWorker.global.push({ description: "Dress Sequence", works: work_sequence });
 }
 
 
 export function InitDressSequence(player: Character, target: Character) {
     if (!CheckItem(player, ToolsVisor) || !CheckItem(player, ToolsInjector)) return;
     ChatRoomAction.instance.LocalAction("<INFO> 初始化 Wolf Girl 环境");
-    EILNetwork.Access().then(net => {
+    EILNetwork.Wfetch().then(net => {
         ChatRoomAction.instance.LocalAction("<INFO> 已经连接到 Wolf Girl 网络。");
         DressSequence(net, player, target);
     }).catch(e => {

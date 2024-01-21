@@ -2,7 +2,8 @@ import { CtrlType, IController } from "../ICtrl";
 
 
 export class ToysCtrl extends IController {
-    target_item = [];
+    readonly type = "ToysCtrl";
+    readonly target_item = [];
     set(player: Character, item: Item[], type: CtrlType): void {
         const target = (() => {
             if (type === "open") return 2;

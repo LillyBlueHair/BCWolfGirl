@@ -1,7 +1,8 @@
 import { CtrlType, IController } from "../ICtrl";
 
 export class VisionCtrl extends IController {
-    target_item = ["ItemHead"];
+    readonly type = "VisionCtrl";
+    readonly target_item = ["ItemHead"];
 
     set(player: Character, item: Item[], type: CtrlType): void {
         const [visor] = item;

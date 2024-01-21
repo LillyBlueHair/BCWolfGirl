@@ -1,7 +1,8 @@
-import { InitDressSequence } from "../Control/Sequence";
+import { InitDressSequence } from "../Control/DressSequence";
 import { IsPlayerWolfGirl } from "../Control/WolfGirlCtrl";
 import { ActivityDeconstruct, ActivityInfo } from "../utils/ChatMessages";
 import { RunCommands } from "./Commands";
+import { CommandType } from "./ICmds";
 
 type HandleFunction = (player: Character, sender: Character, data: ServerChatRoomMessage) => void;
 
@@ -13,7 +14,7 @@ export function ChatRoomHandler(): ChatRoomMessageHandler {
             if (Player && Player.MemberNumber) {
                 if (data.Type === "Chat" || data.Type === "Whisper") {
                     if (!ChatRoomMapVisible || ChatRoomMapCharacterIsHearable(sender))
-                        ChatRoomChat(Player, sender, data.Content);
+                        ChatRoomChat(Player, sender, data.Content, data.Type);
                 }
                 if (data.Type === "Activity" && data.Dictionary) {
                     const d = ActivityDeconstruct(data.Dictionary);
@@ -29,12 +30,12 @@ export function BeepRawHandler(player: Character, data: { MemberNumber?: number,
     if (!data.MemberName || !data.MemberNumber || !data.Message) return;
     if (player.GhostList && player.GhostList.indexOf(data.MemberNumber) >= 0) return;
 
-    if (IsPlayerWolfGirl(player)) RunCommands(player, data.MemberNumber, data.Message);
+    if (IsPlayerWolfGirl(player)) RunCommands(player, data.MemberNumber, data.Message, "Beep");
 }
 
 
-function ChatRoomChat(player: Character, sender: Character, msg: string) {
-    if (IsPlayerWolfGirl(player)) RunCommands(player, sender, msg);
+function ChatRoomChat(player: Character, sender: Character, msg: string, type: CommandType) {
+    if (IsPlayerWolfGirl(player)) RunCommands(player, sender, msg, type);
 }
 
 function ChatRoomActivity(player: Character, sender: Character, data: ActivityInfo) {

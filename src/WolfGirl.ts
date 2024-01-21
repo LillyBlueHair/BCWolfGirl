@@ -18,8 +18,8 @@ import { CtrlHook } from './Control/WolfGirlCtrl';
     }
     const asset_url = this_script_src.substring(0, this_script_src.lastIndexOf('/') + 1) + 'assets/';
 
-    EILNetwork.init(asset_url);
     TimedWorker.init();
+    EILNetwork.init(asset_url);
     ChatRoomAction.init(CUSTOM_ACTION_TAG);
 
     const mod = bcMod.registerMod({ name: ModName, fullName: ModName, version: ModVersion });
@@ -34,6 +34,7 @@ import { CtrlHook } from './Control/WolfGirlCtrl';
         next(args);
         DialogInventoryBuildHandler(args[0] as Character, args[2] as boolean);
     });
+
     CtrlHook(mod);
 
     window.BCWorlGirl_Loaded = true;

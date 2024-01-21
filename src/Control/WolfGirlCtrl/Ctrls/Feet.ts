@@ -1,7 +1,8 @@
 import { IController, CtrlType } from "../ICtrl";
 
 export class FeetCtrl extends IController {
-    target_item = ["ItemFeet", "ItemLegs"];
+    readonly type = "FeetCtrl";
+    readonly target_item = ["ItemFeet", "ItemLegs"];
 
     set(player: Character, item: Item[], type: CtrlType): void {
         const [lower_leg, upper_leg] = item;

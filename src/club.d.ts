@@ -311,6 +311,7 @@ declare function ChatRoomMessage(data: ServerChatRoomMessage): void;
 declare function ChatRoomPublishCustomAction(msg: string, LeaveDialog: boolean, Dictionary: ChatMessageDictionary)
 declare var ChatRoomMapVisible: boolean;
 declare function ChatRoomMapCharacterIsHearable(C: Character): boolean;
+declare function ChatRoomLeave(): void;
 
 declare function PreferenceIsPlayerInSensDep(bypassblindness?: boolean): boolean;
 declare var InformationSheetPreviousModule: string;

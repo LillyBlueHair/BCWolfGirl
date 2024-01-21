@@ -260,7 +260,7 @@ export const OutfitItems: OutfitItemType[] = [
 ]
 
 
-export const OutfitItemMap = new Map<string, OutfitItemType>(OutfitItems.map(e => [e.Asset.Group, e]));
+export const OutfitItemsMap = new Map<string, OutfitItemType>(OutfitItems.map(e => [e.Asset.Group, e]));
 
 export const ToolsCrate: OutfitItemType = {
     Asset: {

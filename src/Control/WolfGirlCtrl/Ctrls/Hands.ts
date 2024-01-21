@@ -1,7 +1,8 @@
 import { IController, CtrlType } from "../ICtrl";
 
 export class HandsCtrl extends IController {
-    target_item = ["ItemHands", "ItemArms"];
+    readonly type = "HandsCtrl";
+    readonly target_item = ["ItemHands", "ItemArms"];
     set(player: Character, item: Item[], type: CtrlType): void {
         const [hand, arm] = item;
 

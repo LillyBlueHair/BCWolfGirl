@@ -18,8 +18,8 @@ function ChatOrWhisperToWolfGirl(data: ServerChatRoomMessage, then: (player: Cha
 
 
 export class HearingCtrl extends IController {
+    readonly type = "HearingCtrl";
     readonly target_item = ["ItemEars"];
-
     set(player: Character, item: Item[], type: CtrlType) {
         const [ear] = item;
         if (type === "off") ExtendedItemSetOptionByRecord(player, ear, { typed: 0 });

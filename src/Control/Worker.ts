@@ -7,21 +7,35 @@ export abstract class TimedWork {
 
 type TimerState = 'working' | 'paused';
 
+interface TimedWorkSuite {
+    description: string;
+    works: TimedWork[];
+}
+
 export class TimedWorker {
-    private readonly works: TimedWork[] = [];
+    private readonly work_suites: TimedWorkSuite[] = [];
     private readonly _timer;
 
     private _state: TimerState = 'working';
     constructor(readonly interval: number = 1000) {
         this._timer = setInterval(() => {
-            if (Player && this.works.length > 0 && this._state === 'working') {
-                const state = this.works[0].run(Player);
-                if (state === TimedWorkState.finished) {
-                    this.works.shift();
-                } else if (state === TimedWorkState.interrupted) {
-                    this.works.length = 0;
+            do {
+                if (Player && this.work_suites.length > 0 && this._state === 'working') {
+                    const cur_suite = this.work_suites[0];
+                    if (cur_suite.works.length === 0) {
+                        this.work_suites.shift();
+                        continue;
+                    }
+
+                    const state = cur_suite.works[0].run(Player);
+                    if (state === TimedWorkState.finished) {
+                        cur_suite.works.shift();
+                    } else if (state === TimedWorkState.interrupted) {
+                        this.work_suites.shift();
+                    }
                 }
-            }
+                break;
+            } while (true);
         }, interval);
     }
 
@@ -33,9 +47,8 @@ export class TimedWorker {
         this._state = 'working';
     }
 
-    push(work: TimedWork | TimedWork[]) {
-        if (Array.isArray(work)) this.works.push(...work);
-        else this.works.push(work);
+    push(work: TimedWorkSuite) {
+        this.work_suites.push(work);
     }
 
     private static _global: TimedWorker | undefined;

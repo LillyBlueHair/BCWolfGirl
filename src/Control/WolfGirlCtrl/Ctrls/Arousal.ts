@@ -1,7 +1,8 @@
 import { CtrlType, IController } from "../ICtrl";
 
 export class ArousalCtrl extends IController {
-    target_item = ["ItemPelvis"];
+    readonly type = "ArousalCtrl";
+    readonly target_item = ["ItemPelvis"];
     set(player: Character, item: Item[], type: CtrlType): void {
         const [pelvis] = item;
         const oldtype = pelvis.Property?.TypeRecord;

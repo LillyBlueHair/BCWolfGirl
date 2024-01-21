@@ -1,3 +1,4 @@
+import { ExtractMemberNumber } from "../utils/Character";
 import { ChatRoomAction } from "../utils/ChatMessages";
 import { TimedWork } from "./Worker";
 import { TimedWorkState } from "./Worker";
@@ -29,7 +30,7 @@ export class MessageWork extends TimedWork {
         super();
         this._message = message;
         this._mode = mode;
-        this._target = typeof target === "number" ? target : target?.MemberNumber;
+        this._target = target ? ExtractMemberNumber(target) : undefined;
     }
 
     run(player: Character): TimedWorkState {
