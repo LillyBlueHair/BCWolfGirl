@@ -2,7 +2,7 @@ import { RunControls } from "../../Control/WolfGirlCtrl";
 import { CommandTemplate } from "../ICmds";
 import { BasicPrerequisites } from "../Prerequistes";
 
-export const ItemCtrls: CommandTemplate[] = [
+export const ItemCmds: CommandTemplate[] = [
     {
         match: /^(关闭|基础|完全)听觉限制/,
         prerequisite: BasicPrerequisites,

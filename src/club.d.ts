@@ -11,6 +11,33 @@ interface ChatRoomChatLogItem {
     Time: number;
 }
 
+type ServerChatRoomData = {
+    Name: string;
+    Description: string;
+    Admin: number[];
+    Ban: number[];
+    Background: string;
+    /* FIXME: server actually expects a string there, but we cheat to make the typing simpler */
+    Limit: number;
+    Game: ServerChatRoomGame;
+    Locked: boolean;
+    Private: boolean;
+    BlockCategory: ServerChatRoomBlockCategory[];
+    Language: ServerChatRoomLanguage;
+    Space: ServerChatRoomSpace;
+    MapData?: ServerChatRoomMapData;
+    Custom: {
+        ImageURL?: string;
+        ImageFilter?: string;
+        MusicURL?: string;
+    };
+    Character: ServerAccountDataSynced[];
+}
+
+type ServerChatRoomSettings = Partial<ServerChatRoomData> & {
+    Character?: never;
+}
+
 declare var ChatRoomChatLog: ChatRoomChatLogItem[] | undefined | null;
 
 interface Character {
@@ -97,6 +124,7 @@ interface Character {
         Activity: { Name: string, Self: number, Other: number }[],
         Zone: { Name: string, Factor: number, Orgasm?: boolean }[],
     };
+    LastChatRoom: ServerChatRoomSettings;
     Reputation?: { Type: string, Value: number }[];
 }
 

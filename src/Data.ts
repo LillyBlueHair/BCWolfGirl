@@ -14,6 +14,12 @@ function defaultValue(): WolfGrilData {
         },
         points: {
             current: 0
+        },
+        arousal: {
+            orgasm: 0,
+            deny: 0,
+            resist: 0,
+            edge_time: 0,
         }
     }
 }
@@ -22,6 +28,29 @@ class PermissionUtilities {
     parent: DataManager;
     constructor(parent: DataManager) {
         this.parent = parent;
+    }
+
+    setLoverMode(arg: boolean) {
+        this.parent.data.permission.loverModerators = arg;
+        this.parent.save();
+    }
+
+    setModerator(id: number, add: boolean) {
+        if (add) {
+            if (!this.parent.data.permission.moderators.includes(id)) {
+                this.parent.data.permission.moderators.push(id);
+            }
+        } else {
+            const index = this.parent.data.permission.moderators.indexOf(id);
+            if (index !== -1) {
+                this.parent.data.permission.moderators.splice(index, 1);
+            }
+        }
+        this.parent.save();
+    }
+
+    get data() {
+        return this.parent.data.permission;
     }
 
     isModerator(player: Character, other: number | Character): boolean {

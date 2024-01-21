@@ -1,3 +1,4 @@
+import { OutfitItemsMap } from "./Definition";
 import { OutfitItemType } from "./OutfitTypes";
 
 export function CraftingItemFromOutfit(player: Character, v: OutfitItemType, crafter?: { uid: number, name: string }) {
@@ -48,15 +49,34 @@ export function LockItem(player: Character, wearer: Character, item: Item, lock:
     InventoryLock(wearer, item, lock, player.MemberNumber, false);
 }
 
+export function CheckItemRaw(item: Item, v: OutfitItemType, crafter?: { uid: number, name: string }) {
+    if (item.Asset.Name !== v.Asset.Name) return false;
+    if (v.Craft) {
+        if (!item.Craft) return false;
+        if (item.Craft.Name !== v.Craft.Name) return false;
+        if (item.Craft.Description !== v.Craft.Description) return false;
+        if (crafter && item.Craft.MemberNumber !== crafter.uid) return false;
+    }
+    return true;
+}
+
 export function CheckItem(target: Character, item: OutfitItemType, crafter?: { uid: number, name: string }) {
     const i = target.Appearance.find(e => e.Asset.Group.Name === item.Asset.Group);
     if (!i) return false;
-    if (i.Asset.Name !== item.Asset.Name) return false;
-    if (item.Craft) {
-        if (!i.Craft) return false;
-        if (i.Craft.Name !== item.Craft.Name) return false;
-        if (i.Craft.Description !== item.Craft.Description) return false;
-        if (crafter && i.Craft.MemberNumber !== crafter.uid) return false;
-    }
-    return true;
+    return CheckItemRaw(i, item, crafter);
+}
+
+export function CheckItems(target: Character, item: (OutfitItemType | string)[], crafter?: { uid: number, name: string }) {
+    const items_map = new Map<string, Item>(
+        target.Appearance.map(e => [e.Asset.Group.Name, e])
+    );
+
+    return item.every(e => {
+        const group = typeof e === "string" ? e : e.Asset.Group;
+        const item = items_map.get(group);
+        const oitem = typeof e === "string" ? OutfitItemsMap.get(group) : e;
+        if (!item || !oitem) return false;
+
+        return CheckItemRaw(item, oitem, crafter);
+    });
 }

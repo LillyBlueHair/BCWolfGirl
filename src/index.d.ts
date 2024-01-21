@@ -19,5 +19,11 @@ interface WolfGrilData {
     },
     points: {
         current: number;
+    },
+    arousal: {
+        orgasm: number;
+        deny: number;
+        resist: number;
+        edge_time: number;
     }
 }

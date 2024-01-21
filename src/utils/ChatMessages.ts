@@ -43,6 +43,8 @@ export class ChatRoomAction {
     public readonly LocalAction: (Content: string) => void;
     public readonly SendAction: (Content: string) => void;
     public readonly SendChat: (Content: string) => void;
+    public readonly SendWhisper: (target: number, Content: string) => void;
+    public readonly SendBeep: (target: number, Content: string) => void;
 
     constructor(readonly CUSTOM_ACTION_TAG: string) {
         const DictItem = (Content: string) => { return { Tag: `MISSING PLAYER DIALOG: ${CUSTOM_ACTION_TAG}`, Text: Content } };
@@ -71,6 +73,25 @@ export class ChatRoomAction {
                 Content: CUSTOM_ACTION_TAG,
                 Type: "Action",
                 Dictionary: [DictItem(Content)],
+            });
+        }
+
+        this.SendWhisper = (target: number, Content: string) => {
+            if (!Content || !Player || !Player.MemberNumber) return;
+            ServerSend("ChatRoomChat", {
+                Content: Content,
+                Type: "Whisper",
+                Target: target
+            });
+        }
+
+        this.SendBeep = (target: number, Content: string) => {
+            if (!Content || !Player || !Player.MemberNumber) return;
+            ServerSend("AccountBeep", {
+                MemberNumber: target,
+                Message: Content,
+                BeepType: "",
+                IsSecret: false
             });
         }
     }

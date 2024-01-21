@@ -3,7 +3,7 @@ import { CommandTemplate } from "../ICmds";
 import { BasicPrerequisites } from "../Prerequistes";
 
 
-export const RoomCtrls: CommandTemplate[] = [
+export const RoomCmds: CommandTemplate[] = [
     {
         match: /^离开这个房间/,
         prerequisite: BasicPrerequisites,
@@ -25,7 +25,7 @@ export const RoomCtrls: CommandTemplate[] = [
         match: /^到我这里来/,
         prerequisite: BasicPrerequisites,
         run(player, sender, content, args) {
-            if (!args || !args["BeepRoom"]) RoomForceLeaveSequence(player);
+            if (!args || typeof args["BeepRoom"] !== "string") RoomForceLeaveSequence(player);
             else RoomComeHereSequence(player, args["BeepRoom"]);
             return false;
         }

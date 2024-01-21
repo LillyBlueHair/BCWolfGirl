@@ -19,17 +19,19 @@ export class ItemWearWork extends TimedWork {
         this._craft = craft;
     }
 
+    static ItemWearSingle(item: OutfitItemType, target: Character, craft?: { uid: number, name: string }) {
+        const item_ = ItemFromOutfit(target, target, item, craft);
+        if (!item_) return;
+        const oldIdx = target.Appearance.findIndex(e => e.Asset.Group === item_.Asset.Group);
+        if (oldIdx >= 0) target.Appearance[oldIdx] = item_;
+        else target.Appearance.push(item_);
+    }
+
     run(player: Character): TimedWorkState {
         const target = ChatRoomCharacter.find(c => c.MemberNumber === this._target);
         if (!target) return TimedWorkState.interrupted;
 
-        this._items.forEach(outfit => {
-            const item = ItemFromOutfit(player, target, outfit, this._craft);
-            if (!item) return;
-            const oldIdx = target.Appearance.findIndex(e => e.Asset.Group === item.Asset.Group);
-            if (oldIdx >= 0) target.Appearance[oldIdx] = item;
-            else target.Appearance.push(item);
-        });
+        this._items.forEach(outfit => ItemWearWork.ItemWearSingle(outfit, target, this._craft));
         AppearanceUpdate(target);
         return TimedWorkState.finished;
     }
@@ -50,15 +52,17 @@ export class ItemOptionWork extends TimedWork {
         this._options = option;
     }
 
+    static ItemOptionSingle(target: Character, option: ItemOptionWorkItem) {
+        const item = target.Appearance.find(e => e.Asset.Group.Name === option.group);
+        if (!item) return;
+        ExtendedItemSetOptionByRecord(target, item, option.option);
+    }
+
     run(player: Character): TimedWorkState {
         const target = ChatRoomCharacter.find(c => c.MemberNumber === this._target);
         if (!target) return TimedWorkState.interrupted;
 
-        this._options.forEach(option => {
-            const item = target.Appearance.find(e => e.Asset.Group.Name === option.group);
-            if (!item) return;
-            ExtendedItemSetOptionByRecord(target, item, option.option);
-        });
+        this._options.forEach(option => ItemOptionWork.ItemOptionSingle(target, option));
         if (this._options.length > 0) AppearanceUpdate(target);
         return TimedWorkState.finished;
     }

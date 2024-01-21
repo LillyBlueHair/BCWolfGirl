@@ -2,9 +2,10 @@ import { EILNetwork } from "../Network";
 import { ChatRoomAction } from "../utils/ChatMessages";
 import { CheckWork, DelayWork } from "./CommonWork";
 import { MessageWork, WaitResponseWork } from "./MessageWork";
-import { ToolsCrate, ToolsInjector, ToolsVisor } from "./OutfitCtrl";
+import { OutfitItemType, OutfitItemsMap, ToolsCrate, ToolsInjector, ToolsVisor } from "./OutfitCtrl";
 import { ClothRemoveWork, ClothRestoreWork, ItemLockWork, ItemOptionWork, ItemPropertyWork, ItemRemoveWork, ItemWearWork } from "./OutfitCtrl";
 import { CheckItem } from "./OutfitCtrl";
+import { IsPlayerWolfGirl } from "./WolfGirlCtrl";
 import { TimedWork, TimedWorker } from "./Worker";
 
 function DressSequence(net: EILNetwork, player: Character, target: Character) {
@@ -153,4 +154,31 @@ export function InitDressSequence(player: Character, target: Character) {
     }).catch(e => {
         ChatRoomAction.instance.LocalAction("<ERROR> Wolf Girl 网络断开，已中止过程。");
     });
+}
+
+export function DressFixSequence(player: Character) {
+    const work_sequence: TimedWork[] = [
+        new CheckWork(() => {
+            if (CheckItem(player, OutfitItemsMap.get('ItemNeck') as OutfitItemType)) return CheckWork.Accepted;
+            return CheckWork.Rejected;
+        }, (pl, result) => {
+            if (!result.passed) return { mode: "chat-action", msg: "警告，中央控制核心丢失，请前往EIL或寻找EIL人员进行处理" }
+        }),
+        new MessageWork("chat-action", "已收到指令，维护模式已开启"),
+        new MessageWork("chat-action", "远程连接已激活，正在部署便携狼女训练设施维护舱"),
+        new DelayWork(5000),
+        new MessageWork("chat-action", "空间似乎有些小小的涟漪，而随着一阵小小的气旋，一个充满了精妙器械的复杂维护舱出现在了{player_id}身后，从中伸出几只机械臂将她拉入了维护舱"),
+        new ItemWearWork([ToolsCrate], player),
+        new DelayWork(5000),
+        new MessageWork("chat-action", "已检测到目标，维护舱室已进行拘束并锁定。正在扫描"),
+        new ItemOptionWork(player, [{ group: ToolsCrate.Asset.Group, option: { "w": 1, "l": 2, "a": 1, "d": 0, "t": 0, "h": 4 } }]),
+        new CheckWork(() => {
+            if (IsPlayerWolfGirl(player)) return CheckWork.Stop;
+            else return CheckWork.Continue;
+        }, (pl, r) => {
+            if (r.passed) return { mode: "chat-action", msg: "组件扫描完成，全部在线且运转正常，能源核心已充能完毕，维护模式已结束，请退出维护模式" };
+            else return { mode: "chat-action", msg: "组件扫描完成，发现部分组件缺失或离线，进入修复模式" };
+        }),
+        new MessageWork("chat-action", "维护舱很快伸出了几个机械臂，在狼女{player_id}身前上下扫描着，淡蓝色的光束照射在她身上，似乎能够看透一切"),
+    ]
 }
