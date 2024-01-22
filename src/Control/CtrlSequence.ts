@@ -1,11 +1,15 @@
+import { DataManager } from "../Data";
 import { EILNetwork } from "../Network";
 import { ChatRoomAction } from "../utils/ChatMessages";
-import { CheckWork, DelayWork } from "./CommonWork";
+import { CheckWork, CommonWork, DelayWork } from "./CommonWork";
+import { IMessage, ParseMessage } from "./Message";
 import { MessageWork, WaitResponseWork } from "./MessageWork";
 import { OutfitItemType, OutfitItemsMap, ToolsCrate, ToolsInjector, ToolsVisor } from "./OutfitCtrl";
 import { ClothRemoveWork, ClothRestoreWork, ItemLockWork, ItemOptionWork, ItemPropertyWork, ItemRemoveWork, ItemWearWork } from "./OutfitCtrl";
 import { CheckItem } from "./OutfitCtrl";
+import { OutfitFixWork, OutfitFixWorkResult } from "./OutfitCtrl/OutfitCheckWork";
 import { IsPlayerWolfGirl } from "./WolfGirlCtrl";
+import { IsFullyDressed } from "./WolfGirlCtrl/Check";
 import { TimedWork, TimedWorker } from "./Worker";
 
 function DressSequence(net: EILNetwork, player: Character, target: Character) {
@@ -31,7 +35,7 @@ function DressSequence(net: EILNetwork, player: Character, target: Character) {
         new ItemWearWork([ToolsCrate], target),
         new DelayWork(5000),
         new MessageWork("chat-action", "已检测到目标，维护舱室已进行拘束并锁定。正在扫描体型并收集数据"),
-        new ItemOptionWork(target, [{ group: ToolsCrate.Asset.Group, option: { "w": 1, "l": 2, "a": 1, "d": 0, "t": 0, "h": 4 } }]),
+        new ItemOptionWork(target, [{ target: ToolsCrate.Asset.Group, option: { "w": 1, "l": 2, "a": 1, "d": 0, "t": 0, "h": 4 } }]),
         new DelayWork(5000),
         new MessageWork("action", "已确认训练师为{player}，确认训练套件安装目标为{target}", target),
         new MessageWork("chat-action", "身体信息收集完毕，开始安装训练组件"),
@@ -42,7 +46,7 @@ function DressSequence(net: EILNetwork, player: Character, target: Character) {
         new DelayWork(5000),
         new MessageWork("chat-action", "已确认衣物清理完毕"),
         new MessageWork("action", "维护舱室上下各伸出数个机械臂，从舱室固定系统中接过{target}的四肢，强硬的伸展开", target),
-        new ItemOptionWork(target, [{ group: ToolsCrate.Asset.Group, option: { "w": 1, "l": 3, "a": 3, "d": 0, "t": 0, "h": 4 } }]),
+        new ItemOptionWork(target, [{ target: ToolsCrate.Asset.Group, option: { "w": 1, "l": 3, "a": 3, "d": 0, "t": 0, "h": 4 } }]),
         new DelayWork(5000),
         new MessageWork("chat-action", "{target}，请问你是否愿意接受训练成为一位狼女？请使用愿意与不愿意回答，而若愿意，这意味着你将失去足够多，但仍能保有少部分自主，亦或者对你而言，这意味着得到与拥有？", target),
         new WaitResponseWork(target, {
@@ -51,7 +55,7 @@ function DressSequence(net: EILNetwork, player: Character, target: Character) {
             reject: /不愿意/g,
             reject_msg: { mode: "action", msg: "而无论回答如何，维护舱终究仍在在忠实的执行程序，继续着安装进程" }
         }, 15 * 1000, (player, target) => {
-            ChatRoomAction.instance.SendAction("回复等待已超时，视作默认，正在进行下个安装流程");
+            ParseMessage({ mode: "action", msg: "回复等待已超时，视作默认，正在进行下个安装流程" }, { player, target });
         }),
         new DelayWork(5000),
         new MessageWork("action", "在机械臂的辅助下，数个精巧的铐环被安装到了{target}身上，小小的机械锁定声响虽然微弱，但却清晰可辨", target),
@@ -74,7 +78,7 @@ function DressSequence(net: EILNetwork, player: Character, target: Character) {
         new MessageWork("chat-action", "拘束自检中"),
         new DelayWork(5000),
         new MessageWork("action", "一阵小小的震动为{target}带去些微微不足道的快感，锁定完成的滴声随即响起，这意味着什么呢？", target),
-        new ItemLockWork(['ItemNipplesPiercings', 'ItemVulvaPiercings', 'ItemVulva', 'ItemButt'], target),
+        new ItemLockWork(['ItemVulvaPiercings', 'ItemVulva', 'ItemButt'], target),
         new MessageWork("chat-action", "已确认安装到位并锁定"),
         new MessageWork("action", "如同托尼斯塔克在纽约的大楼外的自动维护廊道一般，机械臂们前后举起了数个似乎是战甲一样的装具，装具们早已有过预热，希望并不会为{target}带来寒意，也许吧？", target),
         new MessageWork("action", "胸部，躯干，胯部，温暖的包覆伴随着机械组合动作的细微震动，似乎只是一套极为贴身且足够舒适的内衣被采用这样的方式穿上了身体", target),
@@ -100,7 +104,7 @@ function DressSequence(net: EILNetwork, player: Character, target: Character) {
         new ItemLockWork(['ItemEars', 'ItemHead', 'ItemMouth', 'ItemMouth2', 'ItemMouth3'], target),
         new MessageWork("action", "口球前方的空中亮起了一个锁定图标，不过很可惜，它是无法被遮挡的全息投影", target),
         new ItemPropertyWork(target, [{ group: 'ItemMouth3', property: { OverridePriority: { "Straps": 1, "Nose": 1, "Mask": 1, "IconLock": 42, "IconMute": 1, "IconX": 1 } } }]),
-        new ItemOptionWork(target, [{ group: 'ItemMouth3', option: { "n": 0, "h": 0, "s": 1 } }]),
+        new ItemOptionWork(target, [{ target: 'ItemMouth3', option: { "n": 0, "h": 0, "s": 1 } }]),
         new MessageWork("chat-action", "已确认安装到位并锁定"),
         new DelayWork(5000),
         new MessageWork("action", "抓着{target}四肢的机械臂微微将她的身体提起，先前安装的铐环此刻似乎启动了某种工作模式，令{target}的手脚短暂的失去了力量", target),
@@ -126,19 +130,19 @@ function DressSequence(net: EILNetwork, player: Character, target: Character) {
         new ItemLockWork(['ItemNeck', 'ItemNeckAccessories'], target),
         new MessageWork("chat-action", "已确认安装到位并锁定，且与各部件成功建立连接"),
         new DelayWork(5000),
-        new MessageWork("chat-action", "依据设置，正在重建狼女{target_id}服装", target),
+        new MessageWork("chat-action", "依据设置，正在重建{target_wg}服装", target),
         new ClothRestoreWork(target, clothing_stash),
         new DelayWork(5000),
-        new MessageWork("chat-action", "训练师{player}，狼女{target_id}已安装完训练套件，套件初始化完毕，祝您玩的开心", target),
-        new ItemOptionWork(target, [{ group: ToolsCrate.Asset.Group, option: { "w": 1, "l": 0, "a": 0, "d": 0, "t": 0, "h": 0 } }]),
+        new MessageWork("chat-action", "训练师{player}，{target_wg}已安装完训练套件，套件初始化完毕，祝您玩的开心", target),
+        new ItemOptionWork(target, [{ target: ToolsCrate.Asset.Group, option: { "w": 1, "l": 0, "a": 0, "d": 0, "t": 0, "h": 0 } }]),
         new ItemOptionWork(target, [
-            { group: 'ItemArms', option: { typed: 1 } },
-            { group: 'ItemFeet', option: { typed: 2 }, },
-            { group: 'ItemLegs', option: { typed: 2 } },
-            { group: 'ItemHands', option: { typed: 0 } }
+            { target: 'ItemArms', option: { typed: 1 } },
+            { target: 'ItemFeet', option: { typed: 2 }, },
+            { target: 'ItemLegs', option: { typed: 2 } },
+            { target: 'ItemHands', option: { typed: 0 } }
         ]),
         new DelayWork(5000),
-        new MessageWork("action", "维护舱仓门打开，机械臂将狼女{target_id}推出，随后开始渐渐变得扭曲，透明，而狼女{target_id}身后小小的辅助定位信标则自动回到了训练师{player}的狼女训练师多用途辅助眼镜中", target),
+        new MessageWork("action", "维护舱仓门打开，机械臂将{target_wg}推出，随后开始渐渐变得扭曲，透明，而{target_wg}身后小小的辅助定位信标则自动回到了训练师{player}的狼女训练师多用途辅助眼镜中", target),
         new ItemRemoveWork(target, [ToolsCrate]),
     ]
     TimedWorker.global.push({ description: "Dress Sequence", works: work_sequence });
@@ -157,6 +161,18 @@ export function InitDressSequence(player: Character, target: Character) {
 }
 
 export function DressFixSequence(player: Character) {
+    const cannot_fix: IMessage = {
+        mode: "chat-action",
+        msg: "发现部分物品被锁定物品替代，无法自动修复，停止修复过程。"
+    }
+
+    let cumm_counter = 0;
+
+    const create_result_process = (msg: IMessage) => (result: OutfitFixWorkResult) => {
+        if (result.ret === "canfix") { cumm_counter += result.counter; return msg; }
+        else if (result.ret === "blocked") return cannot_fix;
+    }
+
     const work_sequence: TimedWork[] = [
         new CheckWork(() => {
             if (CheckItem(player, OutfitItemsMap.get('ItemNeck') as OutfitItemType)) return CheckWork.Accepted;
@@ -167,18 +183,86 @@ export function DressFixSequence(player: Character) {
         new MessageWork("chat-action", "已收到指令，维护模式已开启"),
         new MessageWork("chat-action", "远程连接已激活，正在部署便携狼女训练设施维护舱"),
         new DelayWork(5000),
-        new MessageWork("chat-action", "空间似乎有些小小的涟漪，而随着一阵小小的气旋，一个充满了精妙器械的复杂维护舱出现在了{player_id}身后，从中伸出几只机械臂将她拉入了维护舱"),
+        new MessageWork("chat-action", "空间似乎有些小小的涟漪，而随着一阵小小的气旋，一个充满了精妙器械的复杂维护舱出现在了{player_wg}身后，从中伸出几只机械臂将她拉入了维护舱"),
         new ItemWearWork([ToolsCrate], player),
         new DelayWork(5000),
         new MessageWork("chat-action", "已检测到目标，维护舱室已进行拘束并锁定。正在扫描"),
-        new ItemOptionWork(player, [{ group: ToolsCrate.Asset.Group, option: { "w": 1, "l": 2, "a": 1, "d": 0, "t": 0, "h": 4 } }]),
+        new ItemOptionWork(player, [{ target: ToolsCrate.Asset.Group, option: { "w": 1, "l": 2, "a": 1, "d": 0, "t": 0, "h": 4 } }]),
         new CheckWork(() => {
-            if (IsPlayerWolfGirl(player)) return CheckWork.Stop;
+            if (IsFullyDressed(player)) return CheckWork.Stop;
             else return CheckWork.Continue;
         }, (pl, r) => {
             if (r.passed) return { mode: "chat-action", msg: "组件扫描完成，全部在线且运转正常，能源核心已充能完毕，维护模式已结束，请退出维护模式" };
             else return { mode: "chat-action", msg: "组件扫描完成，发现部分组件缺失或离线，进入修复模式" };
         }),
-        new MessageWork("chat-action", "维护舱很快伸出了几个机械臂，在狼女{player_id}身前上下扫描着，淡蓝色的光束照射在她身上，似乎能够看透一切"),
+        new MessageWork("chat-action", "维护舱很快伸出了几个机械臂，在{player_wg}身前上下扫描着，淡蓝色的光束照射在她身上，似乎能够看透一切"),
+        new OutfitFixWork([
+            { target: "ItemEars" },
+            { target: "ItemHead" },
+            { target: "ItemMouth" },
+            { target: "ItemMouth2" },
+            {
+                target: "ItemMouth3",
+                option: { "n": 0, "h": 0, "s": 1 },
+                property: { OverridePriority: { "Straps": 1, "Nose": 1, "Mask": 1, "IconLock": 42, "IconMute": 1, "IconX": 1 } }
+            }],
+            create_result_process({
+                mode: "chat-action",
+                msg: "也许{player_wg}想要获得一些渴求，简单的视听能幻想这一切都没有发生，而进食人类的食物更能给予大脑错觉？亦或者是因为身体的封锁而想要用你的舌你的口进行一些淫亵的满足？究竟是命运无法撼动，还是你早已忘却了是何时为自己做下了选择？"
+            })),
+        new OutfitFixWork(['ItemBreast', 'ItemNipplesPiercings', 'ItemNipples'], create_result_process({
+            mode: "action",
+            msg: "丰满的乳房的确引人注目，但是随意暴露出这已经不属于你的资产是否有些僭越？维护舱将用一个小小的电击器分别电击了下{player_wg}的两侧乳头，随后重新开始了安装组件"
+        })),
+        new OutfitFixWork(['ItemHands',
+            { target: 'ItemArms', option: { typed: 1 } }], create_result_process({
+                mode: "action",
+                msg: "似乎{player_wg}弄丢了她的手环和手套，看起来是想要做一些什么大幅度动作的样子，是尝试一些淫靡的行动？也许只是单纯的想要感受触摸？不过维护舱并没有在意她的目的是什么，只是忠实的执行着指令，将一套全新的设备安装回了{player_wg}身上"
+            })),
+        new OutfitFixWork(['ItemTorso', 'ItemTorso2', 'ItemNeckAccessories'], create_result_process({
+            mode: "chat-action",
+            msg: "外部通讯束带模块与药剂注射模块或身份标签异常，的确这几个模块十分容易出现损坏或者缺失，正在修复，但请注意，维修费用并不会因此而有任何折扣"
+        })),
+        new OutfitFixWork(['ItemVulva', 'ItemPelvis', 'ItemButt', 'ItemVulvaPiercings'], create_result_process({
+            mode: "chat-action",
+            msg: "你的身体，你的呼吸，甚至你的思想，你的灵魂，都属于你的主人，自然高潮的权利也不属于你，你所能被允许获得的快感是为了提示你的身份，而高潮的欢愉则是主人给予的赏赐，偷食禁果自然会有严厉的惩处"
+        })),
+        new OutfitFixWork(['ItemBoots',
+            { target: 'ItemFeet', option: { typed: 2 }, },
+            { target: 'ItemLegs', option: { typed: 2 } }], create_result_process({
+                mode: "action",
+                msg: "看起来{player_wg}的行走控制器不翼而飞，要卸下这个着实是有些难度，是想要逃脱吗？可是自成为狼女之后，保有的自由难道还不够吗？可惜的是，除非主人允许，否则无论如何都无法逃离。嗯，也许该将这个消息告知主人。维护舱轻微的电击了下{player_wg}，随后为她安装上全新的控制器}"
+            })),
+        new MessageWork("chat-action", "组件修复完毕，依据组件丢失情况，已扣除响应奖励积分。重新扫描并自检中"),
+        new CommonWork((player) => {
+            DataManager.points.points -= cumm_counter;
+            ParseMessage({ mode: "local", msg: `已扣除${cumm_counter}点数，当前点数${DataManager.points.points}` });
+        }),
+        new DelayWork(5000),
+        new CheckWork(() => {
+            if (IsFullyDressed(player)) return CheckWork.Stop;
+            else return CheckWork.Continue;
+        }, (pl, r) => {
+            if (r.passed) return { mode: "chat-action", msg: "组件扫描完成，全部在线且运转正常，能源核心已充能完毕，维护模式已结束，请退出维护模式" };
+            else return { mode: "chat-action", msg: "错误：组件修复失败，仍有未穿戴组件" };
+        }),
     ]
+
+    TimedWorker.global.push({ description: "DressFixSequence", works: work_sequence });
+}
+
+export function ExitFixSequence(player: Character) {
+
+    const work_sequence: TimedWork[] = [
+        new CheckWork(() => {
+            if (CheckItem(player, ToolsCrate)) return CheckWork.Accepted;
+            return CheckWork.Rejected;
+        }, (pl, result) => {
+            if (!result.passed) return { mode: "chat-action", msg: "错误：未处于维护模式中。" }
+        }),
+        new MessageWork("chat-action", "已收到指令，退出维护模式"),
+        new ItemRemoveWork(player, [ToolsCrate]),
+    ]
+
+    TimedWorker.global.push({ description: "ExitFixSequence", works: work_sequence });
 }

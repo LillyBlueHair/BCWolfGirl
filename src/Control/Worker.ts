@@ -1,5 +1,5 @@
 export enum TimedWorkState {
-    worked, finished, interrupted
+    running, finished, interrupted
 }
 export abstract class TimedWork {
     abstract run(player: Character): TimedWorkState;
@@ -37,6 +37,18 @@ export class TimedWorker {
                 break;
             } while (true);
         }, interval);
+    }
+
+    skip_until(pred: (t: TimedWorkSuite) => boolean) {
+        do {
+            if (this.work_suites.length === 0) return;
+            const cur_suite = this.work_suites[0];
+            if (cur_suite.works.length === 0)
+                this.work_suites.shift();
+            if (pred(cur_suite))
+                cur_suite.works.shift();
+            else return;
+        } while (true);
     }
 
     pause() {

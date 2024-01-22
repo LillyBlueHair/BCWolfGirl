@@ -1,32 +1,15 @@
 import { ExtractMemberNumber } from "../utils/Character";
-import { ChatRoomAction } from "../utils/ChatMessages";
+import { ParseMessage } from "./Message";
+import { IMessageMode } from "./Message";
+import { IMessage } from "./Message";
 import { TimedWork } from "./Worker";
 import { TimedWorkState } from "./Worker";
 
-export type MessageWorkMode = "action" | "chat-action" | "local" | "chat";
-
-interface MessageOptions {
-    mode: MessageWorkMode,
-    msg: string
-}
-
-function SendByOptions(option: MessageOptions) {
-    if (option.mode === "action") {
-        ChatRoomAction.instance.SendAction(option.msg);
-    } else if (option.mode === "chat-action") {
-        ChatRoomAction.instance.SendAction("\"" + option.msg + "\"");
-    } else if (option.mode === "local") {
-        ChatRoomAction.instance.LocalAction(option.msg);
-    } else if (option.mode === "chat") {
-        ChatRoomAction.instance.SendChat(option.msg);
-    }
-}
-
 export class MessageWork extends TimedWork {
     private _message: string;
-    private _mode: MessageWorkMode;
+    private _mode: IMessageMode;
     private _target?: number;
-    constructor(readonly mode: MessageWorkMode, readonly message: string, target?: number | Character) {
+    constructor(readonly mode: IMessageMode, readonly message: string, target?: number | Character) {
         super();
         this._message = message;
         this._mode = mode;
@@ -35,17 +18,7 @@ export class MessageWork extends TimedWork {
 
     run(player: Character): TimedWorkState {
         const target = ChatRoomCharacter.find(c => c.MemberNumber === this._target);
-        const parsed = this._message.replace(/{(target|target_id|player|player_id)}/g, (match, p1) => {
-            if (target) {
-                if (p1 === "target") return CharacterNickname(target);
-                if (p1 === "target_id") return target.MemberNumber.toString();
-            }
-            if (p1 === "player") return CharacterNickname(player);
-            if (p1 === "player_id") return player.MemberNumber.toString();
-            return match;
-        });
-
-        SendByOptions({ mode: this._mode, msg: parsed });
+        ParseMessage({ mode: this._mode, msg: this._message }, { player, target });
         return TimedWorkState.finished;
     }
 }
@@ -54,8 +27,8 @@ export class MessageWork extends TimedWork {
 interface WaitResponseWorkOptions {
     accept: RegExp,
     reject: RegExp,
-    accept_msg?: MessageOptions,
-    reject_msg?: MessageOptions
+    accept_msg?: IMessage,
+    reject_msg?: IMessage
 }
 
 export class WaitResponseWork extends TimedWork {
@@ -106,12 +79,12 @@ export class WaitResponseWork extends TimedWork {
         }
 
         if (result === 'accept' && this._options.accept_msg) {
-            SendByOptions(this._options.accept_msg);
+            ParseMessage(this._options.accept_msg);
             return TimedWorkState.finished;
         }
 
         if (result === 'reject' && this._options.reject_msg) {
-            SendByOptions(this._options.reject_msg);
+            ParseMessage(this._options.reject_msg);
             return TimedWorkState.finished;
         }
 
@@ -119,6 +92,6 @@ export class WaitResponseWork extends TimedWork {
             this._then(player, target);
             return TimedWorkState.finished;
         }
-        return TimedWorkState.worked;
+        return TimedWorkState.running;
     }
 }

@@ -1,4 +1,4 @@
-import { ChatRoomAction } from "../utils/ChatMessages";
+import { IMessage, IMessageMode, ParseMessage } from "./Message";
 import { TimedWork, TimedWorkState } from "./Worker";
 
 
@@ -16,7 +16,7 @@ export class DelayWork extends TimedWork {
             this._timeout = Date.now() + this._timeout;
         }
 
-        if (Date.now() < this._timeout) return TimedWorkState.worked;
+        if (Date.now() < this._timeout) return TimedWorkState.running;
         return TimedWorkState.finished;
     }
 }
@@ -27,20 +27,15 @@ interface CheckWorkState {
 }
 
 interface CheckWorkMessage {
-    mode: "local" | "chat" | "action";
+    mode: IMessageMode;
     passed: string;
     failed: string;
 }
 
-interface CheckWorkMessageResult {
-    mode: "local" | "chat" | "action" | "chat-action";
-    msg: string;
-}
-
 export class CheckWork extends TimedWork {
     readonly _check: (player: Character) => CheckWorkState;
-    readonly message?: CheckWorkMessage | ((player: Character, result: CheckWorkState) => CheckWorkMessageResult | undefined);
-    constructor(check: (player: Character) => CheckWorkState, message?: CheckWorkMessage | ((player: Character, result: CheckWorkState) => CheckWorkMessageResult | undefined)) {
+    readonly message?: CheckWorkMessage | ((player: Character, result: CheckWorkState) => IMessage | undefined);
+    constructor(check: (player: Character) => CheckWorkState, message?: CheckWorkMessage | ((player: Character, result: CheckWorkState) => IMessage | undefined)) {
         super();
         this._check = check;
         this.message = message;
@@ -50,20 +45,13 @@ export class CheckWork extends TimedWork {
         const checked = this._check(player);
 
         if (this.message) {
-            const rmessage: CheckWorkMessageResult | undefined = (() => {
+            const rmessage: IMessage | undefined = (() => {
                 if (typeof this.message === "function") return this.message(player, checked);
                 if (checked) return { mode: this.message.mode, msg: this.message.passed };
                 return { mode: this.message.mode, msg: this.message.failed };
             })()
             if (rmessage) {
-                const func = (() => {
-                    if (rmessage.mode === "local") return ChatRoomAction.instance.LocalAction;
-                    if (rmessage.mode === "chat") return ChatRoomAction.instance.SendChat;
-                    if (rmessage.mode === "chat-action") return (msg: string) => ChatRoomAction.instance.SendAction(`"${msg}"`);
-                    return ChatRoomAction.instance.SendAction;
-                })()
-                if (checked.passed) func(rmessage.msg);
-                else func(rmessage.msg)
+                ParseMessage(rmessage);
             }
         }
         return checked.state;

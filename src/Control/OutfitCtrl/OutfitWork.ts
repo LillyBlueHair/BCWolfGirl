@@ -37,23 +37,34 @@ export class ItemWearWork extends TimedWork {
     }
 }
 
-interface ItemOptionWorkItem {
-    readonly group: string;
+interface ItemOptionWorkIUnit {
+    readonly target: Item;
     readonly option: TypeRecord;
 }
 
+interface ItemOptionWorkSUnit {
+    readonly target: string;
+    readonly option: TypeRecord;
+}
+
+type ItemOptionWorkUnit = ItemOptionWorkIUnit | ItemOptionWorkSUnit;
+
 export class ItemOptionWork extends TimedWork {
     readonly _target: number;
-    readonly _options: ItemOptionWorkItem[];
+    readonly _options: ItemOptionWorkUnit[];
 
-    constructor(target: number | Character, option: ItemOptionWorkItem[]) {
+    constructor(target: number | Character, option: ItemOptionWorkUnit[]) {
         super();
         this._target = ExtractMemberNumber(target);
         this._options = option;
     }
 
-    static ItemOptionSingle(target: Character, option: ItemOptionWorkItem) {
-        const item = target.Appearance.find(e => e.Asset.Group.Name === option.group);
+    static ItemOptionSingleI(target: Character, option: ItemOptionWorkIUnit) {
+        ExtendedItemSetOptionByRecord(target, option.target, option.option);
+    }
+
+    static ItemOptionSingleS(target: Character, option: ItemOptionWorkSUnit) {
+        const item = target.Appearance.find(e => e.Asset.Group.Name === option.target);
         if (!item) return;
         ExtendedItemSetOptionByRecord(target, item, option.option);
     }
@@ -62,7 +73,10 @@ export class ItemOptionWork extends TimedWork {
         const target = ChatRoomCharacter.find(c => c.MemberNumber === this._target);
         if (!target) return TimedWorkState.interrupted;
 
-        this._options.forEach(option => ItemOptionWork.ItemOptionSingle(target, option));
+        const app_map = new Map<string, Item>(target.Appearance.map(i => [i.Asset.Group.Name, i]));
+        (this._options.map(i => { return { target: typeof i.target === "string" ? app_map.get(i.target) : i.target, option: i.option } })
+            .filter(i => i.target) as ItemOptionWorkIUnit[])
+            .forEach(option => ItemOptionWork.ItemOptionSingleI(target, option));
         if (this._options.length > 0) AppearanceUpdate(target);
         return TimedWorkState.finished;
     }

@@ -36,7 +36,19 @@ export function IsCollarOn(player: Character): boolean {
     return true;
 }
 
+function IsGroupsDressed(player: Character, groups: string[]) {
+    let groups_set = new Set(groups);
+    let tItems = player.Appearance.filter(e => groups_set.has(e.Asset.Group.Name));
+    if (tItems.length !== groups.length) return false;
+    return tItems.every(e => {
+        const outfit = OutfitItemsMap.get(e.Asset.Group.Name);
+        if (!outfit) return false;
+        if (!ItemValid(e, outfit)) return false;
+        return true;
+    });
+}
+
 export function IsPlayerWolfGirl(player: Character): boolean {
-    if (DataManager.outfit.collar_only) return IsCollarOn(player);
+    if (DataManager.outfit.collar_only) return IsGroupsDressed(player, ["ItemNeck", "ItemPelvis"]);
     return IsFullyDressed(player);
 }

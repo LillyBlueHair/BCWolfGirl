@@ -7,7 +7,7 @@ import { ToysCtrl } from "./Ctrls/Toys";
 import { VisionCtrl } from "./Ctrls/Vision";
 import { VoiceCtrl } from "./Ctrls/Voice";
 import { ControllerType, CtrlType, IController } from "./ICtrl";
-import { FuturisticBypass } from "./FuturisticBypass";
+import { FuturisticBypass } from "./Ctrls/FuturisticBypass";
 import { FCollarPublic } from "./Ctrls/FCollar";
 
 const WolfGirlCtrls = [HearingCtrl, ArousalCtrl, FeetCtrl,
