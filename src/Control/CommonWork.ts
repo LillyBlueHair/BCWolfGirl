@@ -47,7 +47,7 @@ export class CheckWork extends TimedWork {
         if (this.message) {
             const rmessage: IMessage | undefined = (() => {
                 if (typeof this.message === "function") return this.message(player, checked);
-                if (checked) return { mode: this.message.mode, msg: this.message.passed };
+                if (checked.passed) return { mode: this.message.mode, msg: this.message.passed };
                 return { mode: this.message.mode, msg: this.message.failed };
             })()
             if (rmessage) {
