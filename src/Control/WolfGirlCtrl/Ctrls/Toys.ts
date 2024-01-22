@@ -17,8 +17,7 @@ export class ToysCtrl extends IController {
             else if (i.Asset.Archetype === "modular") {
                 const old_record = i.Property?.TypeRecord;
                 if (!old_record || !old_record.i) return;
-                old_record.i = target;
-                ExtendedItemSetOptionByRecord(player, i, old_record);
+                ExtendedItemSetOptionByRecord(player, i, { i: target });
             }
         })
     }

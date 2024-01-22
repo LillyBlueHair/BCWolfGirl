@@ -8,6 +8,7 @@ import { EILNetwork } from './Network';
 import { CtrlHook, IsPlayerWolfGirl } from './Control/WolfGirlCtrl';
 import { OrgasmMonitor } from './utils/Orgasm';
 import { DataManager } from './Data';
+import { TaskCtrl } from "./Control/TaskCtrl/TaskCtrl";
 
 (function () {
     if (window.BCWorlGirl_Loaded) return;
@@ -20,7 +21,8 @@ import { DataManager } from './Data';
     }
     const asset_url = this_script_src.substring(0, this_script_src.lastIndexOf('/') + 1) + 'assets/';
 
-    TimedWorker.init();
+    TimedWorker.init(1000);
+    TaskCtrl.init(1000);
     EILNetwork.init(asset_url);
     ChatRoomAction.init(CUSTOM_ACTION_TAG);
 
@@ -44,11 +46,13 @@ import { DataManager } from './Data';
     orgasm.AddOrgasmEvent((player) => {
         if (IsPlayerWolfGirl(player))
             DataManager.arousal.orgasm += 1;
+        TaskCtrl.instance.onOrgasm(player);
     });
 
     orgasm.AddResistEvent((player) => {
         if (IsPlayerWolfGirl(player))
             DataManager.arousal.resist += 1;
+        TaskCtrl.instance.onResist(player);
     });
 
     orgasm.AddRuinedEvent((player) => {

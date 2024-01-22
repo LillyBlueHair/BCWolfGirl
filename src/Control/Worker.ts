@@ -17,7 +17,7 @@ export class TimedWorker {
     private readonly _timer;
 
     private _state: TimerState = 'working';
-    constructor(readonly interval: number = 1000) {
+    constructor(readonly time_reso: number) {
         this._timer = setInterval(() => {
             do {
                 if (Player && this.work_suites.length > 0 && this._state === 'working') {
@@ -36,7 +36,7 @@ export class TimedWorker {
                 }
                 break;
             } while (true);
-        }, interval);
+        }, time_reso);
     }
 
     skip_until(pred: (t: TimedWorkSuite) => boolean) {
@@ -65,9 +65,9 @@ export class TimedWorker {
 
     private static _global: TimedWorker | undefined;
 
-    static init() {
+    static init(time_reso: number) {
         if (TimedWorker._global) return;
-        TimedWorker._global = new TimedWorker();
+        TimedWorker._global = new TimedWorker(time_reso);
     }
 
     static get global(): TimedWorker {

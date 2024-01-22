@@ -1,6 +1,7 @@
 import { Prerequisite } from "./Prerequistes";
 
 export type CommandType = "Chat" | "Whisper" | "Beep";
+
 export type CommandArgs = {
     type: CommandType,
     [k: string]: string | number | undefined

@@ -2,6 +2,7 @@ import { InitDressSequence } from "../Control/CtrlSequence";
 import { ActivityDeconstruct, ActivityInfo } from "../utils/ChatMessages";
 import { RunCommands } from "./Run";
 import { CommandType } from "./ICmds";
+import { TaskCtrl } from "../Control/TaskCtrl/TaskCtrl";
 
 export function ChatRoomHandler(): ChatRoomMessageHandler {
     return {
@@ -41,4 +42,7 @@ function ChatRoomActivity(player: Character, sender: Character, data: ActivityIn
         if (!target) return;
         InitDressSequence(player, target);
     }
+
+
+    TaskCtrl.instance.onActivity(player, sender, data);
 }

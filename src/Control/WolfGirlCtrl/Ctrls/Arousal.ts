@@ -5,21 +5,16 @@ export class ArousalCtrl extends IController {
     readonly target_item = ["ItemPelvis"];
     set(player: Character, item: Item[], type: CtrlType): void {
         const [pelvis] = item;
-        const oldtype = pelvis.Property?.TypeRecord;
-        if (!oldtype) return;
-
-        if (type === "off") {
-            oldtype["o"] = 0;
-        }
-        else if (type === "edge") {
-            oldtype["o"] = 1;
-        }
-        else if (type === "deny") {
-            oldtype["o"] = 2;
-        }
         const oldLock = pelvis.Property?.LockedBy;
         const oldMember = pelvis.Property?.LockMemberNumber;
-        ExtendedItemSetOptionByRecord(player, pelvis, oldtype);
+        ExtendedItemSetOptionByRecord(player, pelvis, {
+            o: (() => {
+                if (type === "off") return 0;
+                else if (type === "edge") return 1;
+                else if (type === "deny") return 2;
+                else return 0;
+            })()
+        });
 
         // record setting is not correct for some reason
         ExtendedItemInit(player, pelvis);
