@@ -1,7 +1,7 @@
 export function defaultValue(): WolfGrilData {
     return {
         outfit: {
-            collar_only: false,
+            lite_mode: false,
             items: []
         },
         permission: {
@@ -9,11 +9,13 @@ export function defaultValue(): WolfGrilData {
             loverModerators: true
         },
         points: {
-            current: 0
+            current: 0,
+            punish_time: 5 * 60 * 1000,
+            task_time: 15 * 60 * 1000,
         },
         arousal: {
             orgasm: 0,
-            deny: 0,
+            ruined: 0,
             resist: 0,
             edge_time: 0,
         }
@@ -41,7 +43,7 @@ export function Validate(data: any): WolfGrilData {
         const dvalue = defaultData.outfit;
         const pd = data as Partial<WolfGrilData["outfit"]>;
 
-        if (typeof pd.collar_only !== "boolean") pd.collar_only = dvalue.collar_only;
+        if (typeof pd.lite_mode !== "boolean") pd.lite_mode = dvalue.lite_mode;
         if (!Array.isArray(pd.items)) pd.items = dvalue.items;
 
         let items = [];
@@ -69,13 +71,15 @@ export function Validate(data: any): WolfGrilData {
         const dvalue = defaultData.points;
         const pd = data as Partial<WolfGrilData["points"]>;
         if (typeof pd.current !== "number") pd.current = dvalue.current;
+        if (typeof pd.punish_time !== "number") pd.punish_time = dvalue.punish_time;
+        if (typeof pd.task_time !== "number") pd.task_time = dvalue.task_time;
     })(data["points"]);
 
     ((data: any) => {
         const dvalue = defaultData.arousal;
         const pd = data as Partial<WolfGrilData["arousal"]>;
         if (typeof pd.orgasm !== "number") pd.orgasm = dvalue.orgasm;
-        if (typeof pd.deny !== "number") pd.deny = dvalue.deny;
+        if (typeof pd.ruined !== "number") pd.ruined = dvalue.ruined;
         if (typeof pd.resist !== "number") pd.resist = dvalue.resist;
         if (typeof pd.edge_time !== "number") pd.edge_time = dvalue.edge_time;
     })(data["arousal"]);

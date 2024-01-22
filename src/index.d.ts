@@ -14,7 +14,7 @@ interface DataOutfitItem {
 
 interface WolfGrilData {
     outfit: {
-        collar_only: boolean;
+        lite_mode: boolean;
         items: DataOutfitItem[];
     },
     permission: {
@@ -23,10 +23,12 @@ interface WolfGrilData {
     },
     points: {
         current: number;
+        punish_time: number;
+        task_time: number;
     },
     arousal: {
         orgasm: number;
-        deny: number;
+        ruined: number;
         resist: number;
         edge_time: number;
     }

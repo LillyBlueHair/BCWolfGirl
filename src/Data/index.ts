@@ -3,21 +3,43 @@ import { DataKeyName } from "../Definition";
 import { PermissionUtilities } from "./PermissionUtilities";
 import { OutfitUtilities } from "./OutfitUtilities";
 import { Validate, defaultValue } from "./DefaultValue";
+import { PointsUtilities } from "./PointUtilities";
+import { ArousalUtilities } from "./ArousalUtilities";
 
 export class DataManager {
     private static _instance: DataManager | undefined = undefined;
     private _data: Partial<WolfGrilData> = {};
+    private _permission: PermissionUtilities;
+    private _outfit: OutfitUtilities;
+    private _points: PointsUtilities;
+    private _arousal: ArousalUtilities;
+
+    constructor(player: Character) {
+        this.load(player);
+        this._permission = new PermissionUtilities(this);
+        this._outfit = new OutfitUtilities(this);
+        this._points = new PointsUtilities(this);
+        this._arousal = new ArousalUtilities(this);
+    }
 
     public static get instance(): DataManager {
         return this._instance as DataManager;
     }
 
     public static get permission(): PermissionUtilities {
-        return new PermissionUtilities(this.instance);
+        return this.instance._permission;
     }
 
     public static get outfit(): OutfitUtilities {
-        return new OutfitUtilities(this.instance);
+        return this.instance._outfit;
+    }
+
+    public static get points(): PointsUtilities {
+        return this.instance._points;
+    }
+
+    public static get arousal(): ArousalUtilities {
+        return this.instance._arousal;
     }
 
     public get data(): WolfGrilData {
@@ -25,11 +47,9 @@ export class DataManager {
     }
 
     public static init(mod: ModSDKModAPI, msg?: string): void {
-        if (this._instance) return;
-        this._instance = new DataManager();
-
         const load_then_message = (C: Character | null | undefined) => {
-            if (C) DataManager.instance.load(C);
+            if (this._instance) return;
+            if (C) this._instance = new DataManager(C);
             if (msg) console.log(msg);
         }
 

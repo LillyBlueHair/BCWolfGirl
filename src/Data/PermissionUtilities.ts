@@ -4,8 +4,12 @@ import { DataManager } from ".";
 
 export class PermissionUtilities {
     parent: DataManager;
+
+    moderators: Set<number>;
+
     constructor(parent: DataManager) {
         this.parent = parent;
+        this.moderators = new Set<number>(this.parent.data.permission.moderators);
     }
 
     setLoverMode(arg: boolean) {
@@ -15,16 +19,18 @@ export class PermissionUtilities {
 
     setModerator(id: number, add: boolean) {
         if (add) {
-            if (!this.parent.data.permission.moderators.includes(id)) {
+            if (!this.moderators.has(id)) {
+                this.moderators.add(id);
                 this.parent.data.permission.moderators.push(id);
+                this.parent.save();
             }
         } else {
-            const index = this.parent.data.permission.moderators.indexOf(id);
-            if (index !== -1) {
-                this.parent.data.permission.moderators.splice(index, 1);
+            if (this.moderators.has(id)) {
+                this.moderators.delete(id);
+                this.parent.data.permission.moderators = Array.from(this.moderators);
+                this.parent.save();
             }
         }
-        this.parent.save();
     }
 
     get data() {
@@ -35,7 +41,7 @@ export class PermissionUtilities {
         const num = ExtractMemberNumber(other);
         if (EILNetwork.Access.isEIL(num)) return true;
         if (player.Ownership && player.Ownership.MemberNumber === num) return true;
-        if (this.parent.data.permission.moderators.includes(num)) return true;
+        if (this.moderators.has(num)) return true;
         if (this.parent.data.permission.loverModerators
             && player.Lovership && player.Lovership.some(i => i.MemberNumber === num)) return true;
         return false;
