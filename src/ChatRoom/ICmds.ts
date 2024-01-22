@@ -6,11 +6,9 @@ export type CommandArgs = {
     [k: string]: string | number | undefined
 };
 
-export type ComandRunResult = boolean | undefined | void;
-
 export interface CommandTemplate {
     type?: CommandType;
-    prerequisite: Prerequisite[]
+    prerequisite: Prerequisite
     match: RegExp;
-    run(player: Character, sender: number | Character, content: RegExpExecArray, args: CommandArgs): ComandRunResult;
+    run(player: Character, sender: number | Character, content: RegExpExecArray, args: CommandArgs): void;
 }

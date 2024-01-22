@@ -9,7 +9,6 @@ export const RoomCmds: CommandTemplate[] = [
         prerequisite: BasicPrerequisites,
         run(player, sender, content) {
             RoomLeaveSequence(player);
-            return false;
         }
     },
     {
@@ -17,7 +16,6 @@ export const RoomCmds: CommandTemplate[] = [
         prerequisite: BasicPrerequisites,
         run(player, sender, content) {
             RoomForceLeaveSequence(player);
-            return false;
         }
     },
     {
@@ -27,7 +25,6 @@ export const RoomCmds: CommandTemplate[] = [
         run(player, sender, content, args) {
             if (!args || typeof args["BeepRoom"] !== "string") RoomForceLeaveSequence(player);
             else RoomComeHereSequence(player, args["BeepRoom"]);
-            return false;
         }
     }
 ];

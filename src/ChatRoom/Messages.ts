@@ -4,7 +4,6 @@ import { CommandType } from "./ICmds";
 
 export function RouteIM(target: Character | number, type: CommandType, msg: string) {
     const tnum = ExtractMemberNumber(target);
-
     if (type === "Chat") {
         ChatRoomAction.instance.SendAction(msg);
     } else if (type === "Whisper") {

@@ -1,6 +1,5 @@
 import { DataManager } from "../../Data";
 import { ExtractMemberNumber } from "../../utils/Character";
-import { ChatRoomAction } from "../../utils/ChatMessages";
 import { CommandTemplate } from "../ICmds";
 import { RouteIM } from "../Messages";
 import { BasicPrerequisites } from "../Prerequistes";
