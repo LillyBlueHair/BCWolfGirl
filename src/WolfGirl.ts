@@ -9,6 +9,7 @@ import { CtrlHook, IsPlayerWolfGirl } from './Control/WolfGirlCtrl';
 import { OrgasmMonitor } from './utils/Orgasm';
 import { DataManager } from './Data';
 import { TaskCtrl } from "./Control/TaskCtrl/TaskCtrl";
+import { RegisterActivities } from './ChatRoom/Activity';
 
 (function () {
     if (window.BCWorlGirl_Loaded) return;
@@ -39,7 +40,11 @@ import { TaskCtrl } from "./Control/TaskCtrl/TaskCtrl";
         DialogInventoryBuildHandler(args[0] as Character, args[2] as boolean);
     });
 
+    DataManager.init(mod, `${ModName} v${ModVersion} loaded.`);
+
     CtrlHook(mod);
+
+    RegisterActivities(mod);
 
     const orgasm = new OrgasmMonitor(mod);
 

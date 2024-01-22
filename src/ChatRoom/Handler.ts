@@ -3,6 +3,7 @@ import { ActivityDeconstruct, ActivityInfo } from "../utils/ChatMessages";
 import { RunCommands } from "./Run";
 import { CommandType } from "./ICmds";
 import { TaskCtrl } from "../Control/TaskCtrl/TaskCtrl";
+import { RunActivityHandlers } from "./Activity";
 
 export function ChatRoomHandler(): ChatRoomMessageHandler {
     return {
@@ -37,12 +38,6 @@ function ChatRoomChat(player: Character, sender: Character, msg: string, type: C
 }
 
 function ChatRoomActivity(player: Character, sender: Character, data: ActivityInfo) {
-    if (sender.MemberNumber === player.MemberNumber && data.ActivityName === "Inject" && data.SourceCharacter.MemberNumber === player.MemberNumber) {
-        const target = ChatRoomCharacter.find(c => c.MemberNumber === data.TargetCharacter.MemberNumber);
-        if (!target) return;
-        InitDressSequence(player, target);
-    }
-
-
+    RunActivityHandlers(player, sender, data);
     TaskCtrl.instance.onActivity(player, sender, data);
 }

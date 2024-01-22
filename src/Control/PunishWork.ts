@@ -3,7 +3,7 @@ import { AppearanceUpdate } from "../utils/Apperance";
 import { CommonWork } from "./CommonWork";
 import { MessageWork } from "./MessageWork";
 import { ItemOptionWork, OutfitItemsMap } from "./OutfitCtrl";
-import { StashOutfit } from "./StashOutfit";
+import { GatherDataOutfitItem } from "./StashOutfit";
 import { TimedWork, TimedWorkState, TimedWorker } from "./Worker";
 
 function IsSimpleChat(msg: string) {

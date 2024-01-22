@@ -2,8 +2,8 @@ import { DataManager } from ".";
 
 
 export class OutfitUtilities {
-    parent: DataManager;
-    _items: Map<string, DataOutfitItem>;
+    private parent: DataManager;
+    private _items: Map<string, DataOutfitItem>;
 
     constructor(parent: DataManager) {
         this.parent = parent;
@@ -14,16 +14,16 @@ export class OutfitUtilities {
         return this.parent.data.outfit;
     }
 
-    get collar_only() {
+    get lite_mode() {
         return this.data.lite_mode;
     }
 
-    set collar_only(arg: boolean) {
+    set lite_mode(arg: boolean) {
         this.data.lite_mode = arg;
         this.parent.save();
     }
 
-    push(item: DataOutfitItem | DataOutfitItem[]) {
+    add(item: DataOutfitItem | DataOutfitItem[]) {
         if (Array.isArray(item)) {
             item.forEach(i => this._items.set(i.asset.group, i));
         } else {

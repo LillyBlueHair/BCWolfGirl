@@ -3,7 +3,7 @@ import { OutfitItemsMap, OutfitItems } from "./Definition";
 import { OutfitItemType } from "./OutfitTypes";
 import { TimedWork } from "../Worker";
 import { TimedWorkState } from "../Worker";
-import { ItemFromOutfit } from "./Utils";
+import { CalculateLocks, ItemFromOutfit } from "./Utils";
 import { ExtractMemberNumber } from "../../utils/Character";
 
 export class ItemWearWork extends TimedWork {
@@ -166,15 +166,7 @@ export class ItemLockWork extends TimedWork {
         const target = ChatRoomCharacter.find(c => c.MemberNumber === this._target);
         if (!target) return TimedWorkState.interrupted;
 
-        const lock = (() => {
-            if (this._lock) return this._lock;
-
-            if (target.Ownership && target.Ownership.MemberNumber === player.MemberNumber)
-                return "OwnerPadlock";
-            if (target.Lovership && target.Lovership.some(e => e.MemberNumber === player.MemberNumber))
-                return "LoversPadlock";
-            return "ExclusivePadlock";
-        })()
+        const lock = CalculateLocks(player, target);
 
         this._group.forEach(group => {
             const item = target.Appearance.find(e => e.Asset.Group.Name === group);

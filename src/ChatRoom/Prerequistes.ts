@@ -7,8 +7,8 @@ export type Prerequisite = (player: Character, sender: Character | number) => bo
 export const IsSelf: Prerequisite = (player: Character, sender: Character | number) =>
     (typeof sender !== "number" ? sender.MemberNumber : sender) === player.MemberNumber;
 
-export const IsModerator: Prerequisite = (player: Character, sender: Character | number) => {
-    if (DataManager.permission.isModerator(player, sender)) return true;
+export const IsModerator: Prerequisite = (player: Character, moderator: Character | number) => {
+    if (DataManager.permission.isModerator(player, moderator)) return true;
     return false;
 }
 

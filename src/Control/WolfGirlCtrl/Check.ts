@@ -49,6 +49,6 @@ function IsGroupsDressed(player: Character, groups: string[]) {
 }
 
 export function IsPlayerWolfGirl(player: Character): boolean {
-    if (DataManager.outfit.collar_only) return IsGroupsDressed(player, ["ItemNeck", "ItemPelvis"]);
+    if (DataManager.outfit.lite_mode) return IsGroupsDressed(player, ["ItemNeck", "ItemPelvis"]);
     return IsFullyDressed(player);
 }

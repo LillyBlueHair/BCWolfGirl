@@ -5,7 +5,7 @@ import { IMessage, ParseMessage } from "../Message";
 import { TimedWork, TimedWorkState } from "../Worker";
 import { OutfitItemsMap } from "./Definition";
 import { OutfitItemType } from "./OutfitTypes";
-import { CheckItem, CheckItemRaw, ItemFromOutfit } from "./Utils";
+import { CalculateLocks, CheckItem, CheckItemRaw, ItemFromOutfit } from "./Utils";
 
 
 interface OutfitCheckWorkItem {
@@ -42,8 +42,9 @@ export interface OutfitFixWorkResult {
 export class OutfitFixWork extends TimedWork {
     private readonly _target: OutfitCheckWorkItem[];
     private readonly _message?: (passed: OutfitFixWorkResult) => IMessage | undefined | void;
+    private readonly _acting_chara: Character | number;
 
-    constructor(target: (string | OutfitItemType | OutfitCheckWorkParamItem)[], message?: (result: OutfitFixWorkResult) => IMessage | undefined | void) {
+    constructor(acting_chara: Character | number, target: (string | OutfitItemType | OutfitCheckWorkParamItem)[], message?: (result: OutfitFixWorkResult) => IMessage | undefined | void) {
         super();
         this._target = target.map(i => {
             if (typeof i === "string") return { target: OutfitItemsMap.get(i) as OutfitItemType };
@@ -52,6 +53,7 @@ export class OutfitFixWork extends TimedWork {
             else return { target: i };
         });
         this._message = message;
+        this._acting_chara = acting_chara;
     }
 
     run(player: Character): TimedWorkState {
@@ -82,6 +84,8 @@ export class OutfitFixWork extends TimedWork {
 
         const saved_item = DataManager.outfit.items;
 
+        const lock = CalculateLocks(this._acting_chara, player);
+
         player.Appearance = player.Appearance.concat(this._target.map(i => {
             const existed_i = app_map.get(i.target.Asset.Group);
             const expected_i = ItemFromOutfit(player, player, i.target, craft) as Item;
@@ -91,9 +95,11 @@ export class OutfitFixWork extends TimedWork {
                 if (saved.property) expected_i.Property = saved.property;
             })(saved_item.get(i.target.Asset.Group), () => {
                 if (i.option) ExtendedItemSetOptionByRecord(player, expected_i, i.option);
+                if (!expected_i.Property) expected_i.Property = {};
                 if (i.property) {
-                    if (!expected_i.Property) expected_i.Property = {};
                     Object.assign(expected_i.Property, i.property);
+                } else {
+                    InventoryLock(player, expected_i, lock, player.MemberNumber)
                 }
             });
             if (!existed_i) return expected_i;

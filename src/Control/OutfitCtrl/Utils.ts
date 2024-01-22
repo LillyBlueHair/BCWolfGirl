@@ -1,3 +1,4 @@
+import { ExtractMemberNumber } from "../../utils/Character";
 import { OutfitItemsMap } from "./Definition";
 import { OutfitItemType } from "./OutfitTypes";
 
@@ -79,4 +80,12 @@ export function CheckItems(target: Character, item: (OutfitItemType | string)[],
 
         return CheckItemRaw(item, oitem, crafter);
     });
+}
+
+export function CalculateLocks(locking: Character | number, locked: Character) {
+    const num = ExtractMemberNumber(locking);
+    if (locked.Ownership && locked.Ownership.MemberNumber === num) return "OwnerPadlock";
+    if (locked.Lovership && locked.Lovership.some(e => e.MemberNumber === num))
+        return "LoversPadlock";
+    return "ExclusivePadlock";
 }

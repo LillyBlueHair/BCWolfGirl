@@ -51,16 +51,15 @@ export class EILNetwork {
     static Wfetch: () => Promise<EILNetwork>;
 
     static init(asset_url: string) {
-        const url = asset_url + 'EIL.json';
-        return this.fetch(url).then(d => {
+        return this.fetch(asset_url).then(d => {
             EILNetwork._Access = () => {
                 if (EILNetwork.last_fetched) {
                     if (Date.now() - EILNetwork.last_fetched.Time < 60000)
-                        EILNetwork.fetch(url);
+                        EILNetwork.fetch(asset_url);
                 }
                 return EILNetwork.last_fetched as EILNetwork;
             }
-            EILNetwork.Wfetch = () => EILNetwork.fetch(url);
+            EILNetwork.Wfetch = () => EILNetwork.fetch(asset_url);
         });
     }
 }

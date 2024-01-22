@@ -24,8 +24,8 @@ export function ParseMessage(option: IMessage, src?: { player?: Character, targe
         return match;
     });
     if (option.mode === "action") {
-    } else if (option.mode === "chat-action") {
         ChatRoomAction.instance.SendAction(parsed);
+    } else if (option.mode === "chat-action") {
         ChatRoomAction.instance.SendAction("\"" + parsed + "\"");
     } else if (option.mode === "local") {
         ChatRoomAction.instance.LocalAction(parsed);

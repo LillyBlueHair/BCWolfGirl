@@ -7,7 +7,7 @@ import { MessageWork, WaitResponseWork } from "./MessageWork";
 import { OutfitItemType, OutfitItemsMap, ToolsCrate, ToolsInjector, ToolsVisor } from "./OutfitCtrl";
 import { ClothRemoveWork, ClothRestoreWork, ItemLockWork, ItemOptionWork, ItemPropertyWork, ItemRemoveWork, ItemWearWork } from "./OutfitCtrl";
 import { CheckItem } from "./OutfitCtrl";
-import { OutfitFixWork, OutfitFixWorkResult } from "./OutfitCtrl/OutfitCheckWork";
+import { OutfitFixWork, OutfitFixWorkResult } from "./OutfitCtrl/OutfitFixWork";
 import { IsPlayerWolfGirl } from "./WolfGirlCtrl";
 import { IsFullyDressed } from "./WolfGirlCtrl/Check";
 import { TimedWork, TimedWorker } from "./Worker";
@@ -160,7 +160,7 @@ export function InitDressSequence(player: Character, target: Character) {
     });
 }
 
-export function DressFixSequence(player: Character) {
+export function DressFixSequence(sender: Character | number, player: Character) {
     const cannot_fix: IMessage = {
         mode: "chat-action",
         msg: "发现部分物品被锁定物品替代，无法自动修复，停止修复过程。"
@@ -196,7 +196,7 @@ export function DressFixSequence(player: Character) {
             else return { mode: "chat-action", msg: "组件扫描完成，发现部分组件缺失或离线，进入修复模式" };
         }),
         new MessageWork("chat-action", "维护舱很快伸出了几个机械臂，在{player_wg}身前上下扫描着，淡蓝色的光束照射在她身上，似乎能够看透一切"),
-        new OutfitFixWork([
+        new OutfitFixWork(sender, [
             { target: "ItemEars" },
             { target: "ItemHead" },
             { target: "ItemMouth" },
@@ -210,24 +210,24 @@ export function DressFixSequence(player: Character) {
                 mode: "chat-action",
                 msg: "也许{player_wg}想要获得一些渴求，简单的视听能幻想这一切都没有发生，而进食人类的食物更能给予大脑错觉？亦或者是因为身体的封锁而想要用你的舌你的口进行一些淫亵的满足？究竟是命运无法撼动，还是你早已忘却了是何时为自己做下了选择？"
             })),
-        new OutfitFixWork(['ItemBreast', 'ItemNipplesPiercings', 'ItemNipples'], create_result_process({
+        new OutfitFixWork(sender, ['ItemBreast', 'ItemNipplesPiercings', 'ItemNipples'], create_result_process({
             mode: "action",
             msg: "丰满的乳房的确引人注目，但是随意暴露出这已经不属于你的资产是否有些僭越？维护舱将用一个小小的电击器分别电击了下{player_wg}的两侧乳头，随后重新开始了安装组件"
         })),
-        new OutfitFixWork(['ItemHands',
+        new OutfitFixWork(sender, ['ItemHands',
             { target: 'ItemArms', option: { typed: 1 } }], create_result_process({
                 mode: "action",
                 msg: "似乎{player_wg}弄丢了她的手环和手套，看起来是想要做一些什么大幅度动作的样子，是尝试一些淫靡的行动？也许只是单纯的想要感受触摸？不过维护舱并没有在意她的目的是什么，只是忠实的执行着指令，将一套全新的设备安装回了{player_wg}身上"
             })),
-        new OutfitFixWork(['ItemTorso', 'ItemTorso2', 'ItemNeckAccessories'], create_result_process({
+        new OutfitFixWork(sender, ['ItemTorso', 'ItemTorso2', 'ItemNeckAccessories'], create_result_process({
             mode: "chat-action",
             msg: "外部通讯束带模块与药剂注射模块或身份标签异常，的确这几个模块十分容易出现损坏或者缺失，正在修复，但请注意，维修费用并不会因此而有任何折扣"
         })),
-        new OutfitFixWork(['ItemVulva', 'ItemPelvis', 'ItemButt', 'ItemVulvaPiercings'], create_result_process({
+        new OutfitFixWork(sender, ['ItemVulva', 'ItemPelvis', 'ItemButt', 'ItemVulvaPiercings'], create_result_process({
             mode: "chat-action",
             msg: "你的身体，你的呼吸，甚至你的思想，你的灵魂，都属于你的主人，自然高潮的权利也不属于你，你所能被允许获得的快感是为了提示你的身份，而高潮的欢愉则是主人给予的赏赐，偷食禁果自然会有严厉的惩处"
         })),
-        new OutfitFixWork(['ItemBoots',
+        new OutfitFixWork(sender, ['ItemBoots',
             { target: 'ItemFeet', option: { typed: 2 }, },
             { target: 'ItemLegs', option: { typed: 2 } }], create_result_process({
                 mode: "action",
