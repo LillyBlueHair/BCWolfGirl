@@ -5,7 +5,9 @@ import { TimedWorker } from "./Control/Worker";
 import { DialogInventoryBuildHandler } from './Control/OutfitCtrl';
 import { ChatRoomAction } from './utils/ChatMessages';
 import { EILNetwork } from './Network';
-import { CtrlHook } from './Control/WolfGirlCtrl';
+import { CtrlHook, IsPlayerWolfGirl } from './Control/WolfGirlCtrl';
+import { OrgasmMonitor } from './utils/Orgasm';
+import { DataManager } from './Data';
 
 (function () {
     if (window.BCWorlGirl_Loaded) return;
@@ -36,6 +38,23 @@ import { CtrlHook } from './Control/WolfGirlCtrl';
     });
 
     CtrlHook(mod);
+
+    const orgasm = new OrgasmMonitor(mod);
+
+    orgasm.AddOrgasmEvent((player) => {
+        if (IsPlayerWolfGirl(player))
+            DataManager.arousal.orgasm += 1;
+    });
+
+    orgasm.AddResistEvent((player) => {
+        if (IsPlayerWolfGirl(player))
+            DataManager.arousal.resist += 1;
+    });
+
+    orgasm.AddRuinedEvent((player) => {
+        if (IsPlayerWolfGirl(player))
+            DataManager.arousal.ruined += 1;
+    });
 
     window.BCWorlGirl_Loaded = true;
     console.log(`${ModName} v${ModVersion} loaded.`);
