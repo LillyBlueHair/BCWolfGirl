@@ -349,6 +349,8 @@ declare function ChatRoomSendChat(): void;
 declare var ChatRoomMenuButtons: string[];
 declare function ElementValue(id: string, value?: string): string;
 
+declare var CurrentCharacter: Character | null;
+
 //text.js
 declare function TextGet(key: string): string;
 
