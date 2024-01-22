@@ -2,6 +2,16 @@ declare var TranslationLanguage: string;
 declare var CurrentScreen: string;
 declare var ChatRoomSpace: string | null;
 
+type AssetGroupItemName =
+    'ItemAddon' | 'ItemArms' | 'ItemBoots' | 'ItemBreast' | 'ItemButt' |
+    'ItemDevices' | 'ItemEars' | 'ItemFeet' | 'ItemHands' | 'ItemHead' |
+    'ItemHood' | 'ItemLegs' | 'ItemMisc' | 'ItemMouth' | 'ItemMouth2' |
+    'ItemMouth3' | 'ItemNeck' | 'ItemNeckAccessories' | 'ItemNeckRestraints' |
+    'ItemNipples' | 'ItemNipplesPiercings' | 'ItemNose' | 'ItemPelvis' |
+    'ItemTorso' | 'ItemTorso2' | 'ItemVulva' | 'ItemVulvaPiercings' |
+    'ItemHandheld'
+    ;
+
 interface ChatRoomChatLogItem {
     Chat: string;
     Garbled: string;
@@ -264,14 +274,23 @@ declare function AssetGet(Family: string, Group: string, Name: string): Asset | 
 declare function AssetGroupGet(Family: string, Group: string): AssetGroup | null;
 
 interface Activity {
-    Name: string;
+    Name: ActivityName;
     MaxProgress: number;
-    Prerequisite: string[];
-    Target: string[];
+    MaxProgressSelf?: number;
+    Prerequisite: ActivityPrerequisite[];
+    Target: AssetGroupItemName[];
+    TargetSelf?: AssetGroupItemName[] | true;
+    Reverse?: true;
+    MakeSound?: boolean;
+    StimulationAction?: StimulationAction;
+    ActivityExpression?: ExpressionTrigger[];
 }
 
 declare function AssetAllActivities(family: string): Activity[];
-declare function ActivityAllowedForGroup(character: Character, groupname: string, allowItem: boolean = false): Activity[];
+declare function ActivityAllowedForGroup(character: Character, groupname: AssetGroupItemName, allowItem: boolean = false): Activity[];
+declare var ActivityFemale3DCG: Activity[] | null;
+declare var ActivityFemale3DCGOrdering: string[];
+
 
 declare var KeyPress: number;
 declare var MiniGameCheatAvailable: boolean;
