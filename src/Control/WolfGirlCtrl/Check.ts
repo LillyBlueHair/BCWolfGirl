@@ -1,4 +1,5 @@
-import { OutfitItems } from "../OutfitCtrl";
+import { DataManager } from "../../Data";
+import { OutfitItems, OutfitItemsMap } from "../OutfitCtrl";
 import { OutfitItemType } from "../OutfitCtrl";
 
 function ItemValid(item: Item, src: OutfitItemType) {
@@ -14,7 +15,7 @@ function ItemValid(item: Item, src: OutfitItemType) {
     return true;
 }
 
-export function IsPlayerWolfGirl(player: Character): boolean {
+export function IsFullyDressed(player: Character): boolean {
     const items_map = new Map<string, Item>(
         player.Appearance.map(e => [e.Asset.Group.Name, e])
     );
@@ -24,4 +25,18 @@ export function IsPlayerWolfGirl(player: Character): boolean {
         if (!ItemValid(item, e)) return false;
         return true;
     });
+}
+
+export function IsCollarOn(player: Character): boolean {
+    const group = "ItemNeck";
+    const item = player.Appearance.find(e => e.Asset.Group.Name === group);
+    const outfit = OutfitItemsMap.get(group);
+    if (!item || !outfit) return false;
+    if (!ItemValid(item, outfit)) return false;
+    return true;
+}
+
+export function IsPlayerWolfGirl(player: Character): boolean {
+    if (DataManager.outfit.collar_only) return IsCollarOn(player);
+    return IsFullyDressed(player);
 }

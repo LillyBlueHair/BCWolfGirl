@@ -1,4 +1,5 @@
 import { IsPlayerWolfGirl } from "../Control/WolfGirlCtrl";
+import { IsCollarOn } from "../Control/WolfGirlCtrl/Check";
 import { DataManager } from "../Data";
 
 export type Prerequisite = (player: Character, sender: Character | number) => boolean;
@@ -12,4 +13,4 @@ export const IsModerator: Prerequisite = (player: Character, sender: Character |
 }
 
 export const BasicPrerequisites: Prerequisite[] = [NotSelf, IsPlayerWolfGirl, IsModerator];
-export const NotFullyDressed: Prerequisite[] = [NotSelf, IsModerator];
+export const CollarONPrerequisites: Prerequisite[] = [NotSelf, IsCollarOn, IsModerator];

@@ -1,5 +1,5 @@
 import { CommandTemplate } from "../ICmds";
-import { BasicPrerequisites, NotFullyDressed } from "../Prerequistes";
+import { BasicPrerequisites, CollarONPrerequisites } from "../Prerequistes";
 
 
 export const OutfitCmds: CommandTemplate[] = [
@@ -12,7 +12,7 @@ export const OutfitCmds: CommandTemplate[] = [
     },
     {
         match: /进入维护模式/,
-        prerequisite: NotFullyDressed,
+        prerequisite: CollarONPrerequisites,
         run(player) {
 
         }

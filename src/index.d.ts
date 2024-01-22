@@ -3,15 +3,19 @@ interface Window {
     BCWorlGirl_Loaded?: boolean;
 }
 
-interface ColorPattern {
-    item: string;
-    group: string;
+interface DataOutfitItem {
+    asset: {
+        name: string;
+        group: string;
+    },
     color: string | string[];
+    property: any;
 }
 
 interface WolfGrilData {
-    color: {
-        patterns: ColorPattern[];
+    outfit: {
+        collar_only: boolean;
+        items: DataOutfitItem[];
     },
     permission: {
         moderators: number[];
