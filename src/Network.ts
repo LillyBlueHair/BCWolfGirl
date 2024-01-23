@@ -42,7 +42,7 @@ export class EILNetwork {
     private static last_fetched: EILNetwork | undefined = undefined;
 
     static async fetch(asset_url: string): Promise<EILNetwork> {
-        return fetch(asset_url + 'EIL.json').then((res) => {
+        return fetch(asset_url + `EIL.json?t=${Date.now()}`).then((res) => {
             if (!res.ok) { throw new Error('EIL.json not found.'); }
             return res.json() as Promise<EILData>;
         }).then(d => EILNetwork.last_fetched = new EILNetwork(d));
