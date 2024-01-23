@@ -3,7 +3,7 @@ import { ActivityInfo } from "../../utils/ChatMessages";
 
 export class BegOrgasmTask extends TimedCounterTask {
     summary(): string {
-        return `在${new Date(this.time_out).toUTCString()}之前，向${this.expected}个人乞求高潮，成功后获得${this.bonus}点奖励`
+        return `在${new Date(this.time_out).toLocaleTimeString()}之前，向${this.expected}个人乞求高潮，成功后获得${this.bonus}点奖励`
     }
     constructor(time_limit: number, counter: number, bonus: number) {
         super(time_limit, counter, bonus);

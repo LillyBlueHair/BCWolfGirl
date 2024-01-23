@@ -15,7 +15,7 @@ export const ArousalCmds: CommandTemplate[] = [
                 `  高潮次数：${orgasm}\n` +
                 `  忍耐次数：${resist}\n` +
                 `  毁灭次数：${ruined}\n` +
-                `  高潮成功率：${((orgasm) / (orgasm + resist + ruined) * 100).toFixed(2)}%\n`;
+                `  高潮成功率：${((orgasm) / (orgasm + resist + ruined) * 100).toFixed(2)}%`;
             ParseMessage({ mode: "chat-action", msg: arousal_report });
         }
     }

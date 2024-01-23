@@ -1,7 +1,8 @@
 import { DataManager } from "../Data";
+import { EILNetwork } from "../Network";
 import { AppearanceUpdate } from "../utils/Apperance";
-import { OutfitItemsMap } from "./OutfitCtrl";
-import { CheckItemRaw } from "./OutfitCtrl/Utils";
+import { OutfitItemType, OutfitItemsMap } from "./OutfitCtrl";
+import { CheckItemRaw, CraftingItemFromOutfit } from "./OutfitCtrl/Utils";
 
 
 export function GatherDataOutfitItem(player: Character): DataOutfitItem[] {
@@ -65,10 +66,13 @@ export function StashPopOutfit(player: Character): StashPopResult {
         return true;
     })) return StashPopResult.Locked;
 
+    const craft = EILNetwork.Access.craft;
+
     player.Appearance = player.Appearance.map(item => {
         const ti = saved.get(item.Asset.Group.Name);
         if (!ti) return item;
         const asset = AssetGet(player.AssetFamily, item.Asset.Group.Name, item.Asset.Name)
+        const oi = OutfitItemsMap.get(item.Asset.Group.Name) as OutfitItemType;
         saved.delete(item.Asset.Group.Name);
         return {
             ...item,
@@ -76,13 +80,17 @@ export function StashPopOutfit(player: Character): StashPopResult {
             Color: ti.color,
             Difficulty: 46,
             Property: ti.property,
+            Craft: CraftingItemFromOutfit(player, oi, craft),
         }
     }).concat(Array.from(saved.values()).map(i => {
+        const oi = OutfitItemsMap.get(i.asset.group) as OutfitItemType;
+
         return {
             Asset: AssetGet(player.AssetFamily, i.asset.group, i.asset.name),
             Color: i.color,
             Difficulty: 46,
             Property: i.property,
+            Craft: CraftingItemFromOutfit(player, oi, craft),
         }
     })) as Item[];
 

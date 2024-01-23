@@ -1,11 +1,12 @@
 import { ModSDKModAPI } from "bondage-club-mod-sdk";
 import { DataManager } from "../Data";
 import { ActivityInfo } from "../utils/ChatMessages";
-import { InitDressSequence } from "../Control/CtrlSequence";
+import { InitDressSequence, StartStashPopSequence, StartStashSequence } from "../Control/CtrlSequence";
 import { IsModerator } from "./Prerequistes";
 import { IsPlayerWolfGirl } from "../Control/WolfGirlCtrl";
 import { StashOutfit, StashPopOutfit, StashPopResult } from "../Control/StashOutfit";
 import { ParseMessage } from "../Control/Message";
+import { IsCollarOn } from "../Control/WolfGirlCtrl/Check";
 
 
 abstract class IActivity {
@@ -28,22 +29,15 @@ class WolfGirlItemsSwitch extends IActivity {
     on(player: Character, sender: Character, info: ActivityInfo): void {
         if (info.TargetCharacter.MemberNumber === player.MemberNumber && IsModerator(player, sender) && IsPlayerWolfGirl(player)) {
             if (DataManager.outfit.lite_mode) {
-                if (StashPopOutfit(player) === StashPopResult.Locked) {
-                    ParseMessage({ mode: "chat-action", msg: "存在锁定物品，无法切换模式。" })
-                } else {
-                    DataManager.outfit.lite_mode = false;
-                    ParseMessage({ mode: "chat-action", msg: "已切换到完整物品模式。" })
-                }
+                StartStashPopSequence(player, sender);
             } else {
-                StashOutfit(player);
-                DataManager.outfit.lite_mode = true;
-                ParseMessage({ mode: "chat-action", msg: "已切换到轻量物品模式。" })
+                StartStashSequence(player, sender);
             }
         }
     }
 
     text(keyword: string) {
-        return "切换物品模式";
+        return "切换狼女物品模式";
     }
 }
 
@@ -81,7 +75,7 @@ export function RegisterActivities(mod: ModSDKModAPI) {
             if (acted.MemberNumber === acting.MemberNumber && Player && Player.MemberNumber === acted.MemberNumber) {
                 return DataManager.points.points > 10;
             }
-            else return DataManager.permission.canModerate(acting, acted);
+            else return IsCollarOn(acted) && DataManager.permission.canModerate(acting, acted);
         }
         return next(args);
     });

@@ -50,6 +50,13 @@ type ServerChatRoomSettings = Partial<ServerChatRoomData> & {
 
 declare var ChatRoomChatLog: ChatRoomChatLogItem[] | undefined | null;
 
+interface Lovership {
+    Name: string;
+    MemberNumber: number;
+    Stage: 0 | 1 | 2;
+    Start: number;
+}
+
 interface Character {
     ID: number;
     Appearance: Item[];
@@ -79,12 +86,7 @@ interface Character {
         Start: number,
         Stage: number,
     },
-    Lovership?: {
-        MemberNumber: number,
-        Name: string,
-        Start: number,
-        Stage: number,
-    }[],
+    Lovership?: Lovership[],
     OnlineSharedSettings: {
         AllowFullWardrobeAccess: boolean,
         BlockBodyCosplay: boolean,
@@ -225,8 +227,17 @@ interface Item {
     Property?: ItemProperty;
 }
 
+interface ServerBeepData {
+    MemberNumber?: number,
+    MemberName?: string,
+    ChatRoomName?: string,
+    Message?: string,
+    Private?: boolean
+}
+
 declare var Player: Character | undefined;
 declare var ChatRoomCharacter: Character[];
+declare var ChatRoomPlayerCanJoin: boolean;
 
 declare var KidnapLeagueOnlineBountyTarget: number;
 declare var KidnapLeagueOnlineBountyTargetStartedTime: number;

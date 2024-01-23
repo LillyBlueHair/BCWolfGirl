@@ -8,7 +8,7 @@ import { RunActivityHandlers } from "./Activity";
 export function ChatRoomHandler(): ChatRoomMessageHandler {
     return {
         Description: "WolfGirl Message Hook",
-        Priority: 10, // 100 = deprevation starts
+        Priority: 1024, // 100 = deprevation starts, 500 = show on chatlog
         Callback: (data, sender, msg, metadata) => {
             if (Player && Player.MemberNumber) {
                 if (data.Type === "Chat" || data.Type === "Whisper") {
@@ -25,11 +25,11 @@ export function ChatRoomHandler(): ChatRoomMessageHandler {
     }
 }
 
-export function BeepRawHandler(player: Character, data: { MemberNumber?: number, MemberName?: string, ChatRoom?: string, Message?: string }) {
+export function BeepRawHandler(player: Character, data: ServerBeepData) {
     if (!data.MemberName || !data.MemberNumber || !data.Message) return;
     if (player.GhostList && player.GhostList.indexOf(data.MemberNumber) >= 0) return;
 
-    RunCommands(player, data.MemberNumber, data.Message, { type: "Beep", "BeepRoom": data.ChatRoom });
+    RunCommands(player, data.MemberNumber, data.Message, { type: "Beep", "BeepRoom": data.ChatRoomName });
 }
 
 

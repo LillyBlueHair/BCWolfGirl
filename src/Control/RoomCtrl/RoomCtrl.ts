@@ -68,6 +68,8 @@ export function RoomComeHereSequence(player: Character, room: string) {
         new CommonWork(pl => {
             ChatRoomLeave();
             CommonSetScreen("Online", "ChatSearch");
+            CommonSetScreen("Online", "ChatSearch");
+            ChatRoomPlayerCanJoin = true;
             ServerSend("ChatRoomJoin", { Name: room });
         })
     ];

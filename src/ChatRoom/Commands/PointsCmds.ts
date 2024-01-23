@@ -23,6 +23,8 @@ export const ModPointsCmds: CommandTemplate[] = [
         match: /^忍耐([1-9]\d{0,2})次高潮/,
         prerequisite: BasicPrerequisites,
         run(player, sender, content) {
+            RunControls(player, "ToysCtrl", "max");
+            RunControls(player, "ArousalCtrl", "off");
             PushTask(player, new ResistTask(10 * 60 * 1000, parseInt(content[1]), 2))
         }
     },
@@ -30,7 +32,7 @@ export const ModPointsCmds: CommandTemplate[] = [
         match: /^向([1-9]\d{0,2})人乞求高潮/,
         prerequisite: BasicPrerequisites,
         run(player, sender, content) {
-            ItemOptionWork.ItemOptionSingleS(player, { target: "ItemPelvis", option: {} });
+            ItemOptionWork.ItemOptionSingleS(player, { target: "ItemPelvis", option: { c: 0 } });
             RunControls(player, "ArousalCtrl", "off");
             PushTask(player, new BegOrgasmTask(30 * 60 * 1000, parseInt(content[1]), 2));
         }
@@ -90,7 +92,7 @@ export const ModPointsCmds: CommandTemplate[] = [
         run(player, sender, content) {
             const v = parseInt(content[2]);
             DataManager.points.points += content[1] === "扣除" ? -v : v;
-            ParseMessage({ mode: "local", msg: `${GetWolfGrilName(player)}${content[1]}了5积分，当前积分${DataManager.points.points}` })
+            ParseMessage({ mode: "action", msg: `${GetWolfGrilName(player)}${content[1]}了5积分，当前积分${DataManager.points.points}` }, { player })
         }
     },
 ]

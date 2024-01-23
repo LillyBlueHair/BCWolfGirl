@@ -8,17 +8,17 @@ import { OutfitItemType, OutfitItemsMap, ToolsCrate, ToolsInjector, ToolsVisor }
 import { ClothRemoveWork, ClothRestoreWork, ItemLockWork, ItemOptionWork, ItemPropertyWork, ItemRemoveWork, ItemWearWork } from "./OutfitCtrl";
 import { CheckItem } from "./OutfitCtrl";
 import { OutfitFixWork, OutfitFixWorkResult } from "./OutfitCtrl/OutfitFixWork";
+import { StashOutfit, StashPopOutfit, StashPopResult } from "./StashOutfit";
 import { IsPlayerWolfGirl } from "./WolfGirlCtrl";
 import { IsFullyDressed } from "./WolfGirlCtrl/Check";
 import { TimedWork, TimedWorker } from "./Worker";
 
 function DressSequence(net: EILNetwork, player: Character, target: Character) {
     const clothing_stash: Item[] = [];
+    const craft = net.craft;
     const work_sequence: TimedWork[] = [
         new CheckWork(() => {
-            if (net.isEIL(player.MemberNumber)) return CheckWork.Accepted;
-            if (target.Ownership && target.Ownership.MemberNumber === player.MemberNumber) return CheckWork.Accepted;
-            if (target.Lovership && target.Lovership.some(e => e.MemberNumber === player.MemberNumber)) return CheckWork.Accepted;
+            if (DataManager.permission.canModerate(player, target)) return CheckWork.Accepted;
             return CheckWork.Rejected;
         }, {
             mode: "local",
@@ -32,7 +32,7 @@ function DressSequence(net: EILNetwork, player: Character, target: Character) {
         new MessageWork("action", "{player}的眼镜侧面打开一个小小的隔板，一枚辅助定位信标从中飘出，很快悬停在了{target}身后", target),
         new DelayWork(5000),
         new MessageWork("action", "空间似乎有些小小的涟漪，而随着一阵小小的气旋，一个充满了精妙器械的复杂维护舱出现在了{target}身后，从中伸出几只机械臂将她拉入了维护舱", target),
-        new ItemWearWork([ToolsCrate], target),
+        new ItemWearWork([ToolsCrate], target, craft),
         new DelayWork(5000),
         new MessageWork("chat-action", "已检测到目标，维护舱室已进行拘束并锁定。正在扫描体型并收集数据"),
         new ItemOptionWork(target, [{ target: ToolsCrate.Asset.Group, option: { "w": 1, "l": 2, "a": 1, "d": 0, "t": 0, "h": 4 } }]),
@@ -59,7 +59,7 @@ function DressSequence(net: EILNetwork, player: Character, target: Character) {
         }),
         new DelayWork(5000),
         new MessageWork("action", "在机械臂的辅助下，数个精巧的铐环被安装到了{target}身上，小小的机械锁定声响虽然微弱，但却清晰可辨", target),
-        ...['ItemArms', 'ItemFeet', 'ItemLegs'].map(e => new ItemWearWork([e], target)),
+        ...['ItemArms', 'ItemFeet', 'ItemLegs'].map(e => new ItemWearWork([e], target, craft)),
         new DelayWork(5000),
         new MessageWork("chat-action", "拘束自检中"),
         new DelayWork(5000),
@@ -69,20 +69,20 @@ function DressSequence(net: EILNetwork, player: Character, target: Character) {
         new DelayWork(5000),
         new MessageWork("action", "两个更为精巧的机械臂从两侧伸出，轻轻捏住{target}的乳头", target),
         new MessageWork("action", "似乎只是一阵冰凉的触感，随即而来的紧束感与拉力让{target}知道乳头上也已经被安装了道具", target),
-        new ItemWearWork(['ItemNipplesPiercings', 'ItemNipples'], target),
+        new ItemWearWork(['ItemNipplesPiercings', 'ItemNipples'], target, craft),
         new MessageWork("chat-action", "已确认组件安装到位"),
         new DelayWork(5000),
         new MessageWork("action", "机械臂放开了{target}的乳头，一点点向下，停在了{target}的小腹，机械臂轻轻分开阴唇与包皮，暴露出稚嫩的阴蒂", target),
         new MessageWork("action", "阴蒂上的紧束感带来的快感显然要更为明显，而与此同时小穴与后穴中突然袭击的充盈感带来的愉悦与之相衬，令{target}的身体不自觉的在维护舱的拘束中微微扭动", target),
-        new ItemWearWork(['ItemVulvaPiercings', 'ItemVulva', 'ItemButt'], target),
+        new ItemWearWork(['ItemVulvaPiercings', 'ItemVulva', 'ItemButt'], target, craft),
         new MessageWork("chat-action", "拘束自检中"),
         new DelayWork(5000),
         new MessageWork("action", "一阵小小的震动为{target}带去些微微不足道的快感，锁定完成的滴声随即响起，这意味着什么呢？", target),
-        new ItemLockWork(['ItemVulvaPiercings', 'ItemVulva', 'ItemButt'], target),
+        new ItemLockWork(['ItemVulvaPiercings', 'ItemVulva', 'ItemButt', 'ItemNipplesPiercings'], target),
         new MessageWork("chat-action", "已确认安装到位并锁定"),
         new MessageWork("action", "如同托尼斯塔克在纽约的大楼外的自动维护廊道一般，机械臂们前后举起了数个似乎是战甲一样的装具，装具们早已有过预热，希望并不会为{target}带来寒意，也许吧？", target),
         new MessageWork("action", "胸部，躯干，胯部，温暖的包覆伴随着机械组合动作的细微震动，似乎只是一套极为贴身且足够舒适的内衣被采用这样的方式穿上了身体", target),
-        new ItemWearWork(['ItemBreast', 'ItemPelvis', 'ItemTorso', 'ItemTorso2'], target),
+        new ItemWearWork(['ItemBreast', 'ItemPelvis', 'ItemTorso', 'ItemTorso2'], target, craft),
         new DelayWork(5000),
         new MessageWork("chat-action", "拘束自检中"),
         new DelayWork(5000),
@@ -91,10 +91,10 @@ function DressSequence(net: EILNetwork, player: Character, target: Character) {
         new MessageWork("chat-action", "已确认安装到位并锁定"),
         new DelayWork(5000),
         new MessageWork("action", "一个连接着数个精巧装置的桶型结构缓缓下降，罩住了{target}的脑袋，短暂的强光与爆鸣令{target}闭上了双眼", target),
-        new ItemWearWork(['ItemEars', 'ItemHead'], target),
+        new ItemWearWork(['ItemEars', 'ItemHead'], target, craft),
         new MessageWork("action", "短暂的恍惚与眩晕结束后，{target}并没有太多时间察觉眼前与耳边新增的设备，因为机械爪温柔的捏住了她的鼻子，强迫着她张嘴呼吸", target),
         new MessageWork("action", "但是显然这是维护舱的阴谋，因为很快一个口球就被塞入了她的口中，而口套与附件也随之而来", target),
-        new ItemWearWork(['ItemMouth', 'ItemMouth2', 'ItemMouth3'], target),
+        new ItemWearWork(['ItemMouth', 'ItemMouth2', 'ItemMouth3'], target, craft),
         new DelayWork(5000),
         new ItemPropertyWork(target, [{ group: 'ItemMouth2', property: { OverridePriority: 1 } }, { group: 'ItemMouth3', property: { OverridePriority: 1 } }]),
         new MessageWork("action", "口套的拟态伪装很快启动，完全暴露出{target}的脸与口中紧咬着的口球", target),
@@ -108,7 +108,7 @@ function DressSequence(net: EILNetwork, player: Character, target: Character) {
         new MessageWork("chat-action", "已确认安装到位并锁定"),
         new DelayWork(5000),
         new MessageWork("action", "抓着{target}四肢的机械臂微微将她的身体提起，先前安装的铐环此刻似乎启动了某种工作模式，令{target}的手脚短暂的失去了力量", target),
-        new ItemWearWork(['ItemHands', 'ItemBoots'], target),
+        new ItemWearWork(['ItemHands', 'ItemBoots'], target, craft),
         new MessageWork("action", "趁着{target}手脚自然舒展的时候，数个机械臂灵巧的将手套与高跟鞋套在了她的身上，精心调整着位置以保证穿戴的舒适", target),
         new DelayWork(5000),
         new MessageWork("chat-action", "拘束自检中"),
@@ -120,10 +120,10 @@ function DressSequence(net: EILNetwork, player: Character, target: Character) {
         new MessageWork("chat-action", "即将安装控制核心与名牌，提前预祝{target}成为优秀狼女", target),
         new DelayWork(5000),
         new MessageWork("action", "精巧的项圈很快搭上了{target}的脖颈，随即缓缓开始收紧，直到项圈微微有些嵌入脖颈，虽然如此，但项圈的紧固丝毫不影响呼吸的顺畅与血液的流动", target),
-        new ItemWearWork(['ItemNeck'], target),
+        new ItemWearWork(['ItemNeck'], target, craft),
         new DelayWork(5000),
         new MessageWork("action", "而最后一个机械臂一点点靠近了{target}，上面晃荡着的名牌以一串数字指代着{target}的名字，也许这会是我们最后一次使用这个名字称呼她了", target),
-        new ItemWearWork(['ItemNeckAccessories'], target),
+        new ItemWearWork(['ItemNeckAccessories'], target, craft),
         new ItemPropertyWork(target, [{ group: 'ItemNeckAccessories', property: { Text: target.MemberNumber.toString() } }]),
         new MessageWork("chat-action", "控制核心自检中"),
         new DelayWork(5000),
@@ -166,6 +166,8 @@ export function DressFixSequence(sender: Character | number, player: Character) 
         msg: "发现部分物品被锁定物品替代，无法自动修复，停止修复过程。"
     }
 
+    const craft = EILNetwork.Access.craft;
+
     let cumm_counter = 0;
 
     const create_result_process = (msg: IMessage) => (result: OutfitFixWorkResult) => {
@@ -184,7 +186,7 @@ export function DressFixSequence(sender: Character | number, player: Character) 
         new MessageWork("chat-action", "远程连接已激活，正在部署便携狼女训练设施维护舱"),
         new DelayWork(5000),
         new MessageWork("chat-action", "空间似乎有些小小的涟漪，而随着一阵小小的气旋，一个充满了精妙器械的复杂维护舱出现在了{player_wg}身后，从中伸出几只机械臂将她拉入了维护舱"),
-        new ItemWearWork([ToolsCrate], player),
+        new ItemWearWork([ToolsCrate], player, craft),
         new DelayWork(5000),
         new MessageWork("chat-action", "已检测到目标，维护舱室已进行拘束并锁定。正在扫描"),
         new ItemOptionWork(player, [{ target: ToolsCrate.Asset.Group, option: { "w": 1, "l": 2, "a": 1, "d": 0, "t": 0, "h": 4 } }]),
@@ -261,8 +263,42 @@ export function ExitFixSequence(player: Character) {
             if (!result.passed) return { mode: "chat-action", msg: "错误：未处于维护模式中。" }
         }),
         new MessageWork("chat-action", "已收到指令，退出维护模式"),
+        new DelayWork(5000),
+        new MessageWork("action", "维护舱仓门打开，机械臂将{player_wg}推出，随后开始渐渐变得扭曲，透明，最终仅留下小小的气旋"),
         new ItemRemoveWork(player, [ToolsCrate]),
     ]
 
     TimedWorker.global.push({ description: "ExitFixSequence", works: work_sequence });
+}
+
+export function StartStashSequence(player: Character, sender: Character) {
+    const work_sequence: TimedWork[] = [
+        new MessageWork("chat-action", "正在启动纳米蜂群收纳拘束具进入隐藏模式"),
+        new DelayWork(5000),
+        new MessageWork("action", "{player_wg}身上的拘束具似乎在一点点溶解，化作金属银色的小小水流沿着皮肤流向主控核心与训练内裤，随着水流的消逝，本有的拘束具尽皆消逝，仿佛不曾存在过，但显然脖颈上的项圈与身体上的训练内裤显然不同意这样的想法"),
+        new CommonWork((player) => {
+            StashOutfit(player);
+            DataManager.outfit.lite_mode = true;
+            ParseMessage({ mode: "chat-action", msg: "已切换到轻量物品模式。" })
+        })
+    ]
+
+    TimedWorker.global.push({ description: "StartStashSequence", works: work_sequence });
+}
+
+export function StartStashPopSequence(player: Character, sender: Character) {
+    const work_sequence: TimedWork[] = [
+        new MessageWork("chat-action", "正在退出拘束隐藏模式，纳米蜂群工作中"),
+        new DelayWork(5000),
+        new MessageWork("action", "主控核心与训练内裤发出了一阵小小的震动，如若是另一人来看则能发现一些金属银色的小小水流正从中流出，淌向{player_wg}的身体各处，缓缓构建成原有的拘束具并重新连接各处组件"),
+        new CommonWork((player) => {
+            if (StashPopOutfit(player) === StashPopResult.Locked) {
+                ParseMessage({ mode: "chat-action", msg: "存在锁定物品，无法切换模式。" })
+            } else {
+                DataManager.outfit.lite_mode = false;
+                ParseMessage({ mode: "chat-action", msg: "已切换到完整物品模式。" })
+            }
+        })
+    ]
+    TimedWorker.global.push({ description: "StartStashPopSequence", works: work_sequence });
 }

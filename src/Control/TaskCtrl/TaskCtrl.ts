@@ -6,7 +6,7 @@ export class TaskCtrl {
     private _active_task: ITask | undefined;
 
     constructor(time_reso: number) {
-        setTimeout(() => {
+        setInterval(() => {
             if (this._active_task) {
                 if (Player && Player.MemberNumber) {
                     const s = this._active_task.run(Player);

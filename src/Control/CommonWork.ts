@@ -51,7 +51,7 @@ export class CheckWork extends TimedWork {
                 return { mode: this.message.mode, msg: this.message.failed };
             })()
             if (rmessage) {
-                ParseMessage(rmessage);
+                ParseMessage(rmessage, { player });
             }
         }
         return checked.state;

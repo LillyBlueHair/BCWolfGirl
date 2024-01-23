@@ -3,7 +3,7 @@ import { ActivityInfo } from "../../utils/ChatMessages";
 
 export class InteractTask extends TimedCounterTask {
     summary(): string {
-        return `在${new Date(this.time_out).toUTCString()}之前，接受${this.expected}个人互动，成功后获得${this.bonus}点奖励`
+        return `在${new Date(this.time_out).toLocaleTimeString()}之前，接受${this.expected}个人互动，成功后获得${this.bonus}点奖励`
     }
     private _interact_list: Set<number> = new Set();
     private _check_act: Set<string> | undefined;

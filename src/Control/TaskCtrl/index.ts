@@ -40,7 +40,7 @@ export abstract class TimedCounterTask extends ITask {
     }
 
     finalize(player: Character, s: TaskState): void {
-        if (s === TaskState.Success) IncreaseAndMessage(this.bonus);
+        if (s === TaskState.Success) IncreaseAndMessage(player, this.bonus);
         else StartPunish(player);
     }
 }

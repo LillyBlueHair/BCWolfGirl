@@ -70,7 +70,7 @@ export class OutfitFixWork extends TimedWork {
         }, { failed: [], blocked: [] } as { failed: OutfitCheckWorkItem[], blocked: OutfitCheckWorkItem[] });
 
         const do_message = (result: OutfitFixWorkResult) =>
-            ((msg: IMessage | undefined | void) => { if (msg) ParseMessage(msg) })(this._message ? this._message(result) : undefined);
+            ((msg: IMessage | undefined | void) => { if (msg) ParseMessage(msg, { player }) })(this._message ? this._message(result) : undefined);
 
         if (result.blocked.length > 0) {
             do_message({ ret: "blocked", counter: 0 });
