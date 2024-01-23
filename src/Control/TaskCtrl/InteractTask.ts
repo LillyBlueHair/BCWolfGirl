@@ -17,6 +17,7 @@ export class InteractTask extends TimedCounterTask {
 
     onActivity(player: Character, sender: Character, activity: ActivityInfo): void {
         if (activity.SourceCharacter.MemberNumber === player.MemberNumber) return;
+        if (activity.TargetCharacter.MemberNumber !== player.MemberNumber) return;
         if (this._check_act && !this._check_act.has(activity.ActivityName)) return;
         if (this._check_groups && !this._check_groups.has(activity.ActivityGroup)) return;
         this._interact_list.add(activity.SourceCharacter.MemberNumber);

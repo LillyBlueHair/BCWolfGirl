@@ -13,6 +13,7 @@ export class BegOrgasmTask extends TimedCounterTask {
     interact_list: Set<number> = new Set();
     onActivity(player: Character, sender: Character, activity: ActivityInfo): void {
         if (activity.SourceCharacter.MemberNumber === player.MemberNumber) return;
+        if (activity.TargetCharacter.MemberNumber !== player.MemberNumber) return;
         this.last_interact_num = sender.MemberNumber;
     }
 
