@@ -58,7 +58,7 @@ class PunishWork extends TimedWork {
         ];
 
         if (CurrentScreen == "ChatRoom")
-            ServerSend("ChatRoomChat", { Content: 'TriggerShock' + intensity, Type: "Action", Dictionary: Dictionary });
+            ChatRoomMessage({ Content: 'TriggerShock' + intensity, Type: "Action", Sender: player.MemberNumber, Dictionary: Dictionary });
 
         InventoryShockExpression(player);
 
