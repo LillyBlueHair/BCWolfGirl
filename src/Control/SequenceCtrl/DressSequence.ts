@@ -14,6 +14,11 @@ export function DressSequence(net: EILNetwork, player: Character, target: Charac
     const clothing_stash: Item[] = [];
     const craft = net.craft;
     const work_sequence: TimedWork[] = [
+        new CheckWork((player) => {
+            return IsFullyDressed(target) ? CheckWork.Stop : CheckWork.Continue;
+        }, (pl, result) => {
+            if (result.passed) return { mode: "chat-action", msg: "{target_wg}的中央控制核心小小的发出了错误的嘟声，除此之外什么都没有发生" };
+        }),
         new MessageWork("chat-action", "已选定目标，检测到植入狼女身份芯片，正在打开远程设备连接"),
         new DelayWork(5000),
         new MessageWork("chat-action", "远程连接已激活，正在部署便携狼女训练设施维护舱"),
@@ -135,7 +140,9 @@ export function DressSequence(net: EILNetwork, player: Character, target: Charac
         new ItemRemoveWork(target, [ToolsCrate]),
     ];
     TimedWorker.global.push({ description: "Dress Sequence", works: work_sequence });
-} export function InitDressSequence(player: Character, target: Character) {
+}
+
+export function InitDressSequence(player: Character, target: Character) {
     if (!CheckItem(player, ToolsVisor) || !CheckItem(player, ToolsInjector)) return;
 
     ChatRoomAction.instance.LocalAction("正在连接Wolf Girl网络...");
