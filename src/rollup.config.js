@@ -53,6 +53,8 @@ module.exports = cliArgs => {
     const deploy = cliArgs.configDeploy;
     const name = cliArgs.configName;
 
+    if(!deploy) throw new Error("No deploy site specified");
+
     const fix_deploy = deploy.substring(0, deploy.lastIndexOf("/")) + "/" + name;
     console.log(`Deploying to ${fix_deploy}`);
     if (cliArgs.configDebug === true) {
