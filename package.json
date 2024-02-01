@@ -4,7 +4,7 @@
   "description": "A plugin script for BondageClub",
   "author": "Saki Saotome, lyudmila",
   "license": "MIT",
-  "packageManager": "yarn@4.0.2",
+  "packageManager": "pnpm@8.15.1",
   "scripts": {
     "build:local": "rollup -c src/rollup.config.js --configDebug --configDeploy 'http://localhost:3042/'",
     "build": "rollup -c src/rollup.config.js",
