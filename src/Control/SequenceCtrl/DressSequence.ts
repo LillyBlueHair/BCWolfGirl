@@ -1,31 +1,19 @@
-import { DataManager } from "../Data";
-import { EILNetwork } from "../Network";
-import { ChatRoomAction } from "../utils/ChatMessages";
-import { CheckWork, CommonWork, DelayWork } from "./CommonWork";
-import { IMessage, ParseMessage } from "./Message";
-import { MessageWork, WaitResponseWork } from "./MessageWork";
-import { OutfitItemType, OutfitItemsMap, ToolsCrate, ToolsInjector, ToolsVisor } from "./OutfitCtrl";
-import { ClothRemoveWork, ClothRestoreWork, ItemLockWork, ItemOptionWork, ItemPropertyWork, ItemRemoveWork, ItemWearWork } from "./OutfitCtrl";
-import { CheckItem } from "./OutfitCtrl";
-import { OutfitFixWork, OutfitFixWorkResult } from "./OutfitCtrl/OutfitFixWork";
-import { StashOutfit, StashPopOutfit, StashPopResult } from "./StashOutfit";
-import { IsPlayerWolfGirl } from "./WolfGirlCtrl";
-import { IsFullyDressed } from "./WolfGirlCtrl/Check";
-import { TimedWork, TimedWorker } from "./Worker";
+import { DataManager } from "../../Data";
+import { EILNetwork } from "../../Network";
+import { ChatRoomAction } from "../../utils/ChatMessages";
+import { CheckWork, CommonWork, DelayWork } from "../CommonWork";
+import { IMessage, ParseMessage } from "../Message";
+import { MessageWork, WaitResponseWork } from "../MessageWork";
+import { CheckItem, OutfitItemType, OutfitItemsMap, ToolsCrate, ToolsInjector, ToolsVisor } from "../OutfitCtrl";
+import { ClothRemoveWork, ClothRestoreWork, ItemLockWork, ItemOptionWork, ItemPropertyWork, ItemRemoveWork, ItemWearWork } from "../OutfitCtrl";
+import { OutfitFixWorkResult, OutfitFixWork } from "../OutfitCtrl/OutfitFixWork";
+import { IsFullyDressed } from "../WolfGirlCtrl/Check";
+import { TimedWork, TimedWorker } from "../Worker";
 
-function DressSequence(net: EILNetwork, player: Character, target: Character) {
+export function DressSequence(net: EILNetwork, player: Character, target: Character) {
     const clothing_stash: Item[] = [];
     const craft = net.craft;
     const work_sequence: TimedWork[] = [
-        new CheckWork(() => {
-            if (DataManager.permission.canModerate(player, target)) return CheckWork.Accepted;
-            return CheckWork.Rejected;
-        }, {
-            mode: "local",
-            passed: "<INFO> 授权请求成功。",
-            failed: "<ERROR> 授权失败，已中止过程。"
-        }),
-        new DelayWork(5000),
         new MessageWork("chat-action", "已选定目标，检测到植入狼女身份芯片，正在打开远程设备连接"),
         new DelayWork(5000),
         new MessageWork("chat-action", "远程连接已激活，正在部署便携狼女训练设施维护舱"),
@@ -49,6 +37,7 @@ function DressSequence(net: EILNetwork, player: Character, target: Character) {
         new ItemOptionWork(target, [{ target: ToolsCrate.Asset.Group, option: { "w": 1, "l": 3, "a": 3, "d": 0, "t": 0, "h": 4 } }]),
         new DelayWork(5000),
         new MessageWork("chat-action", "{target}，请问你是否愿意接受训练成为一位狼女？请使用愿意与不愿意回答，而若愿意，这意味着你将失去足够多，但仍能保有少部分自主，亦或者对你而言，这意味着得到与拥有？", target),
+        new MessageWork("chat-action", "请回答愿意或者不愿意，当然，沉默拒绝回答也是可选项之一"),
         new WaitResponseWork(target, {
             accept: /([^不]|^)愿意/g,
             accept_msg: { mode: "chat-action", msg: "意愿已确认，正在继续安装流程" },
@@ -144,19 +133,38 @@ function DressSequence(net: EILNetwork, player: Character, target: Character) {
         new DelayWork(5000),
         new MessageWork("action", "维护舱仓门打开，机械臂将{target_wg}推出，随后开始渐渐变得扭曲，透明，而{target_wg}身后小小的辅助定位信标则自动回到了训练师{player}的狼女训练师多用途辅助眼镜中", target),
         new ItemRemoveWork(target, [ToolsCrate]),
-    ]
+    ];
     TimedWorker.global.push({ description: "Dress Sequence", works: work_sequence });
-}
-
-
-export function InitDressSequence(player: Character, target: Character) {
+} export function InitDressSequence(player: Character, target: Character) {
     if (!CheckItem(player, ToolsVisor) || !CheckItem(player, ToolsInjector)) return;
-    ChatRoomAction.instance.LocalAction("<INFO> 初始化 Wolf Girl 环境");
+
+    ChatRoomAction.instance.LocalAction("正在连接Wolf Girl网络...");
     EILNetwork.Wfetch().then(net => {
-        ChatRoomAction.instance.LocalAction("<INFO> 已经连接到 Wolf Girl 网络。");
-        DressSequence(net, player, target);
+        const work_sequence: TimedWork[] = [
+            new MessageWork("local", "...已连接到Wolf Girl网络"),
+            new MessageWork("local", ">> 权限检查开始"),
+            new MessageWork("local", `EIL网络管理员：${DataManager.permission.isEILNet(player) ? "通过" : "未通过"}`),
+            new MessageWork("local", `恋人权限：${DataManager.permission.isLover(player, target) ? "通过" : "未通过"}`),
+            new MessageWork("local", `主人权限：${DataManager.permission.isOwner(player, target) ? "通过" : "未通过"}`),
+            new CheckWork((player) => {
+                const passed = [
+                    DataManager.permission.isEILNet(player),
+                    DataManager.permission.isLover(player, target),
+                    DataManager.permission.isOwner(player, target)
+                ].some(i => i);
+                if (passed) return CheckWork.Accepted;
+                else return CheckWork.Rejected;
+            }, (player, result) => {
+                if (result.passed) return { mode: "local", msg: ">> 权限检查通过，启动安装流程" };
+                else return { mode: "local", msg: ">> 指令已被拒绝，中止安装流程" };
+            }),
+            new CommonWork(() => {
+                DressSequence(EILNetwork.Access, player, target);
+            })
+        ];
+        TimedWorker.global.push({ description: "Init Dress Sequence", works: work_sequence });
     }).catch(e => {
-        ChatRoomAction.instance.LocalAction("<ERROR> Wolf Girl 网络断开，已中止过程。");
+        ChatRoomAction.instance.LocalAction("...Wolf Girl 网络断开，已中止过程。");
     });
 }
 
@@ -164,7 +172,7 @@ export function DressFixSequence(sender: Character | number, player: Character) 
     const cannot_fix: IMessage = {
         mode: "chat-action",
         msg: "发现部分物品被锁定物品替代，无法自动修复，停止修复过程。"
-    }
+    };
 
     const craft = EILNetwork.Access.craft;
 
@@ -173,14 +181,14 @@ export function DressFixSequence(sender: Character | number, player: Character) 
     const create_result_process = (msg: IMessage) => (result: OutfitFixWorkResult) => {
         if (result.ret === "canfix") { cumm_counter += result.counter; return msg; }
         else if (result.ret === "blocked") return cannot_fix;
-    }
+    };
 
     const work_sequence: TimedWork[] = [
         new CheckWork(() => {
             if (CheckItem(player, OutfitItemsMap.get('ItemNeck') as OutfitItemType)) return CheckWork.Accepted;
             return CheckWork.Rejected;
         }, (pl, result) => {
-            if (!result.passed) return { mode: "chat-action", msg: "警告，中央控制核心丢失，请前往EIL或寻找EIL人员进行处理" }
+            if (!result.passed) return { mode: "chat-action", msg: "警告，中央控制核心丢失，请前往EIL或寻找EIL人员进行处理" };
         }),
         new MessageWork("chat-action", "已收到指令，维护模式已开启"),
         new MessageWork("chat-action", "远程连接已激活，正在部署便携狼女训练设施维护舱"),
@@ -207,7 +215,8 @@ export function DressFixSequence(sender: Character | number, player: Character) 
                 target: "ItemMouth3",
                 option: { "n": 0, "h": 0, "s": 1 },
                 property: { OverridePriority: { "Straps": 1, "Nose": 1, "Mask": 1, "IconLock": 42, "IconMute": 1, "IconX": 1 } }
-            }],
+            }
+        ],
             create_result_process({
                 mode: "chat-action",
                 msg: "也许{player_wg}想要获得一些渴求，简单的视听能幻想这一切都没有发生，而进食人类的食物更能给予大脑错觉？亦或者是因为身体的封锁而想要用你的舌你的口进行一些淫亵的满足？究竟是命运无法撼动，还是你早已忘却了是何时为自己做下了选择？"
@@ -248,57 +257,8 @@ export function DressFixSequence(sender: Character | number, player: Character) 
             if (r.passed) return { mode: "chat-action", msg: "组件扫描完成，全部在线且运转正常，能源核心已充能完毕，维护模式已结束，请退出维护模式" };
             else return { mode: "chat-action", msg: "错误：组件修复失败，仍有未穿戴组件" };
         }),
-    ]
+    ];
 
     TimedWorker.global.push({ description: "DressFixSequence", works: work_sequence });
 }
 
-export function ExitFixSequence(player: Character) {
-
-    const work_sequence: TimedWork[] = [
-        new CheckWork(() => {
-            if (CheckItem(player, ToolsCrate)) return CheckWork.Accepted;
-            return CheckWork.Rejected;
-        }, (pl, result) => {
-            if (!result.passed) return { mode: "chat-action", msg: "错误：未处于维护模式中。" }
-        }),
-        new MessageWork("chat-action", "已收到指令，退出维护模式"),
-        new DelayWork(5000),
-        new MessageWork("action", "维护舱仓门打开，机械臂将{player_wg}推出，随后开始渐渐变得扭曲，透明，最终仅留下小小的气旋"),
-        new ItemRemoveWork(player, [ToolsCrate]),
-    ]
-
-    TimedWorker.global.push({ description: "ExitFixSequence", works: work_sequence });
-}
-
-export function StartStashSequence(player: Character, sender: Character) {
-    const work_sequence: TimedWork[] = [
-        new MessageWork("chat-action", "正在启动纳米蜂群收纳拘束具进入隐藏模式"),
-        new DelayWork(5000),
-        new MessageWork("action", "{player_wg}身上的拘束具似乎在一点点溶解，化作金属银色的小小水流沿着皮肤流向主控核心与训练内裤，随着水流的消逝，本有的拘束具尽皆消逝，仿佛不曾存在过，但显然脖颈上的项圈与身体上的训练内裤显然不同意这样的想法"),
-        new CommonWork((player) => {
-            StashOutfit(player);
-            DataManager.outfit.lite_mode = true;
-            ParseMessage({ mode: "chat-action", msg: "已切换到轻量物品模式。" })
-        })
-    ]
-
-    TimedWorker.global.push({ description: "StartStashSequence", works: work_sequence });
-}
-
-export function StartStashPopSequence(player: Character, sender: Character) {
-    const work_sequence: TimedWork[] = [
-        new MessageWork("chat-action", "正在退出拘束隐藏模式，纳米蜂群工作中"),
-        new DelayWork(5000),
-        new MessageWork("action", "主控核心与训练内裤发出了一阵小小的震动，如若是另一人来看则能发现一些金属银色的小小水流正从中流出，淌向{player_wg}的身体各处，缓缓构建成原有的拘束具并重新连接各处组件"),
-        new CommonWork((player) => {
-            if (StashPopOutfit(player) === StashPopResult.Locked) {
-                ParseMessage({ mode: "chat-action", msg: "存在锁定物品，无法切换模式。" })
-            } else {
-                DataManager.outfit.lite_mode = false;
-                ParseMessage({ mode: "chat-action", msg: "已切换到完整物品模式。" })
-            }
-        })
-    ]
-    TimedWorker.global.push({ description: "StartStashPopSequence", works: work_sequence });
-}

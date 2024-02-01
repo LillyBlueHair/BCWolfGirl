@@ -64,13 +64,15 @@ export class CheckWork extends TimedWork {
 }
 
 export class CommonWork {
-    readonly _callback: (player: Character) => void;
-    constructor(callback: (player: Character) => void) {
+    readonly _callback: (player: Character) => void | TimedWorkState;
+
+    constructor(callback: (player: Character) => void | TimedWorkState) {
         this._callback = callback;
     }
 
     run(player: Character): TimedWorkState {
-        this._callback(player);
-        return TimedWorkState.finished;
+        const result = this._callback(player);
+        if (result === undefined) return TimedWorkState.finished;
+        return result;
     }
 }

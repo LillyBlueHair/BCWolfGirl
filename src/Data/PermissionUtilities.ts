@@ -47,11 +47,18 @@ export class PermissionUtilities {
         return false;
     }
 
-    canModerate(moderator: Character, moderatee: Character): boolean {
-        if (!moderator.MemberNumber) return false;
-        if (EILNetwork.Access.isEIL(moderator.MemberNumber)) return true;
-        if (moderatee.Ownership && moderatee.Ownership.MemberNumber === moderator.MemberNumber) return true;
+    isEILNet(moderator: number | Character): boolean {
+        const num = ExtractMemberNumber(moderator);
+        return EILNetwork.Access.isEIL(num);
+    }
+
+    isLover(moderator: Character, moderatee: Character): boolean {
         if (moderatee.Lovership && moderatee.Lovership.some(i => i.MemberNumber === moderator.MemberNumber)) return true;
+        return false;
+    }
+
+    isOwner(moderator: Character, moderatee: Character): boolean {
+        if (moderatee.Ownership && moderatee.Ownership.MemberNumber === moderator.MemberNumber) return true;
         return false;
     }
 }

@@ -1,4 +1,4 @@
-import { InitDressSequence } from "../Control/CtrlSequence";
+import { InitDressSequence } from "../Control/SequenceCtrl/DressSequence";
 import { ActivityDeconstruct, ActivityInfo } from "../utils/ChatMessages";
 import { RunCommands } from "./Run";
 import { CommandType } from "./ICmds";

@@ -55,6 +55,7 @@ class PunishWork extends TimedWork {
             { Tag: "AssetName", AssetName: collar.Asset.Name, GroupName: collar.Asset.Group.Name },
             { ShockIntensity: intensity * 1.5 },
             { FocusGroupName: collar.Asset.Group.Name },
+            { Automatic: true }
         ];
 
         if (CurrentScreen == "ChatRoom")

@@ -36,8 +36,8 @@ export function IsCollarOn(player: Character): boolean {
     return true;
 }
 
-function IsGroupsDressed(player: Character, groups: string[]) {
-    let groups_set = new Set(groups);
+function IsGroupsDressed(player: Character, groups: AssetGroupItemName[]) {
+    let groups_set: Set<string> = new Set(groups);
     let tItems = player.Appearance.filter(e => groups_set.has(e.Asset.Group.Name));
     if (tItems.length !== groups.length) return false;
     return tItems.every(e => {
@@ -49,6 +49,5 @@ function IsGroupsDressed(player: Character, groups: string[]) {
 }
 
 export function IsPlayerWolfGirl(player: Character): boolean {
-    if (DataManager.outfit.lite_mode) return IsGroupsDressed(player, ["ItemNeck", "ItemPelvis"]);
-    return IsFullyDressed(player);
+    return IsGroupsDressed(player, ["ItemNeck"]) || IsGroupsDressed(player, ["ItemVulva"]);
 }

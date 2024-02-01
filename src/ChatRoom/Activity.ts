@@ -1,7 +1,9 @@
 import { ModSDKModAPI } from "bondage-club-mod-sdk";
 import { DataManager } from "../Data";
 import { ActivityInfo } from "../utils/ChatMessages";
-import { InitDressSequence, StartStashPopSequence, StartStashSequence } from "../Control/CtrlSequence";
+import { StartStashPopSequence } from "../Control/SequenceCtrl/StashSequence";
+import { StartStashSequence } from "../Control/SequenceCtrl/StashSequence";
+import { InitDressSequence } from "../Control/SequenceCtrl/DressSequence";
 import { IsModerator } from "./Prerequistes";
 import { IsPlayerWolfGirl } from "../Control/WolfGirlCtrl";
 import { StashOutfit, StashPopOutfit, StashPopResult } from "../Control/StashOutfit";
@@ -75,7 +77,7 @@ export function RegisterActivities(mod: ModSDKModAPI) {
             if (acted.MemberNumber === acting.MemberNumber && Player && Player.MemberNumber === acted.MemberNumber) {
                 return DataManager.points.points > 10;
             }
-            else return IsCollarOn(acted) && DataManager.permission.canModerate(acting, acted);
+            else return IsCollarOn(acted) && DataManager.permission.isModerator(acted, acting);
         }
         return next(args);
     });

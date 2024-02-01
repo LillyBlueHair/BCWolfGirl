@@ -1,4 +1,5 @@
-import { DressFixSequence, ExitFixSequence } from "../../Control/CtrlSequence";
+import { ExitFixSequence } from "../../Control/SequenceCtrl/CtrlSequence";
+import { DressFixSequence } from "../../Control/SequenceCtrl/DressSequence";
 import { GatherDataOutfitItem } from "../../Control/StashOutfit";
 import { DataManager } from "../../Data";
 import { CommandTemplate } from "../ICmds";

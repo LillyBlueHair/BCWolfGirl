@@ -69,7 +69,6 @@ export class ChatRoomAction {
         this.LocalAction = (Content: string) => {
             if (!Content || !Player || !Player.MemberNumber) return;
             ChatRoomMessage({
-                Sender: Player.MemberNumber,
                 Content: CUSTOM_ACTION_TAG,
                 Type: "Action",
                 Dictionary: [DictItem(Content)],
