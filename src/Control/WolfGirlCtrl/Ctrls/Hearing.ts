@@ -1,9 +1,8 @@
 import { ModSDKModAPI } from "bondage-club-mod-sdk";
 import { IsPlayerWolfGirl } from "../Check";
-import { CtrlType, IController } from "../ICtrl";
-import { BCX_ORIGINAL_MESSAGE, GAGBYPASSINDICATOR } from "../../../BCInterface";
+import { CtrlType, IController, TestCtrlResult } from "..";
 import { CUSTOM_ACTION_TAG } from "../../../Definition";
-
+import { StandardItemSetRecords, StandardItemTestRecords } from "../Ctrls";
 
 function ChatOrWhisperToWolfGirl(data: ServerChatRoomMessage, then: (player: Character, sender: Character) => void) {
     if (data.Type === "Chat" || data.Type === "Whisper") {
@@ -16,15 +15,24 @@ function ChatOrWhisperToWolfGirl(data: ServerChatRoomMessage, then: (player: Cha
     }
 }
 
+function calcRecordValue(type: CtrlType): TypeRecord[] {
+    if (type === "off") return [{ typed: 0 }];
+    else if (type === "base") return [{ typed: 1 }];
+    else if (type === "total") return [{ typed: 3 }];
+    else return [{ typed: 0 }];
+}
 
 export class HearingCtrl extends IController {
     readonly type = "HearingCtrl";
     readonly target_item = ["ItemEars"];
+    readonly available_ctrls: CtrlType[] = ["off", "base", "total"];
+
     set(player: Character, item: Item[], type: CtrlType) {
-        const [ear] = item;
-        if (type === "off") ExtendedItemSetOptionByRecord(player, ear, { typed: 0 });
-        else if (type === "base") ExtendedItemSetOptionByRecord(player, ear, { typed: 1 });
-        else if (type === "total") ExtendedItemSetOptionByRecord(player, ear, { typed: 3 });
+        StandardItemSetRecords(player, item, calcRecordValue(type));
+    }
+
+    test(player: Character, item: Item[], type: CtrlType): TestCtrlResult {
+        return StandardItemTestRecords(item, calcRecordValue(type));
     }
 
     hook(mod: ModSDKModAPI) {

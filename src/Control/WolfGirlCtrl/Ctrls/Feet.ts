@@ -1,23 +1,23 @@
-import { IController, CtrlType } from "../ICtrl";
+import { IController, CtrlType, TestCtrlResult, TReject, TAccept } from "..";
+import { RecordsEqual, StandardItemSetRecords, DetailedItemTestRecords, StandardItemTestRecords } from "../Ctrls";
+
+function calcRecordValue(type: CtrlType) {
+    if (type === "off") return [{ typed: 0 }, { typed: 0 }];
+    else if (type === "base") return [{ typed: 2 }, { typed: 2 }];
+    else if (type === "total") return [{ typed: 1 }, { typed: 1 }];
+    else return [];
+}
 
 export class FeetCtrl extends IController {
     readonly type = "FeetCtrl";
     readonly target_item = ["ItemFeet", "ItemLegs"];
+    available_ctrls: CtrlType[] = ["off", "base", "total"];
 
     set(player: Character, item: Item[], type: CtrlType): void {
-        const [lower_leg, upper_leg] = item;
+        StandardItemSetRecords(player, item, calcRecordValue(type));
+    }
 
-        if (type === "off") {
-            ExtendedItemSetOptionByRecord(player, upper_leg, { typed: 0 });
-            ExtendedItemSetOptionByRecord(player, lower_leg, { typed: 0 });
-        }
-        else if (type === "base") {
-            ExtendedItemSetOptionByRecord(player, upper_leg, { typed: 2 });
-            ExtendedItemSetOptionByRecord(player, lower_leg, { typed: 2 });
-        }
-        else if (type === "total") {
-            ExtendedItemSetOptionByRecord(player, upper_leg, { typed: 1 });
-            ExtendedItemSetOptionByRecord(player, lower_leg, { typed: 1 });
-        }
+    test(player: Character, item: Item[], type: CtrlType): TestCtrlResult {
+        return StandardItemTestRecords(item, calcRecordValue(type));
     }
 }
