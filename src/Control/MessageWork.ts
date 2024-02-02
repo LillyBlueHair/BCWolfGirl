@@ -6,23 +6,18 @@ import { TimedWork } from "./Worker";
 import { TimedWorkState } from "./Worker";
 
 export class MessageWork extends TimedWork {
-    private _message: string;
-    private _mode: IMessageMode;
     private _target?: number;
-    constructor(readonly mode: IMessageMode, readonly message: string, target?: number | Character) {
+    constructor(readonly mode: IMessageMode, readonly message: string, readonly target?: number | Character) {
         super();
-        this._message = message;
-        this._mode = mode;
         this._target = target ? ExtractMemberNumber(target) : undefined;
     }
 
     run(player: Character): TimedWorkState {
         const target = ChatRoomCharacter.find(c => c.MemberNumber === this._target);
-        ParseMessage({ mode: this._mode, msg: this._message }, { player, target });
+        ParseMessage({ mode: this.mode, msg: this.message }, { player, target });
         return TimedWorkState.finished;
     }
 }
-
 
 interface WaitResponseWorkOptions {
     accept: RegExp,
