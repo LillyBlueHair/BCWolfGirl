@@ -64,7 +64,7 @@ export function ToysCtrlSequence(player: Character, mode: CtrlType) {
                 AppearanceUpdate(player);
             }
         }),
-        new CommonWork(() => { if (data.xMessage) ParseMessage(data.xMessage); }),
+        new CommonWork(() => { if (data.xMessage) ParseMessage(data.xMessage, { player }); }),
     ];
 
     TimedWorker.global.push({ description: `SetItemSequence${type}`, works: work_sequence });

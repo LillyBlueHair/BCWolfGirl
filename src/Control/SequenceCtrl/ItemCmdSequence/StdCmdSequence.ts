@@ -30,7 +30,7 @@ export function StdResultBranch(player: Character, data: CmdData, on_missing: Cm
                 data.xMessage = StdMissing.action;
             }
             else if (result.rejected) {
-                ParseMessage({ mode: "chat-action", msg: `[DEBUG] 错误信息: WGException.${data.type}.${result.rejected}` }, { player });
+                ParseMessage({ mode: "chat-action", msg: `[DEBUG] 错误信息: WGException.${data.type}.Rejected.${result.rejected}` }, { player });
                 return TimedWorkState.interrupted;
             }
             else return on_success(data);
@@ -44,7 +44,7 @@ export function StdCmdSequence(player: Character, type: ControllerType, mode: Ct
     let data: CmdData = { type, mode };
 
     const work_sequence: TimedWork[] = [
-        new TestControlWork("HearingCtrl", data.mode, StdResultBranch(player, data, (missing_result, data) => {
+        new TestControlWork(type, data.mode, StdResultBranch(player, data, (missing_result, data) => {
             const missing_formated = missing_result.missing.map(g => OutfitItemsMap.get(g)?.Craft.Name).join("、");
             ParseMessage(messages.missing.notify, { player }, { missing_formated });
             data.xMessage = messages.missing.action;

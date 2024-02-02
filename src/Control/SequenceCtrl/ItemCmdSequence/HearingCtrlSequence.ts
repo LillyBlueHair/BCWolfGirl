@@ -16,7 +16,7 @@ export function HearingCtrlSequence(player: Character, mode: CtrlType) {
                 notify: { mode: "chat-action", msg: "收到指令，听觉限制已开启" },
                 action: { mode: "action", msg: "{player_wg}的耳边声音骤然减小，并且愈发模糊与朦胧，她耳机上的指示灯亮起小小的红光，虽然被{player_wg}的发丝遮盖，但若是在伸手不见五指的黑夜，还是能隐约发觉的" },
             },
-            "max": {
+            "total": {
                 notify: { mode: "chat-action", msg: "收到指令，听觉限制已设置为高功率运转" },
                 action: { mode: "action", msg: "{player_wg}的耳机似乎微微收紧了些，外界的声响似乎在这一瞬间被按下了暂停键一般陷入死寂，方才微弱的光现在已是醒目的红色闪烁，似乎在尝试宣告着什么，但那又如何呢？世间的喧嚣本就太过嘈杂烦扰，也许这样能够静心许多" },
             }
