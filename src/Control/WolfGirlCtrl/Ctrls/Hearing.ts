@@ -27,7 +27,7 @@ export class HearingCtrl extends IController {
     readonly target_item = ["ItemEars"];
     readonly available_ctrls: CtrlType[] = ["off", "base", "total"];
 
-    set(player: Character, item: Item[], type: CtrlType) {
+    set(player: Character, item: (Item | undefined)[], type: CtrlType) {
         StandardItemSetRecords(player, item, calcRecordValue(type));
     }
 

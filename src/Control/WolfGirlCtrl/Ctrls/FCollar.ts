@@ -20,8 +20,9 @@ export class FCollarPublic extends IController {
     readonly target_item = ["ItemNeck"];
     readonly available_ctrls: CtrlType[] = ["open", "close"];
 
-    set(player: Character, item: Item[], type: CtrlType): void {
+    set(player: Character, item: (Item | undefined)[], type: CtrlType): void {
         const [collar] = item;
+        if (!collar) return;
         if (!collar.Property) collar.Property = {};
         if (type === "open") {
             Object.assign(collar.Property, props.open)

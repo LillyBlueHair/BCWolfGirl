@@ -8,7 +8,7 @@ export abstract class IController {
     abstract readonly type: ControllerType;
     abstract readonly target_item: string[];
     abstract readonly available_ctrls: CtrlType[];
-    abstract set(player: Character, item: Item[], type: CtrlType): void;
+    abstract set(player: Character, item: (Item | undefined)[], type: CtrlType): void;
     abstract test(player: Character, item: Item[], type: CtrlType): TestCtrlResult;
     hook(mod: ModSDKModAPI): void { };
 }

@@ -13,7 +13,7 @@ export class VoiceCtrl extends IController {
     readonly target_item = ["ItemMouth"];
     readonly available_ctrls: CtrlType[] = ["off", "base", "total"];
 
-    set(player: Character, item: Item[], type: CtrlType): void {
+    set(player: Character, item: (Item | undefined)[], type: CtrlType): void {
         StandardItemSetRecords(player, item, calcRecordValue(type));
     }
 

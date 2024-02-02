@@ -20,7 +20,7 @@ export function RunControls(player: Character, type: ControllerType, mode: CtrlT
     if (!ctrl) return false;
     const app_map = new Map(player.Appearance.map(e => [e.Asset.Group.Name, e] as [string, Item]));
     FuturisticBypass.instance.on = true;
-    ctrl.set(player, ctrl.target_item.map(e => app_map.get(e) as Item), mode);
+    ctrl.set(player, ctrl.target_item.map(e => app_map.get(e)), mode);
     FuturisticBypass.instance.on = false;
     return true;
 }
@@ -65,8 +65,8 @@ export function ReduceTypeRecords(records: TypeRecord[], ref: TypeRecord): TypeR
     return ref_;
 }
 
-export function StandardItemSetRecords(player: Character, items: Item[], target: TypeRecord[]) {
-    items.forEach((item, idx) => target[idx] && ExtendedItemSetOptionByRecord(player, item, target[idx]));
+export function StandardItemSetRecords(player: Character, items: (Item | undefined)[], target: TypeRecord[]) {
+    items.forEach((item, idx) => target[idx] && item && ExtendedItemSetOptionByRecord(player, item, target[idx]));
 }
 
 export function StandardItemTestRecords(items: Item[], target: TypeRecord[]): TestCtrlResult {

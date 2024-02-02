@@ -9,10 +9,10 @@ function calcValue(type: CtrlType): number {
 
 export class ToysCtrl extends IController {
     readonly type = "ToysCtrl";
-    readonly target_item = [];
+    readonly target_item = ["ItemVulva"];
     readonly available_ctrls: CtrlType[] = ["open", "max", "off"];
 
-    set(player: Character, item: Item[], type: CtrlType): void {
+    set(player: Character, item: (Item | undefined)[], type: CtrlType): void {
         const target = calcValue(type);
         player.Appearance.filter(i => i.Asset.Group.Category === "Item").forEach(i => {
             if (i.Asset.Archetype === "vibrating")

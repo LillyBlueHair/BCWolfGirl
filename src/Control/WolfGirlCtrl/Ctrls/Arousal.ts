@@ -12,8 +12,10 @@ export class ArousalCtrl extends IController {
     readonly type = "ArousalCtrl";
     readonly target_item = ["ItemPelvis"];
     readonly available_ctrls: CtrlType[] = ["off", "edge", "deny"];
-    set(player: Character, item: Item[], type: CtrlType): void {
+    set(player: Character, item: (Item | undefined)[], type: CtrlType): void {
         const [pelvis] = item;
+        if (!pelvis) return;
+
         const oldLock = pelvis.Property?.LockedBy;
         const oldMember = pelvis.Property?.LockMemberNumber;
         ExtendedItemSetOptionByRecord(player, pelvis, calcRecordValue(type));

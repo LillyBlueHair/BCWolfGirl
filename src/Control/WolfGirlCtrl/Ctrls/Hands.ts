@@ -12,7 +12,7 @@ export class HandsCtrl extends IController {
     readonly type = "HandsCtrl";
     readonly target_item = ["ItemHands", "ItemArms"];
     available_ctrls: CtrlType[] = ["off", "base", "total"];
-    set(player: Character, item: Item[], type: CtrlType): void {
+    set(player: Character, item: (Item | undefined)[], type: CtrlType): void {
         StandardItemSetRecords(player, item, calcRecordValue(type));
     }
 
