@@ -16,6 +16,37 @@ function ChatRoomInterceptMessage(cur_msg: string, msg: string) {
     ChatRoomSendChat();
 }
 
+export function DoSinglePunish(player: Character, item: Item | undefined) {
+    if (CurrentCharacter !== null)
+        CurrentCharacter.FocusGroup = null;
+    CurrentCharacter = null;
+    if (CurrentScreen === 'Preference')
+        CommonSetScreen("Character", "InformationSheet");
+    if (CurrentScreen === 'ChatAdmin')
+        CommonSetScreen('Online', 'ChatRoom');
+    if (CurrentScreen === 'InformationSheet')
+        CommonSetScreen(InformationSheetPreviousModule, InformationSheetPreviousScreen);
+    let msg = ElementValue("InputChat");
+    if (IsSimpleChat(msg))
+        ChatRoomInterceptMessage(msg, '');
+
+    const MemberNumber = player.MemberNumber;
+    const intensity = 2;
+
+    const Dictionary = [
+        { Tag: "DestinationCharacterName", Text: CharacterNickname(player), MemberNumber: MemberNumber },
+        { Tag: "AssetName", AssetName: item?.Asset.Name, GroupName: item?.Asset.Group.Name },
+        { ShockIntensity: intensity * 1.5 },
+        { FocusGroupName: item?.Asset.Group.Name },
+        { Automatic: true }
+    ];
+
+    if (CurrentScreen == "ChatRoom")
+        ChatRoomMessage({ Content: 'TriggerShock' + intensity, Type: "Action", Sender: player.MemberNumber, Dictionary: Dictionary });
+
+    InventoryShockExpression(player);
+}
+
 class PunishWork extends TimedWork {
     private _timer: number;
 
@@ -34,37 +65,22 @@ class PunishWork extends TimedWork {
         const collar = InventoryGet(player, "ItemNeck");
         if (!collar) return TimedWorkState.interrupted;
 
-        if (CurrentCharacter !== null)
-            CurrentCharacter.FocusGroup = null;
-        CurrentCharacter = null;
-        if (CurrentScreen === 'Preference')
-            CommonSetScreen("Character", "InformationSheet");
-        if (CurrentScreen === 'ChatAdmin')
-            CommonSetScreen('Online', 'ChatRoom');
-        if (CurrentScreen === 'InformationSheet')
-            CommonSetScreen(InformationSheetPreviousModule, InformationSheetPreviousScreen);
-        let msg = ElementValue("InputChat");
-        if (IsSimpleChat(msg))
-            ChatRoomInterceptMessage(msg, '');
-
-        const MemberNumber = player.MemberNumber;
-        const intensity = 2;
-
-        const Dictionary = [
-            { Tag: "DestinationCharacterName", Text: CharacterNickname(player), MemberNumber: MemberNumber },
-            { Tag: "AssetName", AssetName: collar.Asset.Name, GroupName: collar.Asset.Group.Name },
-            { ShockIntensity: intensity * 1.5 },
-            { FocusGroupName: collar.Asset.Group.Name },
-            { Automatic: true }
-        ];
-
-        if (CurrentScreen == "ChatRoom")
-            ChatRoomMessage({ Content: 'TriggerShock' + intensity, Type: "Action", Sender: player.MemberNumber, Dictionary: Dictionary });
-
-        InventoryShockExpression(player);
+        DoSinglePunish(player, collar);
 
         if (Date.now() > this._timer) return TimedWorkState.finished;
         return TimedWorkState.running;
+    }
+}
+
+export class RandomSinglePunishWork extends TimedWork {
+    run(player: Character): TimedWorkState {
+        const items = player.Appearance.filter(i => i.Asset.Group.Name.startsWith("Item"));
+        const item = items[Math.floor(Math.random() * items.length)];
+        const oi = OutfitItemsMap.get(item.Asset.Group.Name);
+        if (oi) {
+            DoSinglePunish(player, item);
+        }
+        return TimedWorkState.finished;
     }
 }
 
