@@ -35,8 +35,9 @@ function IsStringWorkItem(item: OutfitCheckWorkParamItem | OutfitItemType): item
 }
 
 export interface OutfitFixWorkResult {
-    readonly ret: "passed" | "canfix" | "blocked";
-    readonly counter: number;
+    ret: "passed" | "canfix" | "blocked";
+    blocked?: string[];
+    counter?: number;
 }
 
 export class OutfitFixWork extends TimedWork {
@@ -62,23 +63,25 @@ export class OutfitFixWork extends TimedWork {
 
         let result = this._target.reduce((acc, i) => {
             const existed_i = app_map.get(i.target.Asset.Group);
-            if (!existed_i) acc.failed.push(i);
+            if (!existed_i) acc.canRepair.push(i);
             else if (CheckItemRaw(existed_i, i.target, craft)) { } // do nothing
             else if (existed_i.Property && existed_i.Property.Effect?.includes("Lock")) acc.blocked.push(i);
-            else acc.failed.push(i);
+            else acc.canRepair.push(i);
             return acc;
-        }, { failed: [], blocked: [] } as { failed: OutfitCheckWorkItem[], blocked: OutfitCheckWorkItem[] });
+        }, { canRepair: [], blocked: [] } as { canRepair: OutfitCheckWorkItem[], blocked: OutfitCheckWorkItem[] });
+
+        const locked_items = result.blocked.map(i => i.target.Asset.Group).map(i => (app_map.get(i) as Item).Asset.Name).join("、");
 
         const do_message = (result: OutfitFixWorkResult) =>
-            ((msg: IMessage | undefined | void) => { if (msg) ParseMessage(msg, { player }) })(this._message ? this._message(result) : undefined);
+            ((msg: IMessage | undefined | void) => this._message && ((msg) => msg && ParseMessage(msg, { player }, { locked_items }))(this._message(result)));
 
         if (result.blocked.length > 0) {
-            do_message({ ret: "blocked", counter: 0 });
+            do_message({ ret: "blocked", blocked: result.blocked.map(i => i.target.Asset.Group) });
             return TimedWorkState.interrupted;
         }
 
-        if (result.failed.length === 0) {
-            do_message({ ret: "passed", counter: 0 });
+        if (result.canRepair.length === 0) {
+            do_message({ ret: "passed" });
             return TimedWorkState.finished;
         }
 
@@ -89,24 +92,22 @@ export class OutfitFixWork extends TimedWork {
         player.Appearance = player.Appearance.concat(this._target.map(i => {
             const existed_i = app_map.get(i.target.Asset.Group);
             const expected_i = ItemFromOutfit(player, player, i.target, craft) as Item;
-            ((saved: DataOutfitItem | undefined, then: () => void) => {
-                if (!saved) return then();
+            const saved = saved_item.get(i.target.Asset.Group);
+            if (saved) {
                 if (saved.color) expected_i.Color = saved.color;
                 if (saved.property) expected_i.Property = saved.property;
-            })(saved_item.get(i.target.Asset.Group), () => {
-                if (i.option) ExtendedItemSetOptionByRecord(player, expected_i, i.option);
-                if (!expected_i.Property) expected_i.Property = {};
-                if (i.property) {
-                    Object.assign(expected_i.Property, i.property);
-                } else {
-                    InventoryLock(player, expected_i, lock, player.MemberNumber)
-                }
-            });
+            }
+
+            if (i.option) ExtendedItemSetOptionByRecord(player, expected_i, i.option);
+            else if (!expected_i.Property) ExtendedItemInit(player, expected_i);
+            if (existed_i?.Property?.LockedBy === undefined) InventoryLock(player, expected_i, lock, player.MemberNumber);
+            if (i.property) Object.assign(expected_i.Property as ItemProperty, i.property);
+
             if (!existed_i) return expected_i;
             else Object.assign(existed_i, expected_i);
         }).filter(i => i !== undefined) as Item[]);
         AppearanceUpdate(player);
-        do_message({ ret: "canfix", counter: result.failed.length });
+        do_message({ ret: "canfix", counter: result.canRepair.length });
         return TimedWorkState.finished;
     }
 }

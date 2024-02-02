@@ -178,7 +178,7 @@ export function InitDressSequence(player: Character, target: Character) {
 export function DressFixSequence(sender: Character | number, player: Character) {
     const cannot_fix: IMessage = {
         mode: "chat-action",
-        msg: "发现部分物品被锁定物品替代，无法自动修复，停止修复过程。"
+        msg: "发现物品 {locked_items} 被锁定物品替代，无法自动修复，停止修复过程。"
     };
 
     const craft = EILNetwork.Access.craft;
@@ -186,7 +186,7 @@ export function DressFixSequence(sender: Character | number, player: Character) 
     let cumm_counter = 0;
 
     const create_result_process = (msg: IMessage) => (result: OutfitFixWorkResult) => {
-        if (result.ret === "canfix") { cumm_counter += result.counter; return msg; }
+        if (result.ret === "canfix" && result.counter) { cumm_counter += result.counter; return msg; }
         else if (result.ret === "blocked") return cannot_fix;
     };
 
@@ -251,7 +251,7 @@ export function DressFixSequence(sender: Character | number, player: Character) 
                 mode: "action",
                 msg: "看起来{player_wg}的行走控制器不翼而飞，要卸下这个着实是有些难度，是想要逃脱吗？可是自成为狼女之后，保有的自由难道还不够吗？可惜的是，除非主人允许，否则无论如何都无法逃离。嗯，也许该将这个消息告知主人。维护舱轻微的电击了下{player_wg}，随后为她安装上全新的控制器}"
             })),
-        new MessageWork("chat-action", "组件修复完毕，依据组件丢失情况，已扣除响应奖励积分。重新扫描并自检中"),
+        new MessageWork("chat-action", "组件修复完毕，依据组件丢失情况，已扣相应奖励积分。重新扫描并自检中"),
         new CommonWork((player) => {
             DataManager.points.points -= cumm_counter;
             ParseMessage({ mode: "local", msg: `已扣除${cumm_counter}点数，当前点数${DataManager.points.points}` });
