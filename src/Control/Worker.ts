@@ -63,6 +63,15 @@ export class TimedWorker {
         this.work_suites.push(work);
     }
 
+    insert_after_first(work: TimedWorkSuite) {
+        if (this.work_suites.length === 0) {
+            this.work_suites.push(work);
+            return;
+        } else {
+            this.work_suites.splice(1, 0, work);
+        }
+    }
+
     private static _global: TimedWorker | undefined;
 
     static init(time_reso: number) {
