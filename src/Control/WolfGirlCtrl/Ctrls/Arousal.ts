@@ -1,5 +1,9 @@
-import { CtrlType, IController, TestCtrlResult, TAccept, TReject } from "..";
-import { DetailedItemTestRecords } from "../Ctrls";
+import { CtrlType } from "../IController";
+import { TAccept } from "../IController";
+import { TReject } from "../IController";
+import { TestCtrlResult } from "../IController";
+import { IController } from "../IController";
+import { DetailedItemTestRecords } from "../IController";
 
 function calcRecordValue(type: CtrlType) {
     if (type === "off") return { o: 0 };

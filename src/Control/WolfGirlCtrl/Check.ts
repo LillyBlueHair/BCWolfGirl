@@ -1,4 +1,3 @@
-import { DataManager } from "../../Data";
 import { OutfitItems, OutfitItemsMap } from "../OutfitCtrl";
 import { OutfitItemType } from "../OutfitCtrl";
 

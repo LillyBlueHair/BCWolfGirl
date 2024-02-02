@@ -1,5 +1,12 @@
-import { IController, CtrlType, TestCtrlResult, TAccept, TReject } from "..";
-import { RecordsEqual, StandardItemSetRecords, DetailedItemTestRecords, StandardItemTestRecords } from "../Ctrls";
+import { CtrlType } from "../IController";
+import { TAccept } from "../IController";
+import { TReject } from "../IController";
+import { TestCtrlResult } from "../IController";
+import { IController } from "../IController";
+import { StandardItemSetRecords } from "../IController";
+import { RecordsEqual } from "../IController";
+import { StandardItemTestRecords } from "../IController";
+import { DetailedItemTestRecords } from "../IController";
 
 function calcRecordValue(type: CtrlType): TypeRecord[] {
     if (type === "off") return [{ typed: 1 }, { typed: 0 }];

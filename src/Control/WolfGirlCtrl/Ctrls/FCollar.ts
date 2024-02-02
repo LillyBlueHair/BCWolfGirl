@@ -1,4 +1,8 @@
-import { CtrlType, IController, TAccept, TReject, TestCtrlResult } from "..";
+import { CtrlType } from "../IController";
+import { TAccept } from "../IController";
+import { TReject } from "../IController";
+import { TestCtrlResult } from "../IController";
+import { IController } from "../IController";
 
 const props = {
     open: {

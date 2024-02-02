@@ -1,6 +1,9 @@
-import { ControllerType, CtrlType, RunControls, TestCtrlResult } from ".";
+import { RunControls } from ".";
+import { ControllerType } from "./IController";
+import { CtrlType } from "./IController";
+import { TestCtrlResult } from "./IController";
 import { TimedWork, TimedWorkState } from "../Worker";
-import { TestRunControls } from "./Ctrls";
+import { TestRunControls } from ".";
 
 export class RunControlWork extends TimedWork {
     constructor(readonly type: ControllerType, readonly mode: CtrlType) { super(); }

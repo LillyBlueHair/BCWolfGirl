@@ -1,8 +1,11 @@
 import { ModSDKModAPI } from "bondage-club-mod-sdk";
 import { IsPlayerWolfGirl } from "../Check";
-import { CtrlType, IController, TestCtrlResult } from "..";
+import { CtrlType } from "../IController";
+import { TestCtrlResult } from "../IController";
+import { IController } from "../IController";
 import { CUSTOM_ACTION_TAG } from "../../../Definition";
-import { StandardItemSetRecords, StandardItemTestRecords } from "../Ctrls";
+import { StandardItemSetRecords } from "../IController";
+import { StandardItemTestRecords } from "../IController";
 
 function ChatOrWhisperToWolfGirl(data: ServerChatRoomMessage, then: (player: Character, sender: Character) => void) {
     if (data.Type === "Chat" || data.Type === "Whisper") {

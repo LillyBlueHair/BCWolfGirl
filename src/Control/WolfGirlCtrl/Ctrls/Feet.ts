@@ -1,5 +1,8 @@
-import { IController, CtrlType, TestCtrlResult, TReject, TAccept } from "..";
-import { RecordsEqual, StandardItemSetRecords, DetailedItemTestRecords, StandardItemTestRecords } from "../Ctrls";
+import { CtrlType } from "../IController";
+import { TestCtrlResult } from "../IController";
+import { IController } from "../IController";
+import { StandardItemSetRecords } from "../IController";
+import { StandardItemTestRecords } from "../IController";
 
 function calcRecordValue(type: CtrlType) {
     if (type === "off") return [{ typed: 0 }, { typed: 0 }];
@@ -10,7 +13,7 @@ function calcRecordValue(type: CtrlType) {
 
 export class FeetCtrl extends IController {
     readonly type = "FeetCtrl";
-    readonly target_item = ["ItemFeet", "ItemLegs"];
+    readonly target_item = ["ItemFeet", "ItemLegs", "ItemBoots"];
     available_ctrls: CtrlType[] = ["off", "base", "total"];
 
     set(player: Character, item: (Item | undefined)[], type: CtrlType): void {
