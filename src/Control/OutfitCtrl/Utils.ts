@@ -1,5 +1,5 @@
 import { ExtractMemberNumber } from "../../utils/Character";
-import { OutfitItemsMap } from "./Definition";
+import { OutfitItems, OutfitItemsMap } from "./Definition";
 import { OutfitItemType } from "./OutfitTypes";
 
 export function CraftingItemFromOutfit(player: Character, v: OutfitItemType, crafter?: { uid: number, name: string }) {
@@ -67,6 +67,12 @@ export function CheckItem(target: Character, item: OutfitItemType, crafter?: { u
     return CheckItemRaw(i, item, crafter);
 }
 
+export function CheckItemByGroup(target: Character, group: AssetGroupItemName, crafter?: { uid: number, name: string }) {
+    const oi = OutfitItemsMap.get(group);
+    if (!oi) return false;
+    return CheckItem(target, oi, crafter);
+}
+
 export function CheckItems(target: Character, item: (OutfitItemType | string)[], crafter?: { uid: number, name: string }) {
     const items_map = new Map<string, Item>(
         target.Appearance.map(e => [e.Asset.Group.Name, e])
@@ -80,6 +86,16 @@ export function CheckItems(target: Character, item: (OutfitItemType | string)[],
 
         return CheckItemRaw(item, oitem, crafter);
     });
+}
+
+export function CheckMissingItems(player: Character, crafter?: { uid: number, name: string }) {
+    const app_map = new Map<string, Item>(player.Appearance.map(e => [e.Asset.Group.Name, e]));
+    const missing = new Set<string>();
+    OutfitItems.forEach(e => {
+        if (!app_map.has(e.Asset.Group)) missing.add(e.Asset.Group);
+        if (!CheckItem(player, e, crafter)) missing.add(e.Asset.Group);
+    });
+    return missing;
 }
 
 export function CalculateLocks(locking: Character | number, locked: Character) {
