@@ -145,14 +145,14 @@ export function DressSequence(net: EILNetwork, player: Character, target: Charac
 export function InitDressSequence(player: Character, target: Character) {
     if (!CheckItem(player, ToolsVisor) || !CheckItem(player, ToolsInjector)) return;
 
-    ChatRoomAction.instance.LocalAction("正在连接Wolf Girl网络...");
-    EILNetwork.Wfetch().then(net => {
+    ChatRoomAction.instance.LocalInfo(">> 正在连接Wolf Girl网络...");
+    EILNetwork.force_fetch().then(net => {
         const work_sequence: TimedWork[] = [
-            new MessageWork("local", "...已连接到Wolf Girl网络"),
-            new MessageWork("local", ">> 权限检查开始"),
-            new MessageWork("local", `EIL网络管理员：${DataManager.permission.isEILNet(player) ? "通过" : "未通过"}`),
-            new MessageWork("local", `恋人权限：${DataManager.permission.isLover(player, target) ? "通过" : "未通过"}`),
-            new MessageWork("local", `主人权限：${DataManager.permission.isOwner(player, target) ? "通过" : "未通过"}`),
+            new MessageWork("local-status", "   ...已连接到Wolf Girl网络"),
+            new MessageWork("local-status", ">> 权限检查开始"),
+            new MessageWork("local-status", `   EIL网络管理员：${DataManager.permission.isEILNet(player) ? "通过" : "未通过"}`),
+            new MessageWork("local-status", `   恋人权限：${DataManager.permission.isLover(player, target) ? "通过" : "未通过"}`),
+            new MessageWork("local-status", `   主人权限：${DataManager.permission.isOwner(player, target) ? "通过" : "未通过"}`),
             new CheckWork((player) => {
                 const passed = [
                     DataManager.permission.isEILNet(player),
@@ -162,8 +162,8 @@ export function InitDressSequence(player: Character, target: Character) {
                 if (passed) return CheckWork.Accepted;
                 else return CheckWork.Rejected;
             }, (player, result) => {
-                if (result.passed) return { mode: "local", msg: ">> 权限检查通过，启动安装流程" };
-                else return { mode: "local", msg: ">> 指令已被拒绝，中止安装流程" };
+                if (result.passed) return { mode: "local-status", msg: "   权限检查通过，启动安装流程" };
+                else return { mode: "local-status", msg: "   指令已被拒绝，中止安装流程" };
             }),
             new CommonWork(() => {
                 DressSequence(EILNetwork.Access, player, target);
@@ -171,7 +171,7 @@ export function InitDressSequence(player: Character, target: Character) {
         ];
         TimedWorker.global.push({ description: "Init Dress Sequence", works: work_sequence });
     }).catch(e => {
-        ChatRoomAction.instance.LocalAction("...Wolf Girl 网络断开，已中止过程。");
+        ChatRoomAction.instance.LocalInfo("...Wolf Girl 网络断开，已中止过程。");
     });
 }
 

@@ -48,7 +48,7 @@ export class EILNetwork {
         }).then(d => EILNetwork.last_fetched = new EILNetwork(d));
     }
 
-    static Wfetch: () => Promise<EILNetwork>;
+    static force_fetch: () => Promise<EILNetwork>;
 
     static init(asset_url: string) {
         return this.fetch(asset_url).then(d => {
@@ -59,7 +59,7 @@ export class EILNetwork {
                 }
                 return EILNetwork.last_fetched as EILNetwork;
             }
-            EILNetwork.Wfetch = () => EILNetwork.fetch(asset_url);
+            EILNetwork.force_fetch = () => EILNetwork.fetch(asset_url);
         });
     }
 }
