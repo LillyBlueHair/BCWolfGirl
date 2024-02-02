@@ -1,6 +1,7 @@
 import { ParseMessage } from "../../Control/Message";
 import { ItemOptionWork } from "../../Control/OutfitCtrl";
 import { StartPunish, StopPunish } from "../../Control/PunishWork";
+import { ArousalCtrlSequence, FeetCtrlSequence, HandsCtrlSequence, HearingCtrlSequence, VisionCtrlSequence, VoiceCtrlSequence } from "../../Control/SequenceCtrl/ItemCmdSequence";
 import { ITask } from "../../Control/TaskCtrl";
 import { BegOrgasmTask } from "../../Control/TaskCtrl/BegOrgasmTask";
 import { InteractTask } from "../../Control/TaskCtrl/InteractTask";
@@ -110,7 +111,7 @@ export const SelfPointCmds: CommandTemplate[] = [
         prerequisite: SelfPrerequisites,
         run(player, sender, content) {
             DataManager.points.use_points(1).then(() => {
-                RunControls(player, "ArousalCtrl", "off");
+                ArousalCtrlSequence(player, "off");
             }, (p) => {
                 ParseMessage({ mode: "local", msg: `你没有足够的奖励积分，当前积分${p}` })
             })
@@ -121,7 +122,7 @@ export const SelfPointCmds: CommandTemplate[] = [
         prerequisite: SelfPrerequisites,
         run(player, sender, content) {
             DataManager.points.use_points(1).then(() => {
-                RunControls(player, "VoiceCtrl", "off");
+                VoiceCtrlSequence(player, "off");
             }, (p) => {
                 ParseMessage({ mode: "local", msg: `你没有足够的奖励积分，当前积分${p}` })
             })
@@ -132,7 +133,7 @@ export const SelfPointCmds: CommandTemplate[] = [
         prerequisite: SelfPrerequisites,
         run(player, sender, content) {
             DataManager.points.use_points(1).then(() => {
-                RunControls(player, "HandsCtrl", "off");
+                HandsCtrlSequence(player, "off");
             }, (p) => {
                 ParseMessage({ mode: "local", msg: `你没有足够的奖励积分，当前积分${p}` })
             })
@@ -143,7 +144,7 @@ export const SelfPointCmds: CommandTemplate[] = [
         prerequisite: SelfPrerequisites,
         run(player, sender, content) {
             DataManager.points.use_points(1).then(() => {
-                RunControls(player, "FeetCtrl", "off");
+                FeetCtrlSequence(player, "off");
             }, (p) => {
                 ParseMessage({ mode: "local", msg: `你没有足够的奖励积分，当前积分${p}` })
             })
@@ -154,7 +155,7 @@ export const SelfPointCmds: CommandTemplate[] = [
         prerequisite: SelfPrerequisites,
         run(player, sender, content) {
             DataManager.points.use_points(1).then(() => {
-                RunControls(player, "VisionCtrl", "off");
+                VisionCtrlSequence(player, "off");
             }, (p) => {
                 ParseMessage({ mode: "local", msg: `你没有足够的奖励积分，当前积分${p}` })
             })
@@ -165,7 +166,7 @@ export const SelfPointCmds: CommandTemplate[] = [
         prerequisite: SelfPrerequisites,
         run(player, sender, content) {
             DataManager.points.use_points(1).then(() => {
-                RunControls(player, "HearingCtrl", "off");
+                HearingCtrlSequence(player, "off");
             }, (p) => {
                 ParseMessage({ mode: "local", msg: `你没有足够的奖励积分，当前积分${p}` })
             })
