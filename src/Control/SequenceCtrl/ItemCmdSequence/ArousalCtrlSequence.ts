@@ -1,13 +1,12 @@
-import { CtrlType } from "../../WolfGirlCtrl";
-import { CmdSequenceMessage, StdCmdSequence } from ".";
+import { CtrlType } from "../../WolfGirlCtrl/IController";
+import { StdMissing } from "./CmdSequenceMessage";
+import { CmdSequenceMessage } from "./CmdSequenceMessage";
+import { StdCmdSequence } from "./StdCmdSequence";
 
 
-export function ArousalCtrlSequence(player: Character, sender: Character, mode: CtrlType) {
+export function ArousalCtrlSequence(player: Character, mode: CtrlType) {
     const messages: CmdSequenceMessage = {
-        missing: {
-            notify: { mode: "chat-action", msg: "收到指令，指令执行异常，组件{0}不在线，指令无法完成" },
-            action: { mode: "action", msg: "{player_wg}的中央控制核心小小的发出了错误的嘟声，除此之外什么都没有发生" },
-        },
+        missing: StdMissing,
         modes: {
             "off": {
                 notify: { mode: "chat-action", msg: "收到指令，高潮限制已关闭" },
@@ -24,5 +23,5 @@ export function ArousalCtrlSequence(player: Character, sender: Character, mode: 
         }
     };
 
-    StdCmdSequence(player, sender, "ArousalCtrl", mode, messages);
+    StdCmdSequence(player, "ArousalCtrl", mode, messages);
 }
