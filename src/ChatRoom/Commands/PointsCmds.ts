@@ -95,6 +95,13 @@ export const ModPointsCmds: CommandTemplate[] = [
             ParseMessage({ mode: "action", msg: `${GetWolfGrilName(player)}${content[1]}了5积分，当前积分${DataManager.points.points}` }, { player })
         }
     },
+    {
+        match: /^查询奖励积分/,
+        prerequisite: BasicPrerequisites,
+        run(player, sender, content) {
+            ParseMessage({ mode: "action", msg: `${GetWolfGrilName(player)}当前奖励积分：${DataManager.points.points}` })
+        }
+    }
 ]
 
 export const SelfPointCmds: CommandTemplate[] = [
