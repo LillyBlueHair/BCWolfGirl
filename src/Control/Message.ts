@@ -6,7 +6,7 @@ export interface IMessage {
     msg: string;
 }
 
-export type IMessageMode = "action" | "chat-action" | "local" | "chat";
+export type IMessageMode = "action" | "chat-action" | "local" | "chat" | "local-status";
 
 export function ParseMessage(option: IMessage, src?: { player?: Character, target?: Character }, args?: { [key: string]: string }) {
     if (!src) src = {};
@@ -35,6 +35,8 @@ export function ParseMessage(option: IMessage, src?: { player?: Character, targe
         ChatRoomAction.instance.LocalAction(parsed);
     } else if (option.mode === "chat") {
         ChatRoomAction.instance.SendChat(parsed);
+    } else if (option.mode === "local-status") {
+        ChatRoomAction.instance.LocalInfo(parsed);
     }
 }
 

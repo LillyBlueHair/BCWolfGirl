@@ -41,6 +41,7 @@ export class ChatRoomAction {
     }
 
     public readonly LocalAction: (Content: string) => void;
+    public readonly LocalInfo: (Content: string) => void;
     public readonly SendAction: (Content: string) => void;
     public readonly SendChat: (Content: string) => void;
     public readonly SendWhisper: (target: number, Content: string) => void;
@@ -69,9 +70,19 @@ export class ChatRoomAction {
         this.LocalAction = (Content: string) => {
             if (!Content || !Player || !Player.MemberNumber) return;
             ChatRoomMessage({
+                Sender: Player.MemberNumber,
                 Content: CUSTOM_ACTION_TAG,
                 Type: "Action",
                 Dictionary: [DictItem(Content)],
+            });
+        }
+
+        this.LocalInfo = (Content: string) => {
+            if (!Content || !Player || !Player.MemberNumber) return;
+            ChatRoomMessage({
+                Sender: Player.MemberNumber,
+                Content: Content,
+                Type: "LocalMessage",
             });
         }
 
