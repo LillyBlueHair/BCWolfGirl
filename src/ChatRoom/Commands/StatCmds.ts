@@ -5,7 +5,7 @@ import { CommandTemplate } from "../ICmds";
 import { ModOrSelfPrerequisites } from "../Prerequistes";
 
 
-export const ArousalCmds: CommandTemplate[] = [
+export const StatCmds: CommandTemplate[] = [
     {
         match: /^查询高潮统计/,
         prerequisite: ModOrSelfPrerequisites,

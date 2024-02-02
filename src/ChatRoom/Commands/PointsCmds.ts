@@ -18,7 +18,7 @@ const PushTask = (player: Character, t: ITask) => {
     });
 }
 
-export const ModPointsCmds: CommandTemplate[] = [
+export const TaskPointsCmds: CommandTemplate[] = [
     {
         match: /^忍耐([1-9]\d{0,2})次高潮/,
         prerequisite: BasicPrerequisites,
