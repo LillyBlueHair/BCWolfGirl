@@ -2,7 +2,7 @@ function buildVersion(v1: number, v2: number, v3: number) {
     return `${v1}.${v2}.${v3}`;
 }
 
-export const ModVersion = buildVersion(0, 0, 5);
+export const ModVersion = buildVersion(0, 1, 0);
 export const ModName = 'BondageClub WolfGril';
 export const HTMLIDPrefix = "BCWG_";
 
