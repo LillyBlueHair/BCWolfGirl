@@ -28,7 +28,7 @@ export const TaskPointsCmds: CommandTemplate[] = [
         run(player, sender, content) {
             RunControls(player, "ToysCtrl", "max");
             RunControls(player, "ArousalCtrl", "off");
-            PushTask(player, new ResistTask(10 * 60 * 1000, parseInt(content[1]), 2))
+            PushTask(player, new ResistTask(1, parseInt(content[1]), 2))
         }
     },
     {
@@ -37,14 +37,14 @@ export const TaskPointsCmds: CommandTemplate[] = [
         run(player, sender, content) {
             ItemOptionWork.ItemOptionSingleS(player, { target: "ItemPelvis", option: { c: 0 } });
             RunControls(player, "ArousalCtrl", "off");
-            PushTask(player, new BegOrgasmTask(30 * 60 * 1000, parseInt(content[1]), 2));
+            PushTask(player, new BegOrgasmTask(2, parseInt(content[1]), 2));
         }
     },
     {
         match: /^让([1-9]\d{0,2})人玩弄你的胸部/,
         prerequisite: BasicPrerequisites,
         run(player, sender, content) {
-            PushTask(player, new InteractTask(15 * 60 * 1000, parseInt(content[1]), 2, undefined, ['ItemBreast', 'ItemNipplesPiercings', 'ItemNipples']));
+            PushTask(player, new InteractTask(1, parseInt(content[1]), 2, undefined, ['ItemBreast', 'ItemNipplesPiercings', 'ItemNipples']));
         }
     },
     {
@@ -53,14 +53,14 @@ export const TaskPointsCmds: CommandTemplate[] = [
         run(player, sender, content) {
             ItemOptionWork.ItemOptionSingleS(player, { target: "ItemPelvis", option: { c: 0 } });
             RunControls(player, "ArousalCtrl", "off");
-            PushTask(player, new InteractTask(15 * 60 * 1000, parseInt(content[1]), 2, undefined, ['ItemVulva', 'ItemPelvis', 'ItemVulvaPiercings']));
+            PushTask(player, new InteractTask(1, parseInt(content[1]), 2, undefined, ['ItemVulva', 'ItemPelvis', 'ItemVulvaPiercings']));
         }
     },
     {
         match: /^向([1-9]\d{0,2})人乞求鞭打/,
         prerequisite: BasicPrerequisites,
         run(player, sender, content) {
-            PushTask(player, new InteractTask(15 * 60 * 1000, parseInt(content[1]), 2, ["Slap", "Spank", "Kick", "SpankItem"], undefined));
+            PushTask(player, new InteractTask(1, parseInt(content[1]), 2, ["Slap", "Spank", "Kick", "SpankItem"], undefined));
         }
     },
     {
@@ -69,17 +69,17 @@ export const TaskPointsCmds: CommandTemplate[] = [
         run(player, sender, content, args) {
             const v = parseInt(content[1]);
             DataManager.points.punish_time = v * 60 * 1000;
-            RouteIM(args.type, player, sender, "{player_wg}的惩罚时间为{v}分钟", { v });
+            RouteIM(args.type, player, sender, `{player_wg}的惩罚时间为${DataManager.points.punish_time}分钟`);
             ParseMessage({ mode: "local", msg: `机械播报的冰冷声响复述了一遍{player_wg}任务失败的后果，似乎完全没有情感，但是却能听出一丝玩味` }, { player })
         }
     },
     {
         match: /^设置任务时间为([1-9]\d{0,2})分钟/,
         prerequisite: BasicPrerequisites,
-        run(player, sender, content) {
+        run(player, sender, content, args) {
             const v = parseInt(content[1]);
-            DataManager.points.punish_time = v * 60 * 1000;
-            ParseMessage({ mode: "local", msg: `{player_wg}的任务时间为${v}分钟` }, { player })
+            DataManager.points.task_time = v * 60 * 1000;
+            RouteIM(args.type, player, sender, `{player_wg}的任务基础时间为${DataManager.points.task_time}分钟`)
         }
     },
     {
