@@ -30,7 +30,7 @@ export function FormatMessage(msg: string, src?: { player?: Character, target?: 
     });
 }
 
-export function ParseMessage(option: IMessage, src?: { player?: Character, target?: Character }, args?: { [key: string]: string }) {
+export function ParseMessage(option: IMessage, src?: { player?: Character, target?: Character }, args?: { [key: string]: any }) {
     const formated = FormatMessage(option.msg, src, args);
     if (option.mode === "action") {
         ChatRoomAction.instance.SendAction(formated);
@@ -64,13 +64,14 @@ export function MessageSimWrongCoding(src: string, weight: number) {
     return src.split('').map(replace).join('');
 }
 
-export function RouteIM(target: Character | number, type: CommandType, msg: string) {
+export function RouteIM(type: CommandType, player: Character, target: number | Character, msg: string, args?: { [key: string]: any }) {
+    const formated = FormatMessage(msg, { player }, args);
     const tnum = ExtractMemberNumber(target);
     if (type === "Chat") {
-        ChatRoomAction.instance.SendAction(msg);
+        ChatRoomAction.instance.SendAction(formated);
     } else if (type === "Whisper") {
-        ChatRoomAction.instance.SendWhisper(tnum, msg);
+        ChatRoomAction.instance.SendWhisper(tnum, formated);
     } else if (type === "Beep") {
-        ChatRoomAction.instance.SendBeep(tnum, msg);
+        ChatRoomAction.instance.SendBeep(tnum, formated);
     }
 }

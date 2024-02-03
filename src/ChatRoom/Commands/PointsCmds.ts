@@ -69,7 +69,7 @@ export const TaskPointsCmds: CommandTemplate[] = [
         run(player, sender, content, args) {
             const v = parseInt(content[1]);
             DataManager.points.punish_time = v * 60 * 1000;
-            RouteIM(sender, args.type, FormatMessage("{player_wg}的惩罚时间为{v}分钟", { player }, { v }));
+            RouteIM(args.type, player, sender, "{player_wg}的惩罚时间为{v}分钟", { v });
             ParseMessage({ mode: "local", msg: `机械播报的冰冷声响复述了一遍{player_wg}任务失败的后果，似乎完全没有情感，但是却能听出一丝玩味` }, { player })
         }
     },
@@ -98,16 +98,15 @@ export const TaskPointsCmds: CommandTemplate[] = [
             const oper = content[1];
             DataManager.points.points += oper === "扣除" ? -v : v;
             const points = DataManager.points.points;
-            RouteIM(sender, args.type, FormatMessage("{player_wg}{oper}了{v}积分，当前积分{points}", { player }, { oper, v, points }));
+            RouteIM(args.type, player, sender, "{player_wg}{oper}了{v}积分，当前积分{points}", { oper, v, points });
         },
     },
     {
         match: /^查询奖励积分/,
         prerequisite: BasicPrerequisites,
         run(player, sender, content, args) {
-            // RouteIM(sender, args.type, `${GetWolfGrilName(player)}当前奖励积分：${DataManager.points.points}`);
             const points = DataManager.points.points;
-            RouteIM(sender, args.type, FormatMessage("{player_wg}当前奖励积分：{points}", { player }, { points }));
+            RouteIM(args.type, player, sender, "{player_wg}当前奖励积分：{points}", { points });
             if (DataManager.points.points > 20)
                 ParseMessage({ mode: "local", msg: `{player_wg}做得很好哦，不过攒着积分可没有利息，亦或者只是单纯的想要一个不错的数字？小心下一次打开查询的时候，也许会有惊喜哦？` }, { player })
             else if (DataManager.points.points < 0)
