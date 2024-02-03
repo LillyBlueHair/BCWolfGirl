@@ -18,7 +18,7 @@ function StdInjectionSequence(type: InjectionType, msg: InjectionSequenceMsg) {
 
     const work_sequence: TimedWork[] = [
         new CheckItemsWork(["ItemTorso2"], (player, result) => {
-            if (result.missing) {
+            if (result.missing.length > 0) {
                 const missing_formated = result.missing.map(g => g.Craft.Name).join("、");
                 ParseMessage(StdMissingMsgN, { player }, { missing_formated });
                 return TimedWorkState.interrupted;
