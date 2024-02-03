@@ -4,10 +4,7 @@ import { ActivityInfo } from "../utils/ChatMessages";
 import { StartStashPopSequence } from "../Control/SequenceCtrl/StashSequence";
 import { StartStashSequence } from "../Control/SequenceCtrl/StashSequence";
 import { InitDressSequence } from "../Control/SequenceCtrl/DressSequence";
-import { IsModerator } from "./Prerequistes";
-import { IsPlayerWolfGirl } from "../Control/WolfGirlCtrl";
-import { StashOutfit, StashPopOutfit, StashPopResult } from "../Control/StashOutfit";
-import { ParseMessage } from "../Control/Message";
+import { ModOrSelfPrerequisites } from "./Prerequistes";
 import { IsCollarOn } from "../Control/WolfGirlCtrl/Check";
 
 
@@ -29,11 +26,13 @@ class WolfGirlItemsSwitch extends IActivity {
     } as Activity;
 
     on(player: Character, sender: Character, info: ActivityInfo): void {
-        if (info.TargetCharacter.MemberNumber === player.MemberNumber && IsModerator(player, sender) && IsPlayerWolfGirl(player)) {
-            if (DataManager.outfit.items.size > 0) {
-                StartStashPopSequence(player, sender);
-            } else {
-                StartStashSequence(player, sender);
+        if (info.TargetCharacter.MemberNumber === player.MemberNumber) {
+            if (ModOrSelfPrerequisites(player, sender)) {
+                if (DataManager.outfit.items.size > 0) {
+                    StartStashPopSequence(player, sender);
+                } else {
+                    StartStashSequence(player, sender);
+                }
             }
         }
     }
