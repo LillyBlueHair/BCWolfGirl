@@ -231,6 +231,7 @@ interface ServerBeepData {
     MemberNumber?: number,
     MemberName?: string,
     ChatRoomName?: string,
+    ChatRoomSpace?: string,
     Message?: string,
     Private?: boolean
 }

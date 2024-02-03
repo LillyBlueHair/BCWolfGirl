@@ -29,7 +29,12 @@ export function BeepRawHandler(player: Character, data: ServerBeepData) {
     if (!data.MemberName || !data.MemberNumber || !data.Message) return;
     if (player.GhostList && player.GhostList.indexOf(data.MemberNumber) >= 0) return;
 
-    RunCommands(player, data.MemberNumber, data.Message, { type: "Beep", "BeepRoom": data.ChatRoomName });
+    const room = (() => {
+        if (data.ChatRoomName && data.ChatRoomSpace) return { name: data.ChatRoomName, space: data.ChatRoomSpace };
+        return undefined;
+    })();
+
+    RunCommands(player, data.MemberNumber, data.Message, { type: "Beep", BeepRoom: room });
 }
 
 

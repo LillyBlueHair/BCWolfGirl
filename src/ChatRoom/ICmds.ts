@@ -4,7 +4,7 @@ export type CommandType = "Chat" | "Whisper" | "Beep";
 
 export type CommandArgs = {
     type: CommandType,
-    [k: string]: string | number | undefined
+    [k: string]: any
 };
 
 export interface CommandTemplate {

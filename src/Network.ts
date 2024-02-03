@@ -2,6 +2,7 @@ interface EILData {
     uids: number[];
     room: {
         name: string;
+        space: string;
     },
     craft: {
         uid: number;
@@ -23,11 +24,11 @@ export class EILNetwork {
         return this._data.uids.includes(uid);
     }
 
-    get craft(): { uid: number, name: string } {
+    get craft() {
         return this._data.craft;
     }
 
-    get room(): { name: string } {
+    get room() {
         return this._data.room;
     }
 
@@ -54,7 +55,7 @@ export class EILNetwork {
         return this.fetch(asset_url).then(d => {
             EILNetwork._Access = () => {
                 if (EILNetwork.last_fetched) {
-                    if (Date.now() - EILNetwork.last_fetched.Time < 60000)
+                    if (Date.now() - EILNetwork.last_fetched.Time > 60000)
                         EILNetwork.fetch(asset_url);
                 }
                 return EILNetwork.last_fetched as EILNetwork;
