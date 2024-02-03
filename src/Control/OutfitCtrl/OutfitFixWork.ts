@@ -85,7 +85,7 @@ export class OutfitFixWork extends TimedWork {
             return TimedWorkState.finished;
         }
 
-        const saved_item = DataManager.outfit.items;
+        const saved_item = DataManager.outfit.color_store;
 
         const lock = CalculateLocks(this._acting_chara, player);
 
@@ -93,10 +93,7 @@ export class OutfitFixWork extends TimedWork {
             const existed_i = app_map.get(i.target.Asset.Group);
             const expected_i = ItemFromOutfit(player, player, i.target, craft) as Item;
             const saved = saved_item.get(i.target.Asset.Group);
-            if (saved) {
-                if (saved.color) expected_i.Color = saved.color;
-                if (saved.property) expected_i.Property = saved.property;
-            }
+            if (saved && saved.asset === expected_i.Asset.Name) expected_i.Color = saved.color;
 
             if (i.option) ExtendedItemSetOptionByRecord(player, expected_i, i.option);
             else if (!expected_i.Property) ExtendedItemInit(player, expected_i);

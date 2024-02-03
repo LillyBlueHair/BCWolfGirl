@@ -12,10 +12,17 @@ interface DataOutfitItem {
     property: any;
 }
 
+interface ColorStoreItem {
+    asset: string;
+    group: string;
+    color: string | string[];
+}
+
 interface WolfGrilData {
     outfit: {
         lite_mode: boolean;
         items: DataOutfitItem[];
+        color_store: ColorStoreItem[];
     },
     permission: {
         moderators: number[];

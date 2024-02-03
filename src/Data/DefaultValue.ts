@@ -2,7 +2,8 @@ export function defaultValue(): WolfGrilData {
     return {
         outfit: {
             lite_mode: false,
-            items: []
+            items: [],
+            color_store: []
         },
         permission: {
             moderators: [],
@@ -46,7 +47,7 @@ export function Validate(data: any): WolfGrilData {
         if (typeof pd.lite_mode !== "boolean") pd.lite_mode = dvalue.lite_mode;
         if (!Array.isArray(pd.items)) pd.items = dvalue.items;
 
-        let items = [];
+        let items: DataOutfitItem[] = [];
         for (const item of pd.items) {
             if (typeof item !== "object") continue;
             const ii = item as Partial<DataOutfitItem>;
@@ -58,6 +59,18 @@ export function Validate(data: any): WolfGrilData {
             items.push(ii as DataOutfitItem);
         }
         pd.items = items;
+
+        let color_store: ColorStoreItem[] = [];
+        if (!Array.isArray(pd.color_store)) pd.color_store = dvalue.color_store;
+        for (const item of pd.color_store) {
+            if (typeof item !== "object") continue;
+            const ii = item as Partial<ColorStoreItem>;
+            if (typeof ii.asset !== "string") continue;
+            if (typeof ii.group !== "string") continue;
+            if (typeof ii.color !== "string" && !IsStringArray(ii.color)) continue;
+            color_store.push(ii as ColorStoreItem);
+        }
+        pd.color_store = color_store;
     })(data["outfit"]);
 
     ((data: any) => {

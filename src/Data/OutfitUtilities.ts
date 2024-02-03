@@ -3,11 +3,11 @@ import { DataManager } from ".";
 
 export class OutfitUtilities {
     private parent: DataManager;
-    private _items: Map<string, DataOutfitItem>;
 
     constructor(parent: DataManager) {
         this.parent = parent;
         this._items = new Map<string, DataOutfitItem>(parent.data.outfit.items.map(i => [i.asset.group, i]));
+        this._color_store = new Map<string, ColorStoreItem>(parent.data.outfit.color_store.map(i => [i.group, i]));
     }
 
     private get data() {
@@ -23,6 +23,7 @@ export class OutfitUtilities {
         this.parent.save();
     }
 
+    private _items: Map<string, DataOutfitItem>;
     add(item: DataOutfitItem | DataOutfitItem[]) {
         if (Array.isArray(item)) {
             item.forEach(i => this._items.set(i.asset.group, i));
@@ -44,6 +45,22 @@ export class OutfitUtilities {
         } else {
             this.data.items = [...arg.values()];
             this._items = arg;
+        }
+        this.parent.save();
+    }
+
+    private _color_store: Map<string, ColorStoreItem>;
+    get color_store(): Map<string, ColorStoreItem> {
+        return this._color_store;
+    }
+
+    set color_store(arg: ColorStoreItem[] | Map<string, ColorStoreItem>) {
+        if (Array.isArray(arg)) {
+            this.data.color_store = arg;
+            this._color_store = new Map<string, ColorStoreItem>(arg.map(i => [i.group, i]));
+        } else {
+            this.data.color_store = [...arg.values()];
+            this._color_store = arg;
         }
         this.parent.save();
     }

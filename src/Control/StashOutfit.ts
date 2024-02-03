@@ -25,6 +25,21 @@ export function GatherDataOutfitItem(player: Character): DataOutfitItem[] {
     return result;
 }
 
+export function GatherColorStoreItem(player: Character): ColorStoreItem[] {
+    let result: ColorStoreItem[] = [];
+    player.Appearance.forEach(item => {
+        const ti = OutfitItemsMap.get(item.Asset.Group.Name);
+        if (ti && CheckItemRaw(item, ti)) {
+            result.push({
+                asset: item.Asset.Group.Name,
+                group: item.Asset.Name,
+                color: item.Color ?? "Default",
+            });
+        }
+    });
+    return result;
+}
+
 export function StashOutfit(player: Character) {
     const exclude = ['ItemNeck', 'ItemPelvis'];
     let saved: DataOutfitItem[] = [];
