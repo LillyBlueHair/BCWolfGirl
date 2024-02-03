@@ -381,6 +381,25 @@ declare function ElementValue(id: string, value?: string): string;
 
 declare var CurrentCharacter: Character | null;
 
+interface ServerChatRoomSearchData {
+    Name: string;
+    Language: string;
+    Creator: string;
+    CreatorMemberNumber: number;
+    MemberCount: number;
+    MemberLimit: number;
+    Description: string;
+    BlockCategory: string[];
+    Game: ServerChatRoomGame;
+    Friends: ServerFriendInfo[];
+    Space: ServerChatRoomSpace;
+    MapType?: string;
+}
+
+declare var ChatSearchResult: (ServerChatRoomSearchData & { DisplayName: string, Order: number })[];
+declare var ChatRoomData: ServerChatRoomData;
+
+
 //text.js
 declare function TextGet(key: string): string;
 
