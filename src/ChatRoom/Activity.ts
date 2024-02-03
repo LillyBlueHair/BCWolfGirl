@@ -30,7 +30,7 @@ class WolfGirlItemsSwitch extends IActivity {
 
     on(player: Character, sender: Character, info: ActivityInfo): void {
         if (info.TargetCharacter.MemberNumber === player.MemberNumber && IsModerator(player, sender) && IsPlayerWolfGirl(player)) {
-            if (DataManager.outfit.lite_mode) {
+            if (DataManager.outfit.items.size > 0) {
                 StartStashPopSequence(player, sender);
             } else {
                 StartStashSequence(player, sender);
