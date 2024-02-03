@@ -1,10 +1,5 @@
-import { DataManager } from "../Data";
-import { AppearanceUpdate } from "../utils/Apperance";
-import { CommonWork } from "./CommonWork";
-import { MessageWork } from "./MessageWork";
-import { ItemOptionWork, OutfitItemsMap } from "./OutfitCtrl";
-import { GatherDataOutfitItem } from "./StashOutfit";
-import { TimedWork, TimedWorkState, TimedWorker } from "./Worker";
+import { OutfitItemsMap } from "./OutfitCtrl";
+import { TimedWork, TimedWorkState } from "./Worker";
 
 function IsSimpleChat(msg: string) {
     return msg.trim().length > 0 && !msg.startsWith("/") && !msg.startsWith("(") && !msg.startsWith("*");
@@ -47,8 +42,9 @@ export function DoSinglePunish(player: Character, item: Item | undefined) {
     InventoryShockExpression(player);
 }
 
-class PunishWork extends TimedWork {
+export class PunishWork extends TimedWork {
     private _timer: number;
+    static punish_flag = false;
 
     constructor(timer: number) {
         super();
@@ -61,6 +57,8 @@ class PunishWork extends TimedWork {
             this.first_run = true;
             this._timer = Date.now() + this._timer;
         }
+
+        if (!PunishWork.punish_flag) return TimedWorkState.finished;
 
         const collar = InventoryGet(player, "ItemNeck");
         if (!collar) return TimedWorkState.interrupted;
@@ -85,44 +83,6 @@ export class RandomSinglePunishWork extends TimedWork {
 }
 
 
-export function StartPunish(player: Character) {
-    const time = DataManager.points.punish_time;
-
-    const lock_down = [
-        { target: "ItemEars", option: { typed: 3 } },
-        { target: 'ItemEyes', option: { typed: 3 } },
-        { target: 'ItemArms', option: { typed: 3 } },
-        { target: 'ItemHands', option: { typed: 0 } },
-        { target: 'ItemFeet', option: { typed: 1 } },
-        { target: 'ItemLegs', option: { typed: 1 } }
-    ]
-
-    const stash = new Map<string, TypeRecord | null>(lock_down.map(
-        i => [i.target, null]
-    ));
-
-    const works = [
-        new CommonWork((player) => {
-            player.Appearance.forEach(item => {
-                if (stash.has(item.Asset.Group.Name) && item.Property?.TypeRecord)
-                    stash.set(item.Asset.Group.Name, Object.assign({}, item.Property.TypeRecord));
-            });
-            lock_down.forEach(i => ItemOptionWork.ItemOptionSingleS(player, i));
-        }),
-        new MessageWork("action", `惩罚模式启动，持续时间预计${(time / 60 / 1000).toFixed(2)}分钟`),
-        new PunishWork(time),
-        new CommonWork((player) => {
-            player.Appearance.forEach(item => {
-                const record = stash.get(item.Asset.Group.Name);
-                if (record) ExtendedItemSetOptionByRecord(player, item, record);
-            });
-            AppearanceUpdate(player);
-        }),
-    ];
-
-    TimedWorker.global.push({ description: "punish work", works: works });
-}
-
 export function StopPunish(player: Character) {
-    TimedWorker.global.skip_until(t => t.description === "punish work" && t.works.length > 1 && t.works.length < 4);
+    PunishWork.punish_flag = false;
 }

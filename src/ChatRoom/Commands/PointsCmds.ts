@@ -1,6 +1,7 @@
 import { FormatMessage, ParseMessage } from "../../Control/Message";
 import { ItemOptionWork } from "../../Control/OutfitCtrl";
-import { StartPunish, StopPunish } from "../../Control/PunishWork";
+import { StopPunish } from "../../Control/PunishWork";
+import { StartPunish } from "../../Control/SequenceCtrl/StartPunishSequence";
 import { ArousalCtrlSequence, FeetCtrlSequence, HandsCtrlSequence, HearingCtrlSequence, VisionCtrlSequence, VoiceCtrlSequence } from "../../Control/SequenceCtrl/ItemCmdSequence";
 import { ITask } from "../../Control/TaskCtrl";
 import { BegOrgasmTask } from "../../Control/TaskCtrl/BegOrgasmTask";

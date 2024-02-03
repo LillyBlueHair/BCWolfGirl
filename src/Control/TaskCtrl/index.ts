@@ -1,7 +1,7 @@
 import { ActivityInfo } from "../../utils/ChatMessages";
 import { CommandType } from "../../ChatRoom/ICmds";
 import { IncreaseAndMessage } from "./Points";
-import { StartPunish } from "../PunishWork";
+import { StartPunish } from "../SequenceCtrl/StartPunishSequence";
 
 export enum TaskState {
     Running,
