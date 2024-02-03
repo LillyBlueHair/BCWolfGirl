@@ -37,13 +37,13 @@ export class PermissionUtilities {
         return this.parent.data.permission;
     }
 
-    isModerator(moderatee: Character, moderator: number | Character): boolean {
+    isCommandAuthorized(moderatee: Character, moderator: number | Character): boolean {
         const num = ExtractMemberNumber(moderator);
-        if (EILNetwork.Access.isEIL(num)) return true;
-        if (moderatee.Ownership && moderatee.Ownership.MemberNumber === num) return true;
-        if (this.moderators.has(num)) return true;
+        if (this.isEILNet(moderator)) return true;
+        if (this.isOwner(moderator, moderatee)) return true;
+        if (this.isAdditionModerator(num)) return true;
         if (this.parent.data.permission.loverModerators
-            && moderatee.Lovership && moderatee.Lovership.some(i => i.MemberNumber === num)) return true;
+            && this.isLover(moderator, moderatee)) return true;
         return false;
     }
 
@@ -52,13 +52,20 @@ export class PermissionUtilities {
         return EILNetwork.Access.isEIL(num);
     }
 
-    isLover(moderator: Character, moderatee: Character): boolean {
-        if (moderatee.Lovership && moderatee.Lovership.some(i => i.MemberNumber === moderator.MemberNumber)) return true;
+    isLover(moderator: number | Character, moderatee: Character): boolean {
+        const num = ExtractMemberNumber(moderator);
+        if (moderatee.Lovership && moderatee.Lovership.some(i => i.MemberNumber === num)) return true;
         return false;
     }
 
-    isOwner(moderator: Character, moderatee: Character): boolean {
-        if (moderatee.Ownership && moderatee.Ownership.MemberNumber === moderator.MemberNumber) return true;
+    isOwner(moderator: number | Character, moderatee: Character): boolean {
+        const num = ExtractMemberNumber(moderator);
+        if (moderatee.Ownership && moderatee.Ownership.MemberNumber === num) return true;
         return false;
+    }
+
+    isAdditionModerator(moderator: number | Character): boolean {
+        const num = ExtractMemberNumber(moderator);
+        return this.moderators.has(num);
     }
 }

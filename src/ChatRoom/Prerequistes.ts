@@ -8,7 +8,7 @@ export const IsSelf: Prerequisite = (player: Character, sender: Character | numb
     (typeof sender !== "number" ? sender.MemberNumber : sender) === player.MemberNumber;
 
 export const IsModerator: Prerequisite = (player: Character, moderator: Character | number) => {
-    if (DataManager.permission.isModerator(player, moderator)) return true;
+    if (DataManager.permission.isCommandAuthorized(player, moderator)) return true;
     return false;
 }
 

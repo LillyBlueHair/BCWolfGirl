@@ -8,9 +8,9 @@ export interface IMessage {
 
 export type IMessageMode = "action" | "chat-action" | "local" | "chat" | "local-status";
 
-export function ParseMessage(option: IMessage, src?: { player?: Character, target?: Character }, args?: { [key: string]: string }) {
+export function FormatMessage(msg: string, src?: { player?: Character, target?: Character }, args?: { [key: string]: any }) {
     if (!src) src = {};
-    const parsed = option.msg.replace(/{([\w\d_]+)}/g, (match, p1) => {
+    return msg.replace(/{([\w\d_]+)}/g, (match, p1) => {
         if (src?.target) {
             if (p1 === "target") return CharacterNickname(src.target);
             if (p1 === "target_id") return src.target.MemberNumber.toString();
@@ -22,21 +22,24 @@ export function ParseMessage(option: IMessage, src?: { player?: Character, targe
             if (p1 === "player_wg") return GetWolfGrilName(src.player);
         }
         if (args && args[p1]) {
-            return args[p1];
+            return args[p1].toString();
         }
         return match;
     });
+}
 
+export function ParseMessage(option: IMessage, src?: { player?: Character, target?: Character }, args?: { [key: string]: string }) {
+    const formated = FormatMessage(option.msg, src, args);
     if (option.mode === "action") {
-        ChatRoomAction.instance.SendAction(parsed);
+        ChatRoomAction.instance.SendAction(formated);
     } else if (option.mode === "chat-action") {
-        ChatRoomAction.instance.SendAction("\"" + parsed + "\"");
+        ChatRoomAction.instance.SendAction("\"" + formated + "\"");
     } else if (option.mode === "local") {
-        ChatRoomAction.instance.LocalAction(parsed);
+        ChatRoomAction.instance.LocalAction(formated);
     } else if (option.mode === "chat") {
-        ChatRoomAction.instance.SendChat(parsed);
+        ChatRoomAction.instance.SendChat(formated);
     } else if (option.mode === "local-status") {
-        ChatRoomAction.instance.LocalInfo(parsed);
+        ChatRoomAction.instance.LocalInfo(formated);
     }
 }
 

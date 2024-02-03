@@ -77,7 +77,7 @@ export function RegisterActivities(mod: ModSDKModAPI) {
             if (acted.MemberNumber === acting.MemberNumber && Player && Player.MemberNumber === acted.MemberNumber) {
                 return DataManager.points.points > 10;
             }
-            else return IsCollarOn(acted) && DataManager.permission.isModerator(acted, acting);
+            else return IsCollarOn(acted) && DataManager.permission.isCommandAuthorized(acted, acting);
         }
         return next(args);
     });
