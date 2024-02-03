@@ -99,7 +99,6 @@ export function RoomComeHereSequence(player: Character, cmd_src: { sender: numbe
         new CheckItemsWork(["ItemNeckAccessories"], (pl, result) => {
             if (result.missing.length === 1 || cmd_src.room === undefined) {
                 data.work = "leave-only";
-                cmd_src.room = undefined;
             } else {
                 data.work = "leave-join";
                 CurryRouteIM(`正在前往`);
@@ -110,7 +109,11 @@ export function RoomComeHereSequence(player: Character, cmd_src: { sender: numbe
             CurryRouteIM(`已离开先前房间，但无法进入{sender_num}所在房间，房间满员或锁定`, { sender_num: cmd_src.sender });
         }, (pl, dest) => {
             if (dest === undefined) {
-                CurryRouteIM(`身份信标丢失，通行证明异常，已离开先前房间，但无法进入{sender_num}所在房间`, { sender_num: cmd_src.sender });
+                CurryRouteIM(`指令中未包含房间信息，无法执行进入房间操作。`, { sender_num: cmd_src.sender });
+            } else {
+                if (data.work === "leave-only") {
+                    CurryRouteIM(`身份信标丢失，通行证明异常，已离开先前房间，但无法进入{sender_num}所在房间`, { sender_num: cmd_src.sender });
+                }
             }
         }),
     ];
