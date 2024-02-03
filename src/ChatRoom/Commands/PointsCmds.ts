@@ -109,9 +109,9 @@ export const TaskPointsCmds: CommandTemplate[] = [
             const points = DataManager.points.points;
             RouteIM(sender, args.type, FormatMessage("{player_wg}当前奖励积分：{points}", { player }, { points }));
             if (DataManager.points.points > 20)
-                ParseMessage({ mode: "local", msg: `{player_wg}做得很好哦，不过攒着积分可没有利息，亦或者只是单纯的想要一个不错的数字？小心下一次打开查询的时候，也许会有惊喜哦？` })
+                ParseMessage({ mode: "local", msg: `{player_wg}做得很好哦，不过攒着积分可没有利息，亦或者只是单纯的想要一个不错的数字？小心下一次打开查询的时候，也许会有惊喜哦？` }, { player })
             else if (DataManager.points.points < 0)
-                ParseMessage({ mode: "local", msg: `负数分可不是好狼女该有的哦，希望你继续努力，可不要触发了惩罚任务哦？小心多次惩罚过后被放弃然后回收做成活体玩具。不过，{player_wg}的身材，也许活体家具也不错？` })
+                ParseMessage({ mode: "local", msg: `负数分可不是好狼女该有的哦，希望你继续努力，可不要触发了惩罚任务哦？小心多次惩罚过后被放弃然后回收做成活体玩具。不过，{player_wg}的身材，也许活体家具也不错？` }, { player })
         }
     }
 ]
