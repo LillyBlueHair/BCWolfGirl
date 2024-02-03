@@ -88,7 +88,11 @@ export class CheckItemsWork extends TimedWork {
 
     run(player: Character): TimedWorkState {
         const app_map = new Map(player.Appearance.map(e => [e.Asset.Group.Name, e]));
-        const missing = this._target.filter(e => !app_map.has(e.Asset.Group) || CheckItemRaw(app_map.get(e.Asset.Group) as Item, e))
+        const missing = this._target.filter(e => {
+            const i = app_map.get(e.Asset.Group);
+            if (!i) return false;
+            return !CheckItemRaw(i, e);
+        })
 
         const result = this.callback(player, { missing });
         if (result === undefined) return TimedWorkState.finished;
