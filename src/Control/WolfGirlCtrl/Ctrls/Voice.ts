@@ -17,7 +17,12 @@ export class VoiceCtrl extends IController {
     readonly available_ctrls: CtrlType[] = ["off", "base", "total"];
 
     set(player: Character, item: (Item | undefined)[], type: CtrlType): void {
-        StandardItemSetRecords(player, item, calcRecordValue(type));
+        const target = calcRecordValue(type);
+        const [mouth] = item;
+        const oldg = mouth?.Property?.TypeRecord?.g;
+        StandardItemSetRecords(player, item, target);
+        if (target[0].g !== oldg && mouth?.Property?.AutoPunishUndoTime !== undefined)
+            mouth.Property.AutoPunishUndoTime = 0;
     }
 
     test(player: Character, item: Item[], type: CtrlType): TestCtrlResult {
