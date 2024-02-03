@@ -93,11 +93,10 @@ export class OutfitFixWork extends TimedWork {
             const existed_i = app_map.get(i.target.Asset.Group);
             const expected_i = ItemFromOutfit(player, player, i.target, craft) as Item;
             const saved = saved_item.get(i.target.Asset.Group);
-            if (saved && saved.asset === expected_i.Asset.Name) expected_i.Color = saved.color;
 
+            if (saved && saved.asset === expected_i.Asset.Name) expected_i.Color = saved.color;
             if (i.option) ExtendedItemSetOptionByRecord(player, expected_i, i.option);
-            else if (!expected_i.Property) ExtendedItemInit(player, expected_i);
-            if (existed_i?.Property?.LockedBy === undefined) InventoryLock(player, expected_i, lock, player.MemberNumber);
+            if (expected_i?.Property?.LockedBy === undefined) InventoryLock(player, expected_i, lock, player.MemberNumber);
             if (i.property) Object.assign(expected_i.Property as ItemProperty, i.property);
 
             if (!existed_i) return expected_i;

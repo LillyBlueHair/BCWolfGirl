@@ -218,7 +218,7 @@ export function DressFixSequence(sender: Character | number, player: Character) 
             { target: "ItemEars" },
             { target: "ItemHead" },
             { target: "ItemMouth" },
-            { target: "ItemMouth2" },
+            { target: "ItemMouth2", property: { OverridePriority: 1 } },
             {
                 target: "ItemMouth3",
                 option: { "n": 0, "h": 0, "s": 1 },
@@ -238,7 +238,7 @@ export function DressFixSequence(sender: Character | number, player: Character) 
                 mode: "action",
                 msg: "似乎{player_wg}弄丢了她的手环和手套，看起来是想要做一些什么大幅度动作的样子，是尝试一些淫靡的行动？也许只是单纯的想要感受触摸？不过维护舱并没有在意她的目的是什么，只是忠实的执行着指令，将一套全新的设备安装回了{player_wg}身上"
             })),
-        new OutfitFixWork(sender, ['ItemTorso', 'ItemTorso2', 'ItemNeckAccessories'], create_result_process({
+        new OutfitFixWork(sender, [{ target: 'ItemTorso' }, { target: 'ItemTorso2' }, { target: 'ItemNeckAccessories', property: { Text: player.MemberNumber.toString() } }], create_result_process({
             mode: "chat-action",
             msg: "外部通讯束带模块与药剂注射模块或身份标签异常，的确这几个模块十分容易出现损坏或者缺失，正在修复，但请注意，维修费用并不会因此而有任何折扣"
         })),

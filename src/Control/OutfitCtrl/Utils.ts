@@ -39,7 +39,7 @@ export function ItemFromOutfit(player: Character, wearer: Character, v: OutfitIt
         ExtendedItemInit(wearer, tItem, false, false);
     }
 
-    if (v.Craft.Property) Object.assign(tItem.Property, v.Craft.ItemProperty);
+    if (v.Craft.ItemProperty) Object.assign(tItem.Property, v.Craft.ItemProperty);
     if (v.Craft.OverridePriority)
         tItem.Property.OverridePriority = v.Craft.OverridePriority;
 
