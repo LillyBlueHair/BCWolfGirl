@@ -2,7 +2,7 @@ import { DataManager } from "../../Data";
 import { CommonWork, DelayWork } from "../CommonWork";
 import { ParseMessage } from "../Message";
 import { MessageWork } from "../MessageWork";
-import { StashOutfit, StashPopOutfit, StashPopResult } from "../StashOutfit";
+import { GatherDataOutfitItem, StashOutfit, StashPopOutfit, StashPopResult } from "../StashOutfit";
 import { TimedWork, TimedWorker } from "../Worker";
 
 export function StartStashSequence(player: Character, sender: Character) {
@@ -37,3 +37,23 @@ export function StartStashPopSequence(player: Character, sender: Character) {
     TimedWorker.global.push({ description: "StartStashPopSequence", works: work_sequence });
 }
 
+export function ColorSaveSequence(player: Character, sender: Character) {
+    // 存储色彩方案演出
+    //   "收到指令，正在扫描套件外观变动"
+    //   {{player_wg}的项圈上涌出了数股金属银色的小小水流，正沿着{player_wg}的身体缓缓流向身体各处的拘束具，短暂的停留过后又原路返回了项圈之中}
+    //   短暂延迟
+    //   "已完成色彩方案扫描并存储至核心，当前色彩方案标记为(该色彩方案项圈的显示屏颜色)"
+
+    const work_sequence: TimedWork[] = [
+        new MessageWork("chat-action", "收到指令，正在扫描套件外观变动"),
+        new MessageWork("action", "{player_wg}的项圈上涌出了数股金属银色的小小水流，正沿着{player_wg}的身体缓缓流向身体各处的拘束具，短暂的停留过后又原路返回了项圈之中"),
+        new DelayWork(5000),
+        new CommonWork((player) => {
+            DataManager.outfit.items = GatherDataOutfitItem(player);
+            const collar = player.Appearance.find(a => a.Asset.Group.Name === "ItemNeck");
+            const color = (collar?.Color ?? ["#000000"])[0];
+            ParseMessage({ mode: "chat-action", msg: `已完成色彩方案扫描并存储至核心，当前色彩方案标记为(${color})` });
+        })
+    ];
+    TimedWorker.global.push({ description: "ColorSaveSequence", works: work_sequence });
+}

@@ -1,7 +1,6 @@
 import { ExitFixSequence } from "../../Control/SequenceCtrl/CtrlSequence";
 import { DressFixSequence } from "../../Control/SequenceCtrl/DressSequence";
-import { GatherDataOutfitItem } from "../../Control/StashOutfit";
-import { DataManager } from "../../Data";
+import { ColorSaveSequence } from "../../Control/SequenceCtrl/StashSequence";
 import { CommandTemplate } from "../ICmds";
 import { BasicPrerequisites, OutfitFixPrerequisites } from "../Prerequistes";
 
@@ -11,7 +10,7 @@ export const OutfitCmds: CommandTemplate[] = [
         match: /^存储色彩方案/,
         prerequisite: BasicPrerequisites,
         run(player) {
-            DataManager.outfit.items = GatherDataOutfitItem(player);
+            ColorSaveSequence(player, player);
         }
     },
     {

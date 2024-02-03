@@ -50,7 +50,7 @@ export class OutfitFixWork extends TimedWork {
         this._target = target.map(i => {
             if (typeof i === "string") return { target: OutfitItemsMap.get(i) as OutfitItemType };
             else if (IsWorkItem(i)) return i;
-            else if (IsStringWorkItem(i)) return { target: OutfitItemsMap.get(i.target) as OutfitItemType, option: i.option };
+            else if (IsStringWorkItem(i)) return { ...i, target: OutfitItemsMap.get(i.target) as OutfitItemType };
             else return { target: i };
         });
         this._message = message;
@@ -70,10 +70,10 @@ export class OutfitFixWork extends TimedWork {
             return acc;
         }, { canRepair: [], blocked: [] } as { canRepair: OutfitCheckWorkItem[], blocked: OutfitCheckWorkItem[] });
 
-        const locked_items = result.blocked.map(i => i.target.Asset.Group).map(i => (app_map.get(i) as Item).Asset.Name).join("、");
+        const locked_items = result.blocked.map(i => i.target.Asset.Group).map(i => (app_map.get(i) as Item).Asset.Description).join("、");
 
         const do_message = (result: OutfitFixWorkResult) =>
-            ((msg: IMessage | undefined | void) => this._message && ((msg) => msg && ParseMessage(msg, { player }, { locked_items }))(this._message(result)));
+            (this._message && ((msg) => msg && ParseMessage(msg, { player }, { locked_items }))(this._message(result)));
 
         if (result.blocked.length > 0) {
             do_message({ ret: "blocked", blocked: result.blocked.map(i => i.target.Asset.Group) });

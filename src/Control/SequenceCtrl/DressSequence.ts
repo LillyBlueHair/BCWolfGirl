@@ -204,7 +204,7 @@ export function DressFixSequence(sender: Character | number, player: Character) 
         new ItemWearWork([ToolsCrate], player, craft),
         new DelayWork(5000),
         new MessageWork("chat-action", "已检测到目标，维护舱室已进行拘束并锁定。正在扫描"),
-        new ItemOptionWork(player, [{ target: ToolsCrate.Asset.Group, option: { "w": 1, "l": 2, "a": 1, "d": 0, "t": 0, "h": 4 } }]),
+        new ItemOptionWork(player, [{ target: ToolsCrate.Asset.Group, option: { "w": 1, "l": 2, "a": 2, "d": 0, "t": 0, "h": 4 } }]),
         new CheckWork(() => {
             if (IsFullyDressed(player)) return CheckWork.Stop;
             else return CheckWork.Continue;
