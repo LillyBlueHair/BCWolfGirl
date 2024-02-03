@@ -73,7 +73,7 @@ export class OutfitFixWork extends TimedWork {
         const locked_items = result.blocked.map(i => i.target.Asset.Group).map(i => (app_map.get(i) as Item).Asset.Description).join("、");
 
         const do_message = (result: OutfitFixWorkResult) =>
-            (this._message && ((msg) => msg && ParseMessage(msg, { player }, { locked_items }))(this._message(result)));
+            (((msg) => msg && ParseMessage(msg, { player }, { locked_items }))(this._message?.(result)));
 
         if (result.blocked.length > 0) {
             do_message({ ret: "blocked", blocked: result.blocked.map(i => i.target.Asset.Group) });

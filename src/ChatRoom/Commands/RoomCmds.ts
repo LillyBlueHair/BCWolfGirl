@@ -7,15 +7,15 @@ export const RoomCmds: CommandTemplate[] = [
     {
         match: /^离开这个房间/,
         prerequisite: BasicPrerequisites,
-        run(player, sender, content) {
-            RoomLeaveSequence(player);
+        run(player, sender, content, args) {
+            RoomLeaveSequence(player, { sender: sender, type: args.type });
         }
     },
     {
         match: /^强行离开这个房间/,
         prerequisite: BasicPrerequisites,
-        run(player, sender, content) {
-            RoomForceLeaveSequence(player);
+        run(player, sender, content, args) {
+            RoomForceLeaveSequence(player, { sender: sender, type: args.type });
         }
     },
     {
@@ -23,8 +23,11 @@ export const RoomCmds: CommandTemplate[] = [
         match: /^到我这里来/,
         prerequisite: BasicPrerequisites,
         run(player, sender, content, args) {
-            if (!args || typeof args["BeepRoom"] !== "string") RoomForceLeaveSequence(player);
-            else RoomComeHereSequence(player, args["BeepRoom"]);
+            RoomComeHereSequence(player, {
+                sender: sender,
+                type: args.type,
+                room: args.BeepRoom as { name: string, space: string } | undefined
+            });
         }
     }
 ];

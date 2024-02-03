@@ -9,75 +9,99 @@ interface ChatRoomWorkSyncTask {
     cleanup: (data: any) => void;
 }
 
+interface ChatRoomWorkTask {
+    once_before_ChatSearchQuery?: () => void;
+    once_after_ChatSearchResultResponse: () => void;
+    once_after_ChatRoomSync?: () => void;
+}
+
 type ChatRoomWorkFailState = "notfound" | "full" | "banned" | "rejected" | "not_target";
 
 export class ChatRoomWork extends TimedWork {
     _state: TimedWorkState = TimedWorkState.running;
+    _first_run: boolean = true;
 
-    constructor(readonly join: string | undefined, readonly onfailed?: (player: Character, reason: ChatRoomWorkFailState) => void, readonly onfinished?: (player: Character, dest: string | undefined) => void) {
+    constructor(readonly room: { name: string, space: string } | undefined, readonly onfailed?: (player: Character, reason: ChatRoomWorkFailState) => void, readonly onfinished?: (player: Character, dest: string | undefined) => void) {
         super();
     }
 
     run(player: Character): TimedWorkState {
-        ChatRoomLeave();
-        CommonSetScreen("Online", "ChatSearch");
-
-        if (this.join === undefined) {
+        if (!this._first_run) {
+            return this._state;
+        }
+        this._first_run = false;
+        if (this.room === undefined) {
             ChatRoomPlayerCanJoin = true;
-            ChatRoomWork.chatRoomWorkSearchTasks.push({
-                join: (data) => {
-                    this.onfinished && this.onfinished(player, this.join);
+            const work: ChatRoomWorkTask = {
+                once_after_ChatSearchResultResponse: () => {
+                    this.onfinished?.(player, undefined);
                     this._state = TimedWorkState.finished;
                 }
-            });
+            }
+            ChatRoomWork.chatRoomWorkSearchResultTasks.push(work);
+            CommonSetScreen("Online", "ChatSearch");
         } else {
+            const cj = this.room;
             ChatRoomPlayerCanJoin = false;
-
-            ChatRoomWork.chatRoomWorkSearchTasks.push({
-                join: (data) => {
-                    const target = ChatSearchResult.find(e => e.Name === this.join);
+            const work: ChatRoomWorkTask = {
+                once_before_ChatSearchQuery: () => {
+                    ChatRoomSpace = cj.space;
+                    ElementValue("InputSearch", cj.name);
+                },
+                once_after_ChatSearchResultResponse: () => {
+                    const target = ChatSearchResult.find(e => e.Name === cj.name);
                     this._state = TimedWorkState.interrupted;
-                    if (!target) this.onfailed && this.onfailed(player, "notfound");
-                    else if (target.MemberCount >= target.MemberLimit) this.onfailed && this.onfailed(player, "full");
+                    if (!target) this.onfailed?.(player, "notfound");
+                    else if (target.MemberCount >= target.MemberLimit) this.onfailed?.(player, "full");
                     else {
-                        ServerSend("ChatRoomJoin", { Name: this.join });
+                        ServerSend("ChatRoomJoin", { Name: cj.name });
                         this._state = TimedWorkState.running;
                     }
-                }
-            });
-
-            ChatRoomWork.chatRoomWorkSyncTasks.push({
-                cleanup: (data) => {
-                    if (ChatRoomData.Name === this.join) {
-                        this.onfinished && this.onfinished(player, this.join);
+                },
+                once_after_ChatRoomSync: () => {
+                    if (ChatRoomData.Name === cj.name) {
+                        this.onfinished?.(player, cj.name);
                         this._state = TimedWorkState.finished;
                     } else {
-                        this.onfailed && this.onfailed(player, "not_target");
+                        this.onfailed?.(player, "not_target");
                         this._state = TimedWorkState.interrupted;
                     }
                 }
-            });
+            }
+
+            ChatRoomWork.chatRoomWorkSearchQueryTasks.push(work);
+            ChatRoomWork.chatRoomWorkSearchResultTasks.push(work);
+            ChatRoomWork.chatRoomWorkRoomSyncTasks.push(work);
         }
+        ChatRoomLeave();
+        CommonSetScreen("Online", "ChatSearch");
         return this._state;
     }
 
-
-    static readonly chatRoomWorkSearchTasks: ChatRoomWorkSearchTask[] = [];
-    static readonly chatRoomWorkSyncTasks: ChatRoomWorkSyncTask[] = [];
+    static readonly chatRoomWorkSearchQueryTasks: ChatRoomWorkTask[] = [];
+    static readonly chatRoomWorkSearchResultTasks: ChatRoomWorkTask[] = [];
+    static readonly chatRoomWorkRoomSyncTasks: ChatRoomWorkTask[] = [];
 
     static init(mod: ModSDKModAPI) {
+        mod.hookFunction("ChatSearchQuery", 1, (args, next) => {
+            while (this.chatRoomWorkSearchQueryTasks.length > 0) {
+                this.chatRoomWorkSearchQueryTasks.shift()?.once_before_ChatSearchQuery?.();
+            }
+            next(args);
+        });
+
         mod.hookFunction("ChatSearchResultResponse", 1, (args, next) => {
             next(args);
             ChatRoomPlayerCanJoin = true;
-            while (this.chatRoomWorkSearchTasks.length > 0) {
-                this.chatRoomWorkSearchTasks.shift()?.join(args[0]);
+            while (this.chatRoomWorkSearchResultTasks.length > 0) {
+                this.chatRoomWorkSearchResultTasks.shift()?.once_after_ChatSearchResultResponse();
             }
         });
 
         mod.hookFunction("ChatRoomSync", 1, (args, next) => {
             next(args);
-            while (this.chatRoomWorkSyncTasks.length > 0) {
-                this.chatRoomWorkSyncTasks.shift()?.cleanup(args[0]);
+            while (this.chatRoomWorkRoomSyncTasks.length > 0) {
+                this.chatRoomWorkRoomSyncTasks.shift()?.once_after_ChatRoomSync?.();
             }
         });
     }
