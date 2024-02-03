@@ -69,7 +69,7 @@ export const TaskPointsCmds: CommandTemplate[] = [
         run(player, sender, content, args) {
             const v = parseInt(content[1]);
             DataManager.points.punish_time = v * 60 * 1000;
-            RouteIM(args.type, player, sender, `{player_wg}的惩罚时间为${DataManager.points.punish_time}分钟`);
+            RouteIM(args.type, player, sender, `{player_wg}的惩罚时间为${DataManager.points.punish_time / 60 / 1000}分钟`);
             ParseMessage({ mode: "local", msg: `机械播报的冰冷声响复述了一遍{player_wg}任务失败的后果，似乎完全没有情感，但是却能听出一丝玩味` }, { player })
         }
     },
@@ -79,7 +79,7 @@ export const TaskPointsCmds: CommandTemplate[] = [
         run(player, sender, content, args) {
             const v = parseInt(content[1]);
             DataManager.points.task_time = v * 60 * 1000;
-            RouteIM(args.type, player, sender, `{player_wg}的任务基础时间为${DataManager.points.task_time}分钟`)
+            RouteIM(args.type, player, sender, `{player_wg}的任务基础时间为${DataManager.points.task_time / 60 / 1000}分钟`);
         }
     },
     {
