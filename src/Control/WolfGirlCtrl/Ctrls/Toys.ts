@@ -8,6 +8,7 @@ function calcValue(type: CtrlType): number {
     if (type === "off") return 0;
     else if (type === "open") return 2;
     else if (type === "max") return 4;
+    else if (type === "random") return 5;
     else return 0;
 }
 
@@ -17,30 +18,17 @@ export class ToysCtrl extends IController {
     readonly available_ctrls: CtrlType[] = ["open", "max", "off", "random"];
 
     set(player: Character, item: (Item | undefined)[], type: CtrlType): void {
-        if (type !== "random") {
-            const target = calcValue(type);
-            item.forEach(i => {
-                if (!i) return;
-                if (i.Asset.Archetype === "vibrating")
-                    ExtendedItemSetOptionByRecord(player, i, { vibrating: target })
-                else if (i.Asset.Archetype === "modular") {
-                    const old_record = i.Property?.TypeRecord;
-                    if (!old_record || !old_record.i) return;
-                    ExtendedItemSetOptionByRecord(player, i, { i: target });
-                }
-            })
-        } else {
-            item.forEach(i => {
-                if (!i) return;
-                if (i.Asset.Archetype === "vibrating")
-                    ExtendedItemSetOptionByRecord(player, i, { vibrating: 5 });
-                else if (i.Asset.Archetype === "modular") {
-                    const old_record = i.Property?.TypeRecord;
-                    if (!old_record || !old_record.i) return;
-                    ExtendedItemSetOptionByRecord(player, i, { i: 0 });
-                }
-            })
-        }
+        const target = calcValue(type);
+        item.forEach(i => {
+            if (!i) return;
+            if (i.Asset.Archetype === "vibrating")
+                ExtendedItemSetOptionByRecord(player, i, { vibrating: target })
+            else if (i.Asset.Archetype === "modular") {
+                if (i.Property?.TypeRecord?.i === undefined) return;
+                if (type === "random") ExtendedItemSetOptionByRecord(player, i, { i: 0 });
+                else ExtendedItemSetOptionByRecord(player, i, { i: target });
+            }
+        });
     }
 
     test(player: Character, item: Item[], type: CtrlType): TestCtrlResult {
@@ -49,11 +37,11 @@ export class ToysCtrl extends IController {
         const target = calcValue(type);
         if (item.every(i => {
             if (i.Asset.Archetype === "vibrating") {
-                if (i.Property?.TypeRecord?.vibrating === target) return false;
+                if (i.Property?.TypeRecord?.vibrating === target) return true;
             } else if (i.Asset.Archetype === "modular") {
-                if (i.Property?.TypeRecord?.i === target) return false;
+                if (i.Property?.TypeRecord?.i === target) return true;
             }
-            return true;
+            return false;
         })) return TReject("unchanged");
         return TAccept();
     }
