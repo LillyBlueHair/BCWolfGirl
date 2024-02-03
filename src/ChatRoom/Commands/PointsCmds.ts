@@ -11,7 +11,7 @@ import { TaskCtrl } from "../../Control/TaskCtrl/TaskCtrl";
 import { GetWolfGrilName, RunControls } from "../../Control/WolfGirlCtrl";
 import { DataManager } from "../../Data";
 import { CommandTemplate } from "../ICmds";
-import { RouteIM } from "../Messages";
+import { RouteIM } from "../../Control/Message";
 import { BasicPrerequisites, SelfPrerequisites } from "../Prerequistes";
 
 const PushTask = (player: Character, t: ITask) => {

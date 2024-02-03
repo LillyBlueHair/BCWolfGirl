@@ -1,7 +1,7 @@
 import { DataManager } from "../../Data";
 import { ExtractMemberNumber } from "../../utils/Character";
 import { CommandTemplate } from "../ICmds";
-import { RouteIM } from "../Messages";
+import { RouteIM } from "../../Control/Message";
 import { BasicPrerequisites } from "../Prerequistes";
 
 
