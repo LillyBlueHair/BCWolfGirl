@@ -11,6 +11,7 @@ import { DataManager } from './Data';
 import { TaskCtrl } from "./Control/TaskCtrl/TaskCtrl";
 import { RegisterActivities } from './ChatRoom/Activity';
 import { ChatRoomWork } from './Control/RoomCtrl/Work';
+import { InjectionManager } from './Control/Injection';
 
 (function () {
     if (window.BCWorlGirl_Loaded) return;
@@ -48,6 +49,7 @@ import { ChatRoomWork } from './Control/RoomCtrl/Work';
     RegisterActivities(mod);
 
     ChatRoomWork.init(mod);
+    InjectionManager.init(mod);
 
     const orgasm = new OrgasmMonitor(mod);
 
