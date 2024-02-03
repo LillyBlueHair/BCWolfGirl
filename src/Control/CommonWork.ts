@@ -1,4 +1,6 @@
 import { IMessage, IMessageMode, ParseMessage } from "./Message";
+import { OutfitItemType, OutfitItemsMap } from "./OutfitCtrl";
+import { CheckItemRaw } from "./OutfitCtrl/Utils";
 import { TimedWork, TimedWorkState } from "./Worker";
 
 
@@ -34,8 +36,8 @@ interface CheckWorkMessage {
 
 export class CheckWork extends TimedWork {
     readonly _check: (player: Character) => CheckWorkState;
-    readonly message?: CheckWorkMessage | ((player: Character, result: CheckWorkState) => IMessage | undefined);
-    constructor(check: (player: Character) => CheckWorkState, message?: CheckWorkMessage | ((player: Character, result: CheckWorkState) => IMessage | undefined)) {
+    readonly message?: CheckWorkMessage | ((player: Character, result: CheckWorkState) => IMessage | void);
+    constructor(check: (player: Character) => CheckWorkState, message?: CheckWorkMessage | ((player: Character, result: CheckWorkState) => IMessage | void)) {
         super();
         this._check = check;
         this.message = message;
@@ -45,7 +47,7 @@ export class CheckWork extends TimedWork {
         const checked = this._check(player);
 
         if (this.message) {
-            const rmessage: IMessage | undefined = (() => {
+            const rmessage: IMessage | void = (() => {
                 if (typeof this.message === "function") return this.message(player, checked);
                 if (checked.passed) return { mode: this.message.mode, msg: this.message.passed };
                 return { mode: this.message.mode, msg: this.message.failed };
@@ -72,6 +74,23 @@ export class CommonWork {
 
     run(player: Character): TimedWorkState {
         const result = this._callback(player);
+        if (result === undefined) return TimedWorkState.finished;
+        return result;
+    }
+}
+
+export class CheckItemsWork extends TimedWork {
+    _target: OutfitItemType[];
+    constructor(target: (string | OutfitItemType)[], readonly callback: (player: Character, result: { missing: OutfitItemType[] }) => TimedWorkState | void) {
+        super();
+        this._target = target.map(e => typeof e === "string" ? OutfitItemsMap.get(e) : e).filter(e => e !== undefined) as OutfitItemType[];
+    }
+
+    run(player: Character): TimedWorkState {
+        const app_map = new Map(player.Appearance.map(e => [e.Asset.Group.Name, e]));
+        const missing = this._target.filter(e => !app_map.has(e.Asset.Group) || CheckItemRaw(app_map.get(e.Asset.Group) as Item, e))
+
+        const result = this.callback(player, { missing });
         if (result === undefined) return TimedWorkState.finished;
         return result;
     }
