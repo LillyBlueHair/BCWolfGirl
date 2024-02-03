@@ -1,4 +1,4 @@
-import { ParseMessage } from "../../Control/Message";
+import { FormatMessage, ParseMessage } from "../../Control/Message";
 import { ItemOptionWork } from "../../Control/OutfitCtrl";
 import { StartPunish, StopPunish } from "../../Control/PunishWork";
 import { ArousalCtrlSequence, FeetCtrlSequence, HandsCtrlSequence, HearingCtrlSequence, VisionCtrlSequence, VoiceCtrlSequence } from "../../Control/SequenceCtrl/ItemCmdSequence";
@@ -10,6 +10,7 @@ import { TaskCtrl } from "../../Control/TaskCtrl/TaskCtrl";
 import { GetWolfGrilName, RunControls } from "../../Control/WolfGirlCtrl";
 import { DataManager } from "../../Data";
 import { CommandTemplate } from "../ICmds";
+import { RouteIM } from "../Messages";
 import { BasicPrerequisites, SelfPrerequisites } from "../Prerequistes";
 
 const PushTask = (player: Character, t: ITask) => {
@@ -64,10 +65,11 @@ export const TaskPointsCmds: CommandTemplate[] = [
     {
         match: /^设置惩罚时间为([1-9]\d{0,2})分钟/,
         prerequisite: BasicPrerequisites,
-        run(player, sender, content) {
+        run(player, sender, content, args) {
             const v = parseInt(content[1]);
             DataManager.points.punish_time = v * 60 * 1000;
-            ParseMessage({ mode: "local", msg: `${GetWolfGrilName(player)}的惩罚时间为${v}分钟` })
+            RouteIM(sender, args.type, FormatMessage("{player_wg}的惩罚时间为{v}分钟", { player }, { v }));
+            ParseMessage({ mode: "local", msg: `机械播报的冰冷声响复述了一遍{player_wg}任务失败的后果，似乎完全没有情感，但是却能听出一丝玩味` }, { player })
         }
     },
     {
@@ -76,7 +78,7 @@ export const TaskPointsCmds: CommandTemplate[] = [
         run(player, sender, content) {
             const v = parseInt(content[1]);
             DataManager.points.punish_time = v * 60 * 1000;
-            ParseMessage({ mode: "local", msg: `${GetWolfGrilName(player)}的任务时间为${v}分钟` })
+            ParseMessage({ mode: "local", msg: `{player_wg}的任务时间为${v}分钟` }, { player })
         }
     },
     {
@@ -90,17 +92,25 @@ export const TaskPointsCmds: CommandTemplate[] = [
     {
         match: /^(扣除|奖励)([1-9]\d{0,2})积分/,
         prerequisite: BasicPrerequisites,
-        run(player, sender, content) {
+        run(player, sender, content, args) {
             const v = parseInt(content[2]);
-            DataManager.points.points += content[1] === "扣除" ? -v : v;
-            ParseMessage({ mode: "action", msg: `${GetWolfGrilName(player)}${content[1]}了5积分，当前积分${DataManager.points.points}` }, { player })
-        }
+            const oper = content[1];
+            DataManager.points.points += oper === "扣除" ? -v : v;
+            const points = DataManager.points.points;
+            RouteIM(sender, args.type, FormatMessage("{player_wg}{oper}了{v}积分，当前积分{points}", { player }, { oper, v, points }));
+        },
     },
     {
         match: /^查询奖励积分/,
         prerequisite: BasicPrerequisites,
-        run(player, sender, content) {
-            ParseMessage({ mode: "action", msg: `${GetWolfGrilName(player)}当前奖励积分：${DataManager.points.points}` })
+        run(player, sender, content, args) {
+            // RouteIM(sender, args.type, `${GetWolfGrilName(player)}当前奖励积分：${DataManager.points.points}`);
+            const points = DataManager.points.points;
+            RouteIM(sender, args.type, FormatMessage("{player_wg}当前奖励积分：{points}", { player }, { points }));
+            if (DataManager.points.points > 20)
+                ParseMessage({ mode: "local", msg: `{player_wg}做得很好哦，不过攒着积分可没有利息，亦或者只是单纯的想要一个不错的数字？小心下一次打开查询的时候，也许会有惊喜哦？` })
+            else if (DataManager.points.points < 0)
+                ParseMessage({ mode: "local", msg: `负数分可不是好狼女该有的哦，希望你继续努力，可不要触发了惩罚任务哦？小心多次惩罚过后被放弃然后回收做成活体玩具。不过，{player_wg}的身材，也许活体家具也不错？` })
         }
     }
 ]
