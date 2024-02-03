@@ -17,6 +17,6 @@ export abstract class IInjection {
     abstract disperse: DisperseSetting | undefined;
     isWorking: () => boolean = () => false;
     onInject(): void { };
-    hook(mod: ModSDKModAPI): void { };
+    hook(mod: ModSDKModAPI, lateHook: (callback: () => void) => void): void { };
     update(player: Character): void { };
 }

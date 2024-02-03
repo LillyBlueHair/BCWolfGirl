@@ -38,7 +38,7 @@ export class HearingCtrl extends IController {
         return StandardItemTestRecords(item, calcRecordValue(type));
     }
 
-    hook(mod: ModSDKModAPI) {
+    hook(mod: ModSDKModAPI, lateHook: (callback: () => void) => void) {
         mod.hookFunction("ChatRoomMessage", 1, (args, next) => {
             const [data] = args as [ServerChatRoomMessage];
             ChatOrWhisperToWolfGirl(data, (player, sender) => {

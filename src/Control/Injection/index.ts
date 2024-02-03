@@ -13,9 +13,9 @@ export class InjectionManager {
     // name -> end time
     working: Map<InjectionType, number> = new Map();
 
-    constructor(mod: ModSDKModAPI) {
+    constructor(mod: ModSDKModAPI, lateHook: (callback: () => void) => void) {
         this.injections = new Map(injections.map(i => new i).map(injection => [injection.name, injection]));
-        this.injections.forEach(injection => injection.hook(mod));
+        this.injections.forEach(injection => injection.hook(mod, lateHook));
         this.injections.forEach((i, name) => i.isWorking = () => this.working.has(name));
 
         setInterval(() => {
@@ -69,8 +69,8 @@ export class InjectionManager {
         return InjectionManager._instance as InjectionManager;
     }
 
-    static init(mod: ModSDKModAPI) {
+    static init(mod: ModSDKModAPI, lateHook: (callback: () => void) => void) {
         if (InjectionManager._instance) return;
-        InjectionManager._instance = new InjectionManager(mod);
+        InjectionManager._instance = new InjectionManager(mod, lateHook);
     }
 }

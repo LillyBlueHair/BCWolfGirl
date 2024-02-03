@@ -48,9 +48,9 @@ export function GetWolfGrilName(player: Character): string {
     return `狼女${player.MemberNumber}`;
 }
 
-export function CtrlHook(mod: ModSDKModAPI) {
-    WolfGirlCtrls.forEach(item => item.hook(mod));
-    FuturisticBypass.init(mod);
+export function CtrlHook(mod: ModSDKModAPI, lateHook: (callback: () => void) => void) {
+    WolfGirlCtrls.forEach(item => item.hook(mod, lateHook));
+    FuturisticBypass.init(mod, lateHook);
 }
 
 export function ReduceTypeRecords(records: TypeRecord[], ref: TypeRecord): TypeRecord | undefined {

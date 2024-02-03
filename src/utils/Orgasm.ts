@@ -7,7 +7,7 @@ export class OrgasmMonitor {
     _ResistList = new Array<OrgasmEvent>;
     _RuinedList = new Array<OrgasmEvent>;
 
-    constructor(mod: ModSDKModAPI) {
+    constructor(mod: ModSDKModAPI, lateHook: (callback: () => void) => void) {
         mod.hookFunction('ActivityOrgasmStop', 9, (args, next) => {
             next(args);
             const C = args[0] as Character;

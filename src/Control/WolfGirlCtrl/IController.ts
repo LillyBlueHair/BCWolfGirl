@@ -14,7 +14,7 @@ export abstract class IController {
     abstract readonly available_ctrls: CtrlType[];
     abstract set(player: Character, item: (Item | undefined)[], type: CtrlType): void;
     abstract test(player: Character, item: Item[], type: CtrlType): TestCtrlResult;
-    hook(mod: ModSDKModAPI): void { };
+    hook(mod: ModSDKModAPI, lateHook: (callback: () => void) => void): void { };
 }
 
 export type ControllerType = "ArousalCtrl" | "FeetCtrl" | "HandsCtrl" | "ToysCtrl" | "VisionCtrl" |

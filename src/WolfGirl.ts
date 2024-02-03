@@ -31,6 +31,10 @@ import { InjectionManager } from './Control/Injection';
 
     const mod = bcMod.registerMod({ name: ModName, fullName: ModName, version: ModVersion });
 
+    const lateHooks: (() => void)[] = [];
+
+    const lateHook = (callback: () => void) => lateHooks.push(callback);
+
     ChatRoomRegisterMessageHandler(ChatRoomHandler());
     mod.hookFunction('ServerAccountBeep', 2, (args, next) => {
         next(args);
@@ -44,14 +48,14 @@ import { InjectionManager } from './Control/Injection';
 
     DataManager.init(mod, `${ModName} v${ModVersion} loaded.`);
 
-    CtrlHook(mod);
+    CtrlHook(mod, lateHook);
 
-    RegisterActivities(mod);
+    RegisterActivities(mod, lateHook);
 
-    ChatRoomWork.init(mod);
-    InjectionManager.init(mod);
+    ChatRoomWork.init(mod, lateHook);
+    InjectionManager.init(mod, lateHook);
 
-    const orgasm = new OrgasmMonitor(mod);
+    const orgasm = new OrgasmMonitor(mod, lateHook);
 
     orgasm.AddOrgasmEvent((player) => {
         if (IsPlayerWolfGirl(player))
@@ -69,6 +73,12 @@ import { InjectionManager } from './Control/Injection';
         if (IsPlayerWolfGirl(player))
             DataManager.arousal.ruined += 1;
     });
+
+    (async () => {
+        while (typeof (window as any).Player === 'undefined')
+            await new Promise(resolve => setTimeout(resolve, 500));
+        lateHooks.forEach(hook => hook());
+    })();
 
     window.BCWorlGirl_Loaded = true;
     console.log(`${ModName} v${ModVersion} loaded.`);

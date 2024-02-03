@@ -66,7 +66,7 @@ export function RegisterActivitiy(act: IActivity) {
     ActivityFemale3DCGOrdering?.push(act.activity.Name);
 }
 
-export function RegisterActivities(mod: ModSDKModAPI) {
+export function RegisterActivities(mod: ModSDKModAPI, lateHook: (callback: () => void) => void) {
     const itemSwitch = new WolfGirlItemsSwitch();
 
     mod.hookFunction("ActivityCheckPrerequisite", 1, (args, next) => {

@@ -82,7 +82,7 @@ export class ChatRoomWork extends TimedWork {
     static readonly chatRoomWorkSearchResultTasks: ChatRoomWorkTask[] = [];
     static readonly chatRoomWorkRoomSyncTasks: ChatRoomWorkTask[] = [];
 
-    static init(mod: ModSDKModAPI) {
+    static init(mod: ModSDKModAPI, lateHook: (callback: () => void) => void) {
         mod.hookFunction("ChatSearchQuery", 1, (args, next) => {
             while (this.chatRoomWorkSearchQueryTasks.length > 0) {
                 this.chatRoomWorkSearchQueryTasks.shift()?.once_before_ChatSearchQuery?.();

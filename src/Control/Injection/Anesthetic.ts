@@ -13,21 +13,23 @@ export class Anesthetic extends IInjection {
             Player.ArousalSettings.Progress = 0;
     }
 
-    hook(mod: ModSDKModAPI) {
-        mod.hookFunction('Player.CanInteract', 1, (args, next) => {
-            if (this.isWorking()) return false;
-            return next(args);
+    hook(mod: ModSDKModAPI, lateHook: (callback: () => void) => void) {
+        lateHook(() => {
+            mod.hookFunction('Player.CanInteract', 1, (args, next) => {
+                if (this.isWorking()) return false;
+                return next(args);
+            });
+
+            mod.hookFunction('Player.GetBlurLevel', 1, (args, next) => {
+                const result = next(args);
+                if (this.isWorking()) return result + 3;
+                return result;
+            });
         });
 
         mod.hookFunction('SpeechGetGagLevel', 1, (args, next) => {
             const result = next(args);
             if ((args[0] as Character).ID === Player?.ID && this.isWorking()) return result + 2;
-            return result;
-        });
-
-        mod.hookFunction('Player.GetBlurLevel', 1, (args, next) => {
-            const result = next(args);
-            if (this.isWorking()) return result + 3;
             return result;
         });
     }

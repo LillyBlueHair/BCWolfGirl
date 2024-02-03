@@ -13,7 +13,7 @@ export class FuturisticBypass {
 
     static instance: FuturisticBypass;
 
-    static init(mod: ModSDKModAPI) {
+    static init(mod: ModSDKModAPI, lateHook: (callback: () => void) => void) {
         FuturisticBypass.instance = new FuturisticBypass(mod);
     }
 
