@@ -40,13 +40,13 @@ export const TReject = (reason: Required<TestCtrlResult>["rejected"]) => ({ reje
 export const TAccept = () => ({}) as TestCtrlResult;
 
 export function RecordsEqual(target: TypeRecord[], cur: TypeRecord[]) {
-    if (target.length !== cur.length) return false;
+    if (target.length > cur.length) return false;
     return target.every((e, idx) => Object.keys(e).every(key => e[key] === cur[idx][key]));
 }
 
 export function CollectTypeRecords(items: Item[]): TypeRecord[] | undefined {
-    if (items.some(item => !item.Property?.TypeRecord)) return undefined;
-    return items.map(item => item.Property?.TypeRecord).filter(e => e) as TypeRecord[];
+    if (items.some(item => item.Property?.TypeRecord === undefined)) return undefined;
+    return items.map(item => item.Property?.TypeRecord) as TypeRecord[];
 }
 
 export function StandardItemSetRecords(player: Character, items: (Item | undefined)[], target: TypeRecord[]) {

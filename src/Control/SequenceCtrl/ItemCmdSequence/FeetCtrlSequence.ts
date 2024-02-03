@@ -28,7 +28,7 @@ export function FeetCtrlSequence(player: Character, mode: CtrlType) {
             },
             total: {
                 notify: { mode: "chat-action", msg: "收到指令，行走限制已设置为最强限制模式" },
-                action: { mode: "action", msg: "{player_wg}的腿环骤然扯紧，甚至没有给出太多的反应时间，好在动作姿态稳定系统及时介入避免了{player_wg}摔倒在地的痛苦与困扰，不过失去行走能力的她被推倒也只是个时间问题罢了，谁能想到静静站立姿态端庄的{player_wg}实际上连最为简单的迈步都做不到呢？}" },
+                action: { mode: "action", msg: "{player_wg}的腿环骤然扯紧，甚至没有给出太多的反应时间，好在动作姿态稳定系统及时介入避免了{player_wg}摔倒在地的痛苦与困扰，不过失去行走能力的她被推倒也只是个时间问题罢了，谁能想到静静站立姿态端庄的{player_wg}实际上连最为简单的迈步都做不到呢？" },
             }
         }
     };
