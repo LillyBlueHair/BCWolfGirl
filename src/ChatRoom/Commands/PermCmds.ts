@@ -16,7 +16,7 @@ export const PermCmds: CommandTemplate[] = [
             const perm_report = "当前语音权限:\n"
                 + "└─ 恋人语音权限: " + (data.loverModerators ? "开启" : "关闭")
 
-            RouteIM(sender, args.type, perm_report);
+            RouteIM(args.type, player, sender, perm_report);
         }
     },
     {
@@ -31,7 +31,7 @@ export const PermCmds: CommandTemplate[] = [
             const perm_report = "当前语音权限:\n"
                 + "└─ 附加权限列表: " + (perm.isAdditionModerator(id) ? "+" : "-") + " " + id;
 
-            RouteIM(sender, args.type, perm_report);
+            RouteIM(args.type, player, sender, perm_report);
         }
     },
     {
@@ -45,7 +45,7 @@ export const PermCmds: CommandTemplate[] = [
                 + "└─ 附加权限列表:\n"
                 + data.moderators.map((i, idx, arr) => `   ${idx === arr.length ? '└─' : '├─'} ${i}`).join("\n");
 
-            RouteIM(sender, args.type, perm_report);
+            RouteIM(args.type, player, sender, perm_report);
         }
     }
 ];
