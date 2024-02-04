@@ -31,7 +31,12 @@ import { InitChatCmds } from './ChatRoom/OutfitCheckChatCmd';
     EILNetwork.init(asset_url);
     ChatRoomAction.init(CUSTOM_ACTION_TAG);
 
-    const mod = bcMod.registerMod({ name: ModName, fullName: ModName, version: ModVersion });
+    const mod = bcMod.registerMod({
+        name: ModName,
+        fullName: ModName,
+        version: ModVersion,
+        repository: 'https://gitlab.com/dynilath/BCWolfGirl'
+    });
 
     const lateHooks: (() => void)[] = [];
 
