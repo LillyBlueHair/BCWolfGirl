@@ -12,7 +12,7 @@ export class DrinkExtend implements IActivityExtened {
     mode: ActivityTriggerMode = "onself";
     onBodyparts: AssetGroupItemName[] = ["ItemMouth"];
     on(player: Character, sender: Character, info: ActivityInfo): void {
-        if (info.TargetCharacter.MemberNumber === player.MemberNumber && IsPlayerWolfGirl(player)) {
+        if (IsPlayerWolfGirl(player)) {
             if (info.Asset && info.ActivityGroup.startsWith("ItemMouth")) {
                 const tItem = sender.Appearance.find(a => a.Asset.Group.Name === info.Asset!.GroupName);
                 if (!tItem) return;

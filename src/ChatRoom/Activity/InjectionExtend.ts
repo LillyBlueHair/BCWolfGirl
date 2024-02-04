@@ -4,6 +4,7 @@ import { ActivityTriggerMode, IActivityExtened } from "./IActivity";
 import { InjectionType } from "../../Control/Injection/IInjection";
 import { ModSDKModAPI } from "bondage-club-mod-sdk";
 import { DoInjection } from "../../Control/SequenceCtrl/InjectionSequence";
+import { IsPlayerWolfGirl } from "../../Control/WolfGirlCtrl";
 
 export class InjectionExtend implements IActivityExtened {
     activity = "Inject";
@@ -45,7 +46,7 @@ export class InjectionExtendInjected implements IActivityExtened {
     onBodyparts = undefined;
     on(player: Character, sender: Character, info: ActivityInfo) {
         const v = info.BCDictionary.find(i => i.Tag === "WolfGirlInjectType");
-        if (v) {
+        if (v && IsPlayerWolfGirl(player)) {
             DoInjection(player, v.Text as InjectionType, true);
         }
     }
