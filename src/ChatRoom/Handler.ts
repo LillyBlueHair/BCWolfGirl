@@ -30,7 +30,7 @@ export function BeepRawHandler(player: Character, data: ServerBeepData) {
     if (player.GhostList && player.GhostList.indexOf(data.MemberNumber) >= 0) return;
 
     const room = (() => {
-        if (data.ChatRoomName && data.ChatRoomSpace) return { name: data.ChatRoomName, space: data.ChatRoomSpace };
+        if (data.ChatRoomName !== undefined && data.ChatRoomSpace !== undefined) return { name: data.ChatRoomName, space: data.ChatRoomSpace };
         return undefined;
     })();
 
