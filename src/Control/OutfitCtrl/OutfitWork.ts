@@ -1,4 +1,4 @@
-import { AppearanceUpdate } from "../../utils/Apperance";
+import { AppearanceUpdate, GatherAppMap } from "../../utils/Apperance";
 import { OutfitItemsMap, OutfitItems } from "./Definition";
 import { OutfitItemType } from "./OutfitTypes";
 import { TimedWork } from "../Worker";
@@ -73,7 +73,7 @@ export class ItemOptionWork extends TimedWork {
         const target = ChatRoomCharacter.find(c => c.MemberNumber === this._target);
         if (!target) return TimedWorkState.interrupted;
 
-        const app_map = new Map<string, Item>(target.Appearance.map(i => [i.Asset.Group.Name, i]));
+        const app_map = GatherAppMap(target);
         (this._options.map(i => { return { target: typeof i.target === "string" ? app_map.get(i.target) : i.target, option: i.option } })
             .filter(i => i.target) as ItemOptionWorkIUnit[])
             .forEach(option => ItemOptionWork.ItemOptionSingleI(target, option));

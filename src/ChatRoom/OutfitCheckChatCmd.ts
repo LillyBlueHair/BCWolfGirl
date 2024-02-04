@@ -2,6 +2,7 @@ import { CheckItem, OutfitItems } from "../Control/OutfitCtrl";
 import { CheckItemRaw } from "../Control/OutfitCtrl/Utils";
 import { ModName, ModVersion } from "../Definition";
 import { EILNetwork } from "../Network";
+import { GatherAppMap } from "../utils/Apperance";
 import { ChatRoomAction } from "../utils/ChatMessages";
 
 const WolfGirlCmds: ICommand[] = [
@@ -35,13 +36,13 @@ function ChatCmdOutfitCheck(...args: string[]) {
         return;
     }
 
-    const app_map = new Map<string, Item>(target.Appearance.map(i => [i.Asset.Name, i]));
+    const app_map = GatherAppMap(target);
     const craft = EILNetwork.Access.craft;
 
     ChatRoomAction.instance.LocalInfo(`>> ${ModName} ${ModVersion} 调试模式\n`);
 
     OutfitItems.forEach((i, idx) => {
-        const target_item = app_map.get(i.Asset.Name);
+        const target_item = app_map.get(i.Asset.Group);
         const msglist: string[] = []
 
         msglist.push(`>> 检查工作 序列${idx + 1}`)

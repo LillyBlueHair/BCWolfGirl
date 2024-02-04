@@ -1,6 +1,6 @@
 import { DataManager } from "../Data";
 import { EILNetwork } from "../Network";
-import { AppearanceUpdate } from "../utils/Apperance";
+import { AppearanceUpdate, GatherAppMap } from "../utils/Apperance";
 import { OutfitItemType, OutfitItemsMap } from "./OutfitCtrl";
 import { CheckItemRaw, CraftingItemFromOutfit, ItemFromOutfit } from "./OutfitCtrl/Utils";
 
@@ -72,7 +72,7 @@ export enum StashPopResult {
 export function StashPopOutfit(player: Character): StashPopResult {
     const saved = [...DataManager.outfit.items.values()];
 
-    const app_map = new Map(player.Appearance.map(i => [i.Asset.Group.Name, i] as [string, Item]));
+    const app_map = GatherAppMap(player);
 
     const craft = EILNetwork.Access.craft;
 

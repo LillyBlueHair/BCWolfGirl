@@ -1,6 +1,6 @@
 import { DataManager } from "../../Data";
 import { EILNetwork } from "../../Network";
-import { AppearanceUpdate } from "../../utils/Apperance";
+import { AppearanceUpdate, GatherAppMap } from "../../utils/Apperance";
 import { IMessage, ParseMessage } from "../Message";
 import { TimedWork, TimedWorkState } from "../Worker";
 import { OutfitItemsMap } from "./Definition";
@@ -58,7 +58,7 @@ export class OutfitFixWork extends TimedWork {
     }
 
     run(player: Character): TimedWorkState {
-        const app_map = new Map<string, Item>(player.Appearance.map(i => [i.Asset.Group.Name, i]));
+        const app_map = GatherAppMap(player);
         const craft = EILNetwork.Access.craft;
 
         let result = this._target.reduce((acc, i) => {
