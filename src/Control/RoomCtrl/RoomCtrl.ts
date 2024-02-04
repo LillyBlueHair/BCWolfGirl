@@ -1,5 +1,6 @@
 import { CommandType } from "../../ChatRoom/ICmds";
 import { EILNetwork } from "../../Network";
+import { ExtractMemberNumber } from "../../utils/Character";
 import { CheckItemsWork, CheckWork, CommonWork, DelayWork } from "../CommonWork";
 import { ParseMessage, RouteIM } from "../Message";
 import { MessageWork } from "../MessageWork";
@@ -119,6 +120,19 @@ export function RoomComeHereSequence(player: Character, cmd_src: { sender: numbe
                     CurryRouteIM(`身份信标丢失，通行证明异常，已离开先前房间，但无法进入{sender_num}所在房间`, { sender_num: cmd_src.sender });
                 }
             }
+        }),
+        new CommonWork((pl) => {
+            const sender_num = ExtractMemberNumber(cmd_src.sender);
+            const target: any = ChatRoomCharacter.find(c => c.MemberNumber === sender_num);
+            const target_name = (() => {
+                if (target) return target.Name;
+                else {
+                    const friend = pl.FriendNames?.get(sender_num);
+                    if (friend === undefined) return sender_num.toString();
+                    return friend;
+                }
+            })();
+            ParseMessage({ mode: "action", msg: "{player_wg}身上的行走姿态控制器控制着{player_wg}进入了房间，走到{target_name}身边，顺从的用身体蹭了蹭{target_name}" }, { player }, { target_name });
         }),
     ];
     TimedWorker.global.push({ description: "Room Come Here Sequence", works: work_sequence });
