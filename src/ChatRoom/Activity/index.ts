@@ -81,8 +81,8 @@ export function RunActivityHandlers(player: Character, sender: Character, info: 
         if (h.onBodyparts !== undefined && !h.onBodyparts.includes(info.ActivityGroup as AssetGroupItemName)) return;
         if (h.mode === "onself" && info.TargetCharacter.MemberNumber !== player.MemberNumber) return;
         if (h.mode === "selfonother"
-            && info.TargetCharacter.MemberNumber === player.MemberNumber
-            && info.SourceCharacter.MemberNumber !== player.MemberNumber) return;
+            && (info.TargetCharacter.MemberNumber === player.MemberNumber
+                || info.SourceCharacter.MemberNumber !== player.MemberNumber)) return;
         h.on(player, sender, info);
     });
 }
