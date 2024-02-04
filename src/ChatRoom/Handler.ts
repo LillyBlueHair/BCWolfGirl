@@ -3,7 +3,7 @@ import { ActivityDeconstruct, ActivityInfo } from "../utils/ChatMessages";
 import { RunCommands } from "./Run";
 import { CommandType } from "./ICmds";
 import { TaskCtrl } from "../Control/TaskCtrl/TaskCtrl";
-import { RunActivityHandlers } from "./Activity/Activity";
+import { RunActivityHandlers } from "./Activity";
 
 export function ChatRoomHandler(): ChatRoomMessageHandler {
     return {

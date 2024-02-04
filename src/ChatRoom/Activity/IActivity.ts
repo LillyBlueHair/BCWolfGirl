@@ -1,15 +1,21 @@
 import { ActivityInfo } from "../../utils/ChatMessages";
 
-export interface IActivity {
+export type ActivityTriggerMode = "onself" | "selfonother" | "both";
+
+interface ActivityInvokeBase {
+    mode: ActivityTriggerMode;
+    onBodyparts: AssetGroupItemName[] | undefined;
+    on(player: Character, sender: Character, info: ActivityInfo): void;
+}
+
+export type IActivity = ActivityInvokeBase & {
     activity: Activity;
     image: string;
-    on(player: Character, sender: Character, info: ActivityInfo): void;
     text(keyword: string): string;
 }
 
-export interface IActivityExtened {
+export type IActivityExtened = ActivityInvokeBase & {
     activity: string;
-    on(player: Character, sender: Character, info: ActivityInfo): void;
 }
 
 export type IActivityInvokable = IActivity | IActivityExtened;

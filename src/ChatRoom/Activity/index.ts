@@ -5,6 +5,7 @@ import { IsCollarOn } from "../../Control/WolfGirlCtrl/Check";
 import { IActivity, IActivityExtened, IActivityInvokable } from "./IActivity";
 import { WolfGirlItemsSwitch } from "./WolfGirlItemsSwitch";
 import { InjectionExtend } from "./InjectionExtend";
+import { DrinkExtend } from "./DrinkExtend";
 
 const ActivityHandlers: Map<string, IActivityInvokable[]> = new Map();
 const ActivityCustoms: Map<string, IActivity> = new Map();
@@ -71,9 +72,18 @@ export function RegisterActivities(mod: ModSDKModAPI, lateHook: (callback: () =>
     });
 
     RegisterActivitiyExtend(new InjectionExtend);
+    RegisterActivitiyExtend(new DrinkExtend);
     RegisterActivitiyCustom(new WolfGirlItemsSwitch);
+
 }
 
 export function RunActivityHandlers(player: Character, sender: Character, info: ActivityInfo) {
-    ActivityHandlers.get(info.ActivityName)?.forEach(h => h.on(player, sender, info));
+    ActivityHandlers.get(info.ActivityName)?.forEach(h => {
+        if (h.onBodyparts !== undefined && !h.onBodyparts.includes(info.ActivityGroup as AssetGroupItemName)) return;
+        if (h.mode === "onself" && info.TargetCharacter.MemberNumber !== player.MemberNumber) return;
+        if (h.mode === "selfonother"
+            && info.TargetCharacter.MemberNumber === player.MemberNumber
+            && info.SourceCharacter.MemberNumber !== player.MemberNumber) return;
+        h.on(player, sender, info);
+    });
 }

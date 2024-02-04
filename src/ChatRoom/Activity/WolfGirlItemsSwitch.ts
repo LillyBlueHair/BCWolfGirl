@@ -3,7 +3,7 @@ import { ActivityInfo } from "../../utils/ChatMessages";
 import { StartStashPopSequence } from "../../Control/SequenceCtrl/StashSequence";
 import { StartStashSequence } from "../../Control/SequenceCtrl/StashSequence";
 import { ModOrSelfPrerequisites } from "../Prerequistes";
-import { IActivity } from "./IActivity";
+import { ActivityTriggerMode, IActivity } from "./IActivity";
 
 const strings: { [index: string]: string } = {
     "Label-ChatOther-ItemNeck-WolfGirlItemsSwitch": "切换狼女物品模式",
@@ -20,6 +20,9 @@ export class WolfGirlItemsSwitch implements IActivity {
         Target: ['ItemNeck'],
         TargetSelf: ['ItemNeck']
     } as Activity;
+
+    mode: ActivityTriggerMode = "onself";
+    onBodyparts: AssetGroupItemName[] = ["ItemNeck"];
 
     image = "Assets/Female3DCG/ItemNeck/Preview/FuturisticCollar.png";
 
