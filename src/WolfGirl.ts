@@ -13,6 +13,7 @@ import { RegisterActivities } from './ChatRoom/Activity';
 import { ChatRoomWork } from './Control/RoomCtrl/Work';
 import { InjectionManager } from './Control/Injection';
 import { DrinkHook } from './Control/Drink';
+import { InitChatCmds } from './ChatRoom/OutfitCheckChatCmd';
 
 (function () {
     if (window.BCWorlGirl_Loaded) return;
@@ -75,6 +76,8 @@ import { DrinkHook } from './Control/Drink';
         if (IsPlayerWolfGirl(player))
             DataManager.arousal.ruined += 1;
     });
+
+    lateHooks.push(() => InitChatCmds());
 
     (async () => {
         while (typeof (window as any).Player === 'undefined')

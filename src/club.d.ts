@@ -360,6 +360,19 @@ declare function ExtendedItemInit(C: Character, I: Item, Push: boolean = true, R
 
 
 // ChatRoom
+
+interface ICommand {
+    Tag: string;
+    Description?: string;
+    Reference?: string;
+    Action?: (this: Optional<ICommand, 'Tag'>, args: string, msg: string, parsed: string[]) => void
+    Prerequisite?: (this: Optional<ICommand, 'Tag'>) => boolean;
+    AutoComplete?: (this: Optional<ICommand, 'Tag'>, parsed: string[], low: string, msg: string) => void;
+    Clear?: false;
+}
+
+declare function CommandCombine(add: ICommand[]): void;
+
 interface ChatRoomMessageHandler {
     Description?: string;
     Priority: number;
