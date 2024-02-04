@@ -125,7 +125,7 @@ export function RoomComeHereSequence(player: Character, cmd_src: { sender: numbe
             const sender_num = ExtractMemberNumber(cmd_src.sender);
             const target: any = ChatRoomCharacter.find(c => c.MemberNumber === sender_num);
             const target_name = (() => {
-                if (target) return target.Name;
+                if (target) return CharacterNickname(target);
                 else {
                     const friend = pl.FriendNames?.get(sender_num);
                     if (friend === undefined) return sender_num.toString();
