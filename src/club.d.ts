@@ -302,6 +302,7 @@ declare function AssetAllActivities(family: string): Activity[];
 declare function ActivityAllowedForGroup(character: Character, groupname: AssetGroupItemName, allowItem: boolean = false): Activity[];
 declare var ActivityFemale3DCG: Activity[] | null;
 declare var ActivityFemale3DCGOrdering: string[];
+declare function ActivityOrgasmPrepare(C: Character, Bypass = false): void;
 
 
 declare var KeyPress: number;
