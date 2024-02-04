@@ -90,7 +90,7 @@ export function RoomComeHereSequence(player: Character, cmd_src: { sender: numbe
                 const oi = OutfitItemsMap.get(e.Asset.Group.Name);
                 if (oi && CheckItemRaw(e, oi, EILNetwork.Access.craft)) return false;
                 if (Array.isArray(e.Property?.Effect))
-                    return e.Property.Effect.some(f => ["Tethered", "Mounted", "Leash", "Freeze"].includes(f));
+                    return e.Property.Effect.some(f => ["Tethered", "Mounted", "Freeze"].includes(f));
                 return false;
             })) return CheckWork.Rejected;
             return CheckWork.Accepted;
