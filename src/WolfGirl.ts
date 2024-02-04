@@ -9,7 +9,7 @@ import { CtrlHook, IsPlayerWolfGirl } from './Control/WolfGirlCtrl';
 import { OrgasmMonitor } from './utils/Orgasm';
 import { DataManager } from './Data';
 import { TaskCtrl } from "./Control/TaskCtrl/TaskCtrl";
-import { RegisterActivities } from './ChatRoom/Activity';
+import { RegisterActivities } from './ChatRoom/Activity/Activity';
 import { ChatRoomWork } from './Control/RoomCtrl/Work';
 import { InjectionManager } from './Control/Injection';
 
