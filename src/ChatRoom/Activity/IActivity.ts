@@ -6,6 +6,7 @@ interface ActivityInvokeBase {
     mode: ActivityTriggerMode;
     onBodyparts: AssetGroupItemName[] | undefined;
     on(player: Character, sender: Character, info: ActivityInfo): void;
+    adjustDict?(Content: string, dict: any[]): any[];
 }
 
 export type IActivity = ActivityInvokeBase & {

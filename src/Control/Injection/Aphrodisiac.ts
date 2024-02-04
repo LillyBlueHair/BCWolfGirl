@@ -13,10 +13,16 @@ export class Aphrodisiac extends IInjection {
 
     savedArousal: number = -1;
 
+    onInject(): void {
+        if (Player) {
+            CharacterSetFacialExpression(Player, "Eyes", "HeartPink", null);
+        }
+    }
+
     update(player: Character): void {
         if (this.isWorking() && this.savedArousal !== -1) {
             const diff = player.ArousalSettings.Progress - this.savedArousal;
-            player.ArousalSettings.Progress += diff;
+            if (diff > 0) player.ArousalSettings.Progress += diff;
         }
         this.savedArousal = player.ArousalSettings.Progress;
     }

@@ -8,6 +8,7 @@ export interface ActivityInfo {
         CraftName: string;
         GroupName: string;
     }
+    BCDictionary: any[];
 }
 
 export function ActivityDeconstruct(dict: ChatMessageDictionary): ActivityInfo | undefined {
@@ -27,7 +28,7 @@ export function ActivityDeconstruct(dict: ChatMessageDictionary): ActivityInfo |
     }
     if (SourceCharacter === undefined || TargetCharacter === undefined
         || ActivityGroup === undefined || ActivityName === undefined) return undefined;
-    return { SourceCharacter, TargetCharacter, ActivityGroup, ActivityName, Asset };
+    return { SourceCharacter, TargetCharacter, ActivityGroup, ActivityName, Asset, BCDictionary: dict };
 }
 
 export function ChatRoomChatMessage(msg: string) {

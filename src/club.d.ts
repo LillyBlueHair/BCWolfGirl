@@ -272,6 +272,7 @@ declare function CharacterNickname(C: Character): string;
 declare function CharacterLoadCanvas(C: Character): void;
 declare function CharacterChangeMoney(C: Character, Value: number): void;
 declare function CharacterSetActivePose(C: Character, NewPose: string): void;
+declare function CharacterSetFacialExpression(C: Character, AssetGroup: string, Expression: string, Timer: number | null);
 
 declare function ServerPlayerAppearanceSync(): void;
 declare function ServerPlayerInventorySync(): void;

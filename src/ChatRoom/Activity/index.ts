@@ -1,10 +1,10 @@
 import { ModSDKModAPI } from "bondage-club-mod-sdk";
 import { DataManager } from "../../Data";
-import { ActivityInfo } from "../../utils/ChatMessages";
+import { ActivityDeconstruct, ActivityInfo } from "../../utils/ChatMessages";
 import { IsCollarOn } from "../../Control/WolfGirlCtrl/Check";
 import { IActivity, IActivityExtened, IActivityInvokable } from "./IActivity";
 import { WolfGirlItemsSwitch } from "./WolfGirlItemsSwitch";
-import { InjectionExtend } from "./InjectionExtend";
+import { InjectionExtend, InjectionExtendInjected } from "./InjectionExtend";
 import { DrinkExtend } from "./DrinkExtend";
 
 const ActivityHandlers: Map<string, IActivityInvokable[]> = new Map();
@@ -58,20 +58,19 @@ export function RegisterActivities(mod: ModSDKModAPI, lateHook: (callback: () =>
 
     mod.hookFunction("ServerSend", 1, (args, next) => {
         if (args[0] !== "ChatRoomChat" || args[1]?.Type !== "Activity") return next(args);
-        const actname = args[1].Dictionary?.find((d: any) => d.ActivityName)?.ActivityName;
-        if (!actname) return next(args);
-        const myact = ActivityCustoms.get(actname);
+        const dict = args[1].Dictionary;
+        if (!dict) return next(args);
+        const d = ActivityDeconstruct(dict);
+        if (!d) return next(args);
+
+        const myact = ActivityHandlers.get(d.ActivityName);
         if (!myact) return next(args);
-        (args[1].Dictionary as any[]).push(
-            {
-                Tag: `MISSING ACTIVITY DESCRIPTION FOR KEYWORD ${args[1].Content}`,
-                Text: myact.text(args[1].Content)
-            }
-        );
+        args[1].Dictionary = myact.reduce((acc, act) => act.adjustDict?.(args[1].Content, acc) ?? acc, dict);
         return next(args);
     });
 
-    RegisterActivitiyExtend(new InjectionExtend);
+    RegisterActivitiyExtend(InjectionExtend.global);
+    RegisterActivitiyExtend(new InjectionExtendInjected);
     RegisterActivitiyExtend(new DrinkExtend);
     RegisterActivitiyCustom(new WolfGirlItemsSwitch);
 

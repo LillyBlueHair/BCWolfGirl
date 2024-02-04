@@ -9,8 +9,10 @@ export class Anesthetic extends IInjection {
     disperse = undefined;
 
     onInject(): void {
-        if (Player?.ArousalSettings.Progress)
+        if (Player?.ArousalSettings.Progress !== undefined) {
             Player.ArousalSettings.Progress = 0;
+            CharacterSetFacialExpression(Player, "Eyes", "Closed", null);
+        }
     }
 
     hook(mod: ModSDKModAPI, lateHook: (callback: () => void) => void) {

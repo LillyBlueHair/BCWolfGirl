@@ -38,6 +38,14 @@ export class WolfGirlItemsSwitch implements IActivity {
         }
     }
 
+    adjustDict(content: string, dict: any[]): any[] {
+        dict.push({
+            Tag: `MISSING ACTIVITY DESCRIPTION FOR KEYWORD ${content}`,
+            Text: this.text(content)
+        });
+        return dict;
+    }
+
     text(keyword: string) {
         return strings[keyword] ?? keyword;
     }

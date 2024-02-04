@@ -20,7 +20,7 @@ export class Inhibitor extends IInjection {
     update(player: Character): void {
         if (this.isWorking() && this.savedArousal !== -1) {
             const diff = player.ArousalSettings.Progress - this.savedArousal;
-            player.ArousalSettings.Progress -= diff * 0.5;
+            if (diff > 0) player.ArousalSettings.Progress -= diff * 0.5;
         }
         this.savedArousal = player.ArousalSettings.Progress;
     }
