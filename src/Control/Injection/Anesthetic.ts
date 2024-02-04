@@ -13,11 +13,30 @@ export class Anesthetic extends IInjection {
             Player.ArousalSettings.Progress = 0;
             CharacterSetFacialExpression(Player, "Eyes", "Closed", null);
         }
+
+        if (CurrentCharacter) {
+            if (CurrentCharacter.FocusGroup) {
+                CurrentCharacter.FocusGroup = null;
+            }
+            CurrentCharacter = null;
+        }
+    }
+
+    update(player: Character): void {
+        const input = ElementValue("InputChat");
+        const rnd = Math.random();
+        if (rnd < 0.1) {
+            ElementValue("InputChat", input.substring(1));
+        } else if (rnd < 0.6) {
+            ElementValue("InputChat", input.replace(/^([z\.]*)./, "$1z"));
+        } else {
+            ElementValue("InputChat", input.replace(/^([z\.]*)./, "$1."));
+        }
     }
 
     hook(mod: ModSDKModAPI, lateHook: (callback: () => void) => void) {
         lateHook(() => {
-            mod.hookFunction('Player.CanInteract', 1, (args, next) => {
+            mod.hookFunction('Player.CanWalk', 1, (args, next) => {
                 if (this.isWorking()) return false;
                 return next(args);
             });
@@ -27,6 +46,11 @@ export class Anesthetic extends IInjection {
                 if (this.isWorking()) return result + 3;
                 return result;
             });
+        });
+
+        mod.hookFunction('ChatRoomFocusCharacter', 1, (args, next) => {
+            if (this.isWorking()) return;
+            return next(args);
         });
 
         mod.hookFunction('SpeechGetGagLevel', 1, (args, next) => {
