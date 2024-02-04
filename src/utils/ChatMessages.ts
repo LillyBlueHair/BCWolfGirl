@@ -3,24 +3,31 @@ export interface ActivityInfo {
     TargetCharacter: { MemberNumber: number };
     ActivityGroup: string;
     ActivityName: string;
+    Asset?: {
+        AssetName: string;
+        CraftName: string;
+        GroupName: string;
+    }
 }
 
 export function ActivityDeconstruct(dict: ChatMessageDictionary): ActivityInfo | undefined {
-    let SourceCharacter, TargetCharacter, ActivityGroup, ActivityName;
+    let SourceCharacter, TargetCharacter, ActivityGroup, ActivityName, Asset;
     for (let v of dict) {
-        if (v.hasOwnProperty('TargetCharacter')) {
-            TargetCharacter = { MemberNumber: v['TargetCharacter'] };
-        } else if (v.hasOwnProperty('SourceCharacter')) {
-            SourceCharacter = { MemberNumber: v['SourceCharacter'] };
-        } else if (v.hasOwnProperty('ActivityName')) {
-            ActivityName = v['ActivityName'];
-        } else if (v.hasOwnProperty('Tag') && v.Tag === 'FocusAssetGroup') {
-            ActivityGroup = v['FocusGroupName'];
+        if (v['TargetCharacter'] !== undefined) TargetCharacter = { MemberNumber: v['TargetCharacter'] };
+        else if (v['SourceCharacter'] !== undefined) SourceCharacter = { MemberNumber: v['SourceCharacter'] };
+        else if (v['ActivityName'] !== undefined) ActivityName = v['ActivityName'];
+        else if (v.Tag === 'FocusAssetGroup') ActivityGroup = v['FocusGroupName'];
+        else if (v.Tag === 'ActivityAsset') {
+            Asset = {
+                AssetName: v['AssetName'],
+                CraftName: v['CraftName'],
+                GroupName: v['GroupName']
+            };
         }
     }
     if (SourceCharacter === undefined || TargetCharacter === undefined
         || ActivityGroup === undefined || ActivityName === undefined) return undefined;
-    return { SourceCharacter, TargetCharacter, ActivityGroup, ActivityName };
+    return { SourceCharacter, TargetCharacter, ActivityGroup, ActivityName, Asset };
 }
 
 export function ChatRoomChatMessage(msg: string) {
