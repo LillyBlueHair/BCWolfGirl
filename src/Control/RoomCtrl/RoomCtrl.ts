@@ -3,7 +3,9 @@ import { EILNetwork } from "../../Network";
 import { CheckItemsWork, CheckWork, CommonWork, DelayWork } from "../CommonWork";
 import { ParseMessage, RouteIM } from "../Message";
 import { MessageWork } from "../MessageWork";
+import { CheckItem } from "../OutfitCtrl";
 import { OutfitItemsMap } from "../OutfitCtrl/Definition";
+import { CheckItemRaw } from "../OutfitCtrl/Utils";
 import { StdMissingAction, StdMissingMsgN } from "../SequenceCtrl/ItemCmdSequence/CmdSequenceMessage";
 import { TimedWork, TimedWorkState, TimedWorker } from "../Worker";
 import { ChatRoomWork } from "./Work";
@@ -85,9 +87,11 @@ export function RoomComeHereSequence(player: Character, cmd_src: { sender: numbe
         }),
         new CheckWork((pl) => {
             if (pl.Appearance.some(e => {
-                if (OutfitItemsMap.has(e.Asset.Group.Name)) return false;
-                if (e.Property && e.Property.Effect)
+                const oi = OutfitItemsMap.get(e.Asset.Group.Name);
+                if (oi && CheckItemRaw(e, oi, EILNetwork.Access.craft)) return false;
+                if (Array.isArray(e.Property?.Effect))
                     return e.Property.Effect.some(f => ["Tethered", "Mounted", "Leash", "Freeze"].includes(f));
+                return false;
             })) return CheckWork.Rejected;
             return CheckWork.Accepted;
         }, (pl, result) => {
