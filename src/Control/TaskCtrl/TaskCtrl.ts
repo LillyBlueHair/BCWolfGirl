@@ -1,6 +1,7 @@
 import { ActivityInfo } from "../../utils/ChatMessages";
 import { CommandType } from "../../ChatRoom/ICmds";
-import { ITask, TaskState } from ".";
+import { TaskState } from "./ITask";
+import { ITask } from "./ITask";
 
 export class TaskCtrl {
     private _active_task: ITask | undefined;
@@ -26,6 +27,10 @@ export class TaskCtrl {
             if (reject) reject(this._active_task);
         }
         else this._active_task = t;
+    }
+
+    has_task(): boolean {
+        return this._active_task !== undefined;
     }
 
     onChat(player: Character, sender: Character, msg: string, type: CommandType) {

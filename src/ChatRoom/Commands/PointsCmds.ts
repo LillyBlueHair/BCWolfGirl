@@ -3,7 +3,7 @@ import { ItemOptionWork } from "../../Control/OutfitCtrl";
 import { StopPunish } from "../../Control/PunishWork";
 import { StartPunish } from "../../Control/SequenceCtrl/StartPunishSequence";
 import { ArousalCtrlSequence, FeetCtrlSequence, HandsCtrlSequence, HearingCtrlSequence, VisionCtrlSequence, VoiceCtrlSequence } from "../../Control/SequenceCtrl/ItemCmdSequence";
-import { ITask } from "../../Control/TaskCtrl";
+import { ITask } from "../../Control/TaskCtrl/ITask";
 import { BegOrgasmTask } from "../../Control/TaskCtrl/BegOrgasmTask";
 import { InteractTask } from "../../Control/TaskCtrl/InteractTask";
 import { ResistTask } from "../../Control/TaskCtrl/ResistTask";

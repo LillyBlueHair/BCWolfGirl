@@ -14,6 +14,7 @@ import { ChatRoomWork } from './Control/RoomCtrl/Work';
 import { InjectionManager } from './Control/Injection';
 import { DrinkHook } from './Control/Drink';
 import { InitChatCmds } from './ChatRoom/OutfitCheckChatCmd';
+import { TaskCtrlInit } from './Control/TaskCtrl';
 
 (function () {
     if (window.BCWorlGirl_Loaded) return;
@@ -27,7 +28,7 @@ import { InitChatCmds } from './ChatRoom/OutfitCheckChatCmd';
     const asset_url = this_script_src.substring(0, this_script_src.lastIndexOf('/') + 1) + 'assets/';
 
     TimedWorker.init(1000);
-    TaskCtrl.init(1000);
+    TaskCtrlInit(1000);
     EILNetwork.init(asset_url);
     ChatRoomAction.init(CUSTOM_ACTION_TAG);
 

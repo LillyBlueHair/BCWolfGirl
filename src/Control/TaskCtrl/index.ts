@@ -1,50 +1,43 @@
-import { ActivityInfo } from "../../utils/ChatMessages";
-import { CommandType } from "../../ChatRoom/ICmds";
-import { IncreaseAndMessage } from "./Points";
-import { StartPunish } from "../SequenceCtrl/StartPunishSequence";
+import { TaskCtrl } from "./TaskCtrl";
 import { DataManager } from "../../Data";
+import { ResistTask } from "./ResistTask";
+import { InteractTask } from "./InteractTask";
+import { BegOrgasmTask } from "./BegOrgasmTask";
+import { ParseMessage } from "../Message";
+import { ITask } from "./ITask";
 
-export enum TaskState {
-    Running,
-    Success,
-    Failed,
-}
 
-export abstract class ITask {
-    abstract run(player: Character): TaskState;
-    abstract finalize(player: Character, s: TaskState): void;
-    onChat(player: Character, sender: Character, msg: string, type: CommandType): void { };
-    onActivity(player: Character, sender: Character, activity: ActivityInfo): void { };
-    onOrgasm(player: Character): void { };
-    onResist(player: Character): void { };
-    abstract summary(): string;
-}
+export function TaskCtrlInit(time_reso: number) {
+    TaskCtrl.init(time_reso);
 
-export abstract class TimedCounterTask extends ITask {
-    time_limit_rate: number;
-    time_out: number;
-    bonus: number;
-    cur: number;
-    expected: number;
-
-    constructor(time_limit_rate: number, counter: number, bonus: number) {
-        super();
-        this.time_limit_rate = time_limit_rate;
-        this.time_out = DataManager.points.task_time * time_limit_rate + Date.now();
-        this.expected = counter;
-        this.bonus = bonus;
-        this.cur = 0;
+    const PushTask = (player: Character, t: ITask) => {
+        ParseMessage({ mode: "action", msg: `{player_wg}由于奖励点数过低，自动接收任务：\n${t.summary()}` }, { player });
+        TaskCtrl.instance.push_task(t);
     }
 
-    run(player: Character): TaskState {
-        if (Date.now() > this.time_out) return TaskState.Failed;
-        if (this.cur >= this.expected) return TaskState.Success;
-        return TaskState.Running;
-    }
+    const RandomTaskList = [
+        (point: number) => new ResistTask(1, 5, point),
+        (point: number) => new ResistTask(2, 10, point),
+        (point: number) => new InteractTask(2, 10, point, undefined, ['ItemBreast', 'ItemNipplesPiercings', 'ItemNipples']),
+        (point: number) => new InteractTask(2, 10, point, undefined, ['ItemVulva', 'ItemPelvis', 'ItemVulvaPiercings']),
+        (point: number) => new InteractTask(2, 10, point, ["Slap", "Spank", "Kick", "SpankItem"], undefined),
+        (point: number) => new BegOrgasmTask(2, 5, point)
+    ]
 
-    finalize(player: Character, s: TaskState): void {
-        if (s === TaskState.Success) IncreaseAndMessage(player, this.bonus);
-        else StartPunish(player);
-    }
+    let check_timer = Date.now();
+    setInterval(() => {
+        if (Player && Player.MemberNumber) {
+            const now = Date.now();
+            const ten_min_after = 10 * 60 * 1000 + check_timer;
+            if (TaskCtrl.instance.has_task() || CurrentScreen !== "ChatRoom") check_timer = now;
+            else if (now > ten_min_after) {
+                check_timer = now;
+                if (DataManager.points.points < -14) {
+                    const bonus = - 14 - DataManager.points.points;
+                    const task = RandomTaskList[Math.floor(Math.random() * RandomTaskList.length)](bonus);
+                    PushTask(Player, task);
+                }
+            }
+        }
+    }, time_reso);
 }
-

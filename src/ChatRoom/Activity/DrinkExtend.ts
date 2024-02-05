@@ -12,20 +12,19 @@ export class DrinkExtend implements IActivityExtened {
     mode: ActivityTriggerMode = "onself";
     onBodyparts: AssetGroupItemName[] = ["ItemMouth"];
     on(player: Character, sender: Character, info: ActivityInfo): void {
-        if (IsPlayerWolfGirl(player)) {
-            if (info.Asset && info.ActivityGroup.startsWith("ItemMouth")) {
-                const tItem = sender.Appearance.find(a => a.Asset.Group.Name === info.Asset!.GroupName);
-                if (!tItem) return;
-                const target = Tools.find(i => i.Asset.Group === info.Asset!.GroupName
-                    && i.Asset.Name === info.Asset!.AssetName && i.Craft.Name === info.Asset!.CraftName);
-                if (!target) return;
-                if (!CheckItemRaw(tItem, target)) return;
+        if (info.Asset && info.ActivityGroup.startsWith("ItemMouth")) {
+            const tItem = sender.Appearance.find(a => a.Asset.Group.Name === info.Asset!.GroupName);
+            if (!tItem) return;
+            const target = Tools.find(i => i.Asset.Group === info.Asset!.GroupName
+                && i.Asset.Name === info.Asset!.AssetName && i.Craft.Name === info.Asset!.CraftName);
+            if (!target) return;
+            if (!CheckItemRaw(tItem, target)) return;
 
-                if (target.Craft.Name === "情欲之水") {
+            if (target.Craft.Name === "情欲之水") {
+                if (IsPlayerWolfGirl(player))
                     DrinkAphrodisiac(player);
-                } else if (target.Craft.Name === "特种红牛") {
-                    DrinkRedbull(player);
-                }
+            } else if (target.Craft.Name === "特种红牛") {
+                DrinkRedbull(player);
             }
         }
     }

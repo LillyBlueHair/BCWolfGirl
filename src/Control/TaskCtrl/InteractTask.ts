@@ -1,9 +1,13 @@
-import { TimedCounterTask } from ".";
+import { TimedCounterTask } from "./TimedCounterTask";
 import { ActivityInfo } from "../../utils/ChatMessages";
 
 export class InteractTask extends TimedCounterTask {
     summary(): string {
-        return `在 ${new Date(this.time_out).toLocaleTimeString()} (${this.time_limit_rate}x任务基础时间) 之前，接受${this.expected}个人互动，成功后获得${this.bonus}点奖励`
+        const time_report = `在 ${new Date(this.time_out).toLocaleTimeString()} (${this.time_limit_rate}x任务基础时间) 之前`;
+        const group_report = this._check_groups ? `在 ${[...this._check_groups.values()].map(i => AssetGroupGet('', i)?.Description).filter(i => i !== undefined).join("、")} ` : '';
+        const act_report = this._check_act ? `的 ${[...this._check_act.values()].map(i => ActivityDictionaryText(`Activity${i}`)).join("、")} 的互动` : '的互动';
+
+        return `${time_report}，接受${this.expected}个人${group_report}${act_report}，成功后获得${this.bonus}点奖励`
     }
     private _interact_list: Set<number> = new Set();
     private _check_act: Set<string> | undefined;

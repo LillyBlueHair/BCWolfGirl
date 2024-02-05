@@ -304,7 +304,7 @@ declare function ActivityAllowedForGroup(character: Character, groupname: AssetG
 declare var ActivityFemale3DCG: Activity[] | null;
 declare var ActivityFemale3DCGOrdering: string[];
 declare function ActivityOrgasmPrepare(C: Character, Bypass = false): void;
-
+declare function ActivityDictionaryText(Tag: string): string;
 
 declare var KeyPress: number;
 declare var MiniGameCheatAvailable: boolean;

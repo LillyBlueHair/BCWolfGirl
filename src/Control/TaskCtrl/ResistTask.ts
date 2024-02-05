@@ -1,4 +1,4 @@
-import { TimedCounterTask } from ".";
+import { TimedCounterTask } from "./TimedCounterTask";
 
 export class ResistTask extends TimedCounterTask {
     summary(): string {
