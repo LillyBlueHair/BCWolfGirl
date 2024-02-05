@@ -90,8 +90,10 @@ export function StashPopOutfit(player: Character): StashPopResult {
         if (oi.Asset.Name !== i.asset.name) return;
         const nitem = ItemFromOutfit(player, player, oi, craft);
         if (!nitem) return;
+
+        Object.assign(nitem, { Color: i.color, Property: i.property });
+
         if (!item) {
-            Object.assign(nitem, { Color: i.color, Property: i.property });
             player.Appearance.push(nitem);
         } else {
             Object.assign(item, nitem);
