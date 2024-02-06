@@ -2,7 +2,6 @@ import { CheckItemsWork, CommonWork, DelayWork } from "../../CommonWork";
 import { InjectionManager } from "../../Injection";
 import { InjectionType } from "../../Injection/IInjection";
 import { IMessage, ParseMessage } from "../../Message";
-import { MessageWork } from "../../MessageWork";
 import { TimedWork, TimedWorkState, TimedWorker } from "../../Worker";
 import { StdMissingAction, StdMissingMsgN } from "../ItemCmdSequence/CmdSequenceMessage";
 
@@ -11,10 +10,13 @@ interface InjectionSequenceMsg {
     f_action: IMessage;
 }
 
-function InstantInjection(player: Character, type: InjectionType, msg: InjectionSequenceMsg) {
-    InjectionManager.instance.doInject(type);
-    ParseMessage(msg.finish, { player });
-    ParseMessage(msg.f_action, { player });
+function InstantInjection(type: InjectionType, msg: InjectionSequenceMsg) {
+    const work_sequence: TimedWork[] = [
+        new CommonWork((player) => ParseMessage(msg.finish, { player })),
+        new CommonWork((player) => ParseMessage(msg.f_action, { player })),
+        new CommonWork(() => InjectionManager.instance.doInject(type))
+    ]
+    TimedWorker.global.push_front({ description: `InstantInjection${type}`, works: work_sequence })
 }
 
 function StdInjectionSequence(type: InjectionType, msg: InjectionSequenceMsg) {
@@ -61,12 +63,16 @@ const messages: {
     'pickmeup': {
         finish: { mode: "chat-action", msg: "恢复剂注射完毕" },
         f_action: { mode: "action", msg: "随着恢复剂的注射，{player_wg}的身体渐渐有了气力，也逐步得以恢复了对四肢的掌控" }
+    },
+    "EasterUniversalDispersal": {
+        finish: { mode: "chat-action", msg: "泛用驱散剂注射完毕" },
+        f_action: { mode: "action", msg: "复杂的魔力回路，传承的古老血统，繁琐的施术准备，数十年才能成就的大魔法师怎么躲过科技的追赶，科技的低使用门槛从来不是那些需求所谓血脉与出身的魔法侧能相比拟的" }
     }
 }
 
-export function DoInjection(player: Character, type: InjectionType, instant?: boolean) {
+export function DoInjection(type: InjectionType, instant?: boolean) {
     if (instant) {
-        InstantInjection(player, type, messages[type]);
+        InstantInjection(type, messages[type]);
     } else {
         StdInjectionSequence(type, messages[type]);
     }

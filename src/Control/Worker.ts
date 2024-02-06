@@ -59,6 +59,10 @@ export class TimedWorker {
         this._state = 'working';
     }
 
+    push_front(work: TimedWorkSuite) {
+        this.work_suites.unshift(work);
+    }
+
     push(work: TimedWorkSuite) {
         this.work_suites.push(work);
     }

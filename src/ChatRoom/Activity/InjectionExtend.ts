@@ -47,7 +47,7 @@ export class InjectionExtendInjected implements IActivityExtened {
     on(player: Character, sender: Character, info: ActivityInfo) {
         const v = info.BCDictionary.find(i => i.Tag === "WolfGirlInjectType");
         if (v && IsPlayerWolfGirl(player)) {
-            DoInjection(player, v.Text as InjectionType, true);
+            DoInjection(v.Text as InjectionType, true);
         }
     }
 }

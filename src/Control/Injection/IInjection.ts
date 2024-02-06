@@ -1,6 +1,6 @@
 import { ModSDKModAPI } from "bondage-club-mod-sdk";
 
-export type InjectionType = "anesthetic" | "pickmeup" | "aphrodisiac" | "inhibitor";
+export type InjectionType = "anesthetic" | "pickmeup" | "aphrodisiac" | "inhibitor" | "EasterUniversalDispersal";
 
 export type DisperseMode = "timely_cancel" | "all_cancel"
 export type CummlateMode = "refresh" | "add" | "none"
