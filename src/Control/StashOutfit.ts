@@ -31,8 +31,8 @@ export function GatherColorStoreItem(player: Character): ColorStoreItem[] {
         const ti = OutfitItemsMap.get(item.Asset.Group.Name);
         if (ti && CheckItemRaw(item, ti)) {
             result.push({
-                asset: item.Asset.Group.Name,
-                group: item.Asset.Name,
+                asset: item.Asset.Name,
+                group: item.Asset.Group.Name,
                 color: item.Color ?? "Default",
             });
         }
