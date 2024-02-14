@@ -3,7 +3,7 @@ import { CheckItemRaw } from "../Control/OutfitCtrl/Utils";
 import { ModName, ModVersion } from "../Definition";
 import { EILNetwork } from "../Network";
 import { GatherAppMap } from "../utils/Apperance";
-import { ChatRoomAction } from "../utils/ChatMessages";
+import { ChatRoomAction } from "../bc-utilities/ChatMessages";
 
 const WolfGirlCmds: ICommand[] = [
     {

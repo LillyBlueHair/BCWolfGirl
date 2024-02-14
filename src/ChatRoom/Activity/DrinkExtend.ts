@@ -3,7 +3,7 @@ import { ParseMessage } from "../../Control/Message";
 import { Tools } from "../../Control/OutfitCtrl";
 import { CheckItemRaw } from "../../Control/OutfitCtrl/Utils";
 import { IsPlayerWolfGirl } from "../../Control/WolfGirlCtrl";
-import { ActivityInfo } from "../../utils/ChatMessages";
+import { ActivityInfo } from "../../bc-utilities/ChatMessages";
 import { ActivityTriggerMode, IActivityExtened } from "./IActivity";
 
 

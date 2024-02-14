@@ -1,0 +1,3 @@
+[submodule "src/bc-utilities"]
+	path = src/bc-utilities
+	url = https://gitlab.com/dynilath/bc-utilities.git

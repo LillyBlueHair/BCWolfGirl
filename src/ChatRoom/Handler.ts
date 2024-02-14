@@ -1,5 +1,4 @@
-import { InitDressSequence } from "../Control/SequenceCtrl/DressSequence";
-import { ActivityDeconstruct, ActivityInfo } from "../utils/ChatMessages";
+import { ActivityDeconstruct, ActivityInfo } from "../bc-utilities/ChatMessages";
 import { RunCommands } from "./Run";
 import { CommandType } from "./ICmds";
 import { TaskCtrl } from "../Control/TaskCtrl/TaskCtrl";

@@ -1,4 +1,4 @@
-import { ActivityInfo } from "../../utils/ChatMessages";
+import { ActivityInfo } from "../../bc-utilities/ChatMessages";
 import { InitDressSequence } from "../../Control/SequenceCtrl/DressSequence";
 import { ActivityTriggerMode, IActivityExtened } from "./IActivity";
 import { InjectionType } from "../../Control/Injection/IInjection";

@@ -1,4 +1,4 @@
-import { ActivityInfo } from "../../utils/ChatMessages";
+import { ActivityInfo } from "../../bc-utilities/ChatMessages";
 import { CommandType } from "../../ChatRoom/ICmds";
 
 export enum TaskState {

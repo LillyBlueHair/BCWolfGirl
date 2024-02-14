@@ -1,6 +1,6 @@
 import { ModSDKModAPI } from "bondage-club-mod-sdk";
 import { DataManager } from "../../Data";
-import { ActivityDeconstruct, ActivityInfo } from "../../utils/ChatMessages";
+import { ActivityDeconstruct, ActivityInfo } from "../../bc-utilities/ChatMessages";
 import { IsCollarOn } from "../../Control/WolfGirlCtrl/Check";
 import { IActivity, IActivityExtened, IActivityInvokable } from "./IActivity";
 import { WolfGirlItemsSwitch } from "./WolfGirlItemsSwitch";

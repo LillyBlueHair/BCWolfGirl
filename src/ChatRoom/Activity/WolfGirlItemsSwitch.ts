@@ -1,5 +1,5 @@
 import { DataManager } from "../../Data";
-import { ActivityInfo } from "../../utils/ChatMessages";
+import { ActivityInfo } from "../../bc-utilities/ChatMessages";
 import { StartStashPopSequence } from "../../Control/SequenceCtrl/StashSequence";
 import { StartStashSequence } from "../../Control/SequenceCtrl/StashSequence";
 import { ModOrSelfPrerequisites } from "../Prerequistes";

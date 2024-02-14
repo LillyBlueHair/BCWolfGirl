@@ -3,10 +3,10 @@ import { CUSTOM_ACTION_TAG, ModName, ModVersion } from './Definition';
 import { BeepRawHandler, ChatRoomHandler } from './ChatRoom/Handler';
 import { TimedWorker } from "./Control/Worker";
 import { DialogInventoryBuildHandler } from './Control/OutfitCtrl';
-import { ChatRoomAction } from './utils/ChatMessages';
+import { ChatRoomAction } from './bc-utilities/ChatMessages';
 import { EILNetwork } from './Network';
 import { CtrlHook, IsPlayerWolfGirl } from './Control/WolfGirlCtrl';
-import { OrgasmMonitor } from './utils/Orgasm';
+import { OrgasmMonitor } from './bc-utilities/Orgasm';
 import { DataManager } from './Data';
 import { TaskCtrl } from "./Control/TaskCtrl/TaskCtrl";
 import { RegisterActivities } from './ChatRoom/Activity';
@@ -64,7 +64,7 @@ import { TaskCtrlInit } from './Control/TaskCtrl';
     InjectionManager.init(mod, lateHook);
     DrinkHook(mod, lateHook);
 
-    const orgasm = new OrgasmMonitor(mod, lateHook);
+    const orgasm = new OrgasmMonitor(mod);
 
     orgasm.AddOrgasmEvent((player) => {
         if (IsPlayerWolfGirl(player))

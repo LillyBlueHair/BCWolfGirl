@@ -1,4 +1,4 @@
-import { ActivityInfo } from "../../utils/ChatMessages";
+import { ActivityInfo } from "../../bc-utilities/ChatMessages";
 
 export type ActivityTriggerMode = "onself" | "selfonother" | "both";
 

@@ -1,6 +1,6 @@
 import { DataManager } from "../../Data";
 import { EILNetwork } from "../../Network";
-import { ChatRoomAction } from "../../utils/ChatMessages";
+import { ChatRoomAction } from "../../bc-utilities/ChatMessages";
 import { CheckWork, CommonWork, DelayWork } from "../CommonWork";
 import { IMessage, ParseMessage } from "../Message";
 import { MessageWork, WaitResponseWork } from "../MessageWork";

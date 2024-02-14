@@ -1,5 +1,5 @@
 import { TimedCounterTask } from "./TimedCounterTask";
-import { ActivityInfo } from "../../utils/ChatMessages";
+import { ActivityInfo } from "../../bc-utilities/ChatMessages";
 
 export class BegOrgasmTask extends TimedCounterTask {
     summary(): string {

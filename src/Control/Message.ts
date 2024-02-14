@@ -1,6 +1,6 @@
 import { CommandType } from "../ChatRoom/ICmds";
 import { ExtractMemberNumber } from "../utils/Character";
-import { ChatRoomAction } from "../utils/ChatMessages";
+import { ChatRoomAction } from "../bc-utilities/ChatMessages";
 import { GetWolfGrilName } from "./WolfGirlCtrl";
 
 export interface IMessage {
