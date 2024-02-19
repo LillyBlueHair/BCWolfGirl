@@ -21,6 +21,7 @@
         script.src = src;
         script.type = "text/javascript";
         script.crossOrigin = "anonymous";
+        script.id = __SCRIPT_ID__;
         document.head.appendChild(n);
     }
 })();

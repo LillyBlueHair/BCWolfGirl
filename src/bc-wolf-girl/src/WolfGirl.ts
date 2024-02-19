@@ -1,5 +1,5 @@
 import bcMod from 'bondage-club-mod-sdk'
-import { CUSTOM_ACTION_TAG, ModName, ModVersion } from './Definition';
+import { CUSTOM_ACTION_TAG, GIT_REPO, ModName, ModVersion, SCRIPT_ID } from './Definition';
 import { BeepRawHandler, ChatRoomHandler } from './ChatRoom/Handler';
 import { TimedWorker } from "./Control/Worker";
 import { DialogInventoryBuildHandler } from './Control/OutfitCtrl';
@@ -17,12 +17,12 @@ import { InitChatCmds } from './ChatRoom/OutfitCheckChatCmd';
 import { TaskCtrlInit } from './Control/TaskCtrl';
 
 (function () {
-    if (window.BCWorlGirl_Loaded) return;
-    window.BCWorlGirl_Loaded = false;
+    if (window.__load_flag__) return;
+    window.__load_flag__ = false;
 
-    const this_script_src = document.getElementById('WolfGirlLoader')?.getAttribute('src');
+    const this_script_src = document.getElementById(SCRIPT_ID)?.getAttribute('src');
     if (!this_script_src) {
-        console.log('WolfGirlLoader not found.');
+        console.error('WolfGirlLoader not found.');
         return;
     }
     const asset_url = this_script_src.substring(0, this_script_src.lastIndexOf('/') + 1) + 'assets/';
@@ -36,7 +36,7 @@ import { TaskCtrlInit } from './Control/TaskCtrl';
         name: ModName,
         fullName: ModName,
         version: ModVersion,
-        repository: 'https://gitlab.com/dynilath/BCWolfGirl'
+        repository: GIT_REPO
     });
 
     const lateHooks: (() => void)[] = [];
@@ -91,6 +91,6 @@ import { TaskCtrlInit } from './Control/TaskCtrl';
         lateHooks.forEach(hook => hook());
     })();
 
-    window.BCWorlGirl_Loaded = true;
+    window.__load_flag__ = true;
     console.log(`${ModName} v${ModVersion} loaded.`);
 })()

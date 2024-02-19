@@ -1,8 +1,3 @@
-
-interface Window {
-    BCWorlGirl_Loaded?: boolean;
-}
-
 interface DataOutfitItem {
     asset: {
         name: string;
@@ -40,3 +35,11 @@ interface WolfGrilData {
         edge_time: number;
     }
 }
+
+interface Window {
+    __load_flag__?: boolean;
+}
+declare const __mod_version__: string;
+declare const __mod_name__: string;
+declare const __repo__: string;
+declare const __script_id__: string;
