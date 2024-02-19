@@ -4,3 +4,4 @@ docs
 .vscode
 public
 /node_modules
+/src/*/node_modules
