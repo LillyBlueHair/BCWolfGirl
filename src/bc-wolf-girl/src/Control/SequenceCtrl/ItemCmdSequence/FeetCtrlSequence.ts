@@ -1,5 +1,5 @@
 import { EILNetwork } from "../../../Network";
-import { AppearanceUpdate } from "../../../utils/Apperance";
+import { AppearanceUpdate } from "bc-utilities";
 import { CommonWork, DelayWork } from "../../CommonWork";
 import { IMessage, MessageSimWrongCoding, ParseMessage } from "../../Message";
 import { MessageWork } from "../../MessageWork";

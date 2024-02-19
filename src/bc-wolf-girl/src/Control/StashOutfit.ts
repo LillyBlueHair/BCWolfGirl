@@ -1,6 +1,7 @@
+import { AppearanceUpdate } from "bc-utilities";
 import { DataManager } from "../Data";
 import { EILNetwork } from "../Network";
-import { AppearanceUpdate, GatherAppMap } from "../utils/Apperance";
+import { GatherAppMap } from "../utils/Apperance";
 import { OutfitItemsMap } from "./OutfitCtrl";
 import { DefaultCheckOutfitItem, ItemFromOutfit } from "./OutfitCtrl/Utils";
 

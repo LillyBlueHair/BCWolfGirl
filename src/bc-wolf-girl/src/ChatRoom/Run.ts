@@ -1,6 +1,6 @@
 import { GetWolfGrilName } from "../Control/WolfGirlCtrl";
 import { DataManager } from "../Data";
-import { AppearanceUpdate } from "../utils/Apperance";
+import { AppearanceUpdate } from "bc-utilities";
 import { Commands, InjectionSwCommands, PointCommands } from "./Commands";
 import { CommandArgs, CommandTemplate, CommandType } from "./ICmds";
 

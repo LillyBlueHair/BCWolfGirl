@@ -1,5 +1,5 @@
 import { DataManager } from "../../Data";
-import { AppearanceUpdate } from "../../utils/Apperance";
+import { AppearanceUpdate } from "bc-utilities";
 import { CommonWork } from "../CommonWork";
 import { MessageWork } from "../MessageWork";
 import { ItemOptionWork } from "../OutfitCtrl";

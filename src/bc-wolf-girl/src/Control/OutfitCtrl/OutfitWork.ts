@@ -1,10 +1,10 @@
-import { AppearanceUpdate, GatherAppMap } from "../../utils/Apperance";
+import { GatherAppMap } from "../../utils/Apperance";
 import { OutfitItemsMap, OutfitItems } from "./Definition";
 import { TimedWork } from "../Worker";
 import { TimedWorkState } from "../Worker";
 import { CalculateLocks, ItemFromOutfit } from "./Utils";
 import { ExtractMemberNumber } from "../../utils/Character";
-import { OutfitItemType } from "bc-utilities";
+import { AppearanceUpdate, OutfitItemType } from "bc-utilities";
 
 export class ItemWearWork extends TimedWork {
     readonly _items: OutfitItemType[];

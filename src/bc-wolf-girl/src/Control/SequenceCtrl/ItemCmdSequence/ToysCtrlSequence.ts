@@ -9,7 +9,7 @@ import { TimedWork, TimedWorkState, TimedWorker } from "../../Worker";
 import { StdMissing } from "./CmdSequenceMessage";
 import { CmdSequenceMessage } from "./CmdSequenceMessage";
 import { CmdData, StdResultBranch } from "./StdCmdSequence";
-import { AppearanceUpdate } from "../../../utils/Apperance";
+import { AppearanceUpdate } from "bc-utilities";
 
 
 export function ToysCtrlSequence(player: PlayerCharacter, mode: CtrlType) {

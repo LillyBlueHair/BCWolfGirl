@@ -13,7 +13,7 @@ import { TimedWork, TimedWorkState, TimedWorker } from "../../Worker";
 import { StdMissing, StdMissingMsgBase, StdMissingMsgN, StdMissingMsgNPart } from "./CmdSequenceMessage";
 import { CmdSequenceModeMessage } from "./CmdSequenceMessage";
 import { CmdData, StdResultBranch } from "./StdCmdSequence";
-import { AppearanceUpdate } from "../../../utils/Apperance";
+import { AppearanceUpdate } from "bc-utilities";
 
 
 export function HandsCtrlSequence(player: PlayerCharacter, mode: CtrlType) {

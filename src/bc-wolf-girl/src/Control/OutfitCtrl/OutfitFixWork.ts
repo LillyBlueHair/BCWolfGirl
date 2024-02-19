@@ -1,7 +1,7 @@
-import { OutfitItemType } from "bc-utilities";
+import { AppearanceUpdate, OutfitItemType } from "bc-utilities";
 import { DataManager } from "../../Data";
 import { EILNetwork } from "../../Network";
-import { AppearanceUpdate, GatherAppMap } from "../../utils/Apperance";
+import { GatherAppMap } from "../../utils/Apperance";
 import { IMessage, ParseMessage } from "../Message";
 import { TimedWork, TimedWorkState } from "../Worker";
 import { OutfitItemsMap } from "./Definition";

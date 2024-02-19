@@ -8,7 +8,7 @@ import { TestControlWork } from "../../WolfGirlCtrl/Works";
 import { TimedWork, TimedWorkState, TimedWorker } from "../../Worker";
 import { StdMissing } from "./CmdSequenceMessage";
 import { CmdSequenceMessage } from "./CmdSequenceMessage";
-import { AppearanceUpdate } from "../../../utils/Apperance";
+import { AppearanceUpdate } from "bc-utilities";
 
 export interface CmdData {
     xMessage?: IMessage | undefined;
