@@ -1,11 +1,12 @@
 import { ModSDKModAPI } from "bondage-club-mod-sdk";
 import { DataManager } from "../../Data";
-import { ActivityDeconstruct, ActivityInfo } from "bc-utilities";
+import { ActivityDeconstruct, ActivityInfo, CheckOutfitItemCE } from "bc-utilities";
 import { IsCollarOn } from "../../Control/WolfGirlCtrl/Check";
 import { IActivity, IActivityExtened, IActivityInvokable } from "./IActivity";
 import { WolfGirlItemsSwitch } from "./WolfGirlItemsSwitch";
 import { InjectionExtend, InjectionExtendInjected } from "./InjectionExtend";
 import { DrinkExtend } from "./DrinkExtend";
+import { OutfitItemsMap } from "../../Control/OutfitCtrl";
 
 const ActivityHandlers: Map<string, IActivityInvokable[]> = new Map();
 const ActivityCustoms: Map<string, IActivity> = new Map();
@@ -29,13 +30,13 @@ export function RegisterActivitiyCustom(act: IActivity) {
 
 export function RegisterActivities(mod: ModSDKModAPI, lateHook: (callback: () => void) => void) {
     mod.hookFunction("ActivityCheckPrerequisite", 1, (args, next) => {
-        const [prereq, acting, acted, group] = args as [string, Character, Character, AssetGroupItemName];
+        const [prereq, acting, acted, group] = args as [string, Character, Character, AssetGroup];
         if (prereq === "IsActedWolfGirl") {
-            // act on self
-            if (acted.MemberNumber === acting.MemberNumber && Player && Player.MemberNumber === acted.MemberNumber) {
+            if (!CheckOutfitItemCE(acted, OutfitItemsMap.get(group.Name))) return false;
+            if (acted.IsPlayer()) {
                 return DataManager.points.points > 10;
             }
-            else return IsCollarOn(acted) && DataManager.permission.isCommandAuthorized(acted, acting);
+            return true;
         }
         return next(args);
     });
