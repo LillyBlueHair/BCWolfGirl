@@ -22,6 +22,7 @@ export class StatUtilities {
         this.parent.save();
     }
 
+    add_time_counter: number = 0;
     add_time(isWolfGirl: boolean, isStashed: boolean, time: number) {
         this.parent.data.stat.script_run_time += time;
         if (isWolfGirl) {
@@ -30,7 +31,10 @@ export class StatUtilities {
         if (isStashed) {
             this.parent.data.stat.stash_time += time;
         }
-        this.parent.save();
+        if (this.add_time_counter++ > 10) {
+            this.parent.save();
+            this.add_time_counter = 0;
+        }
     }
 
     set_last_fix_time(time: number) {
