@@ -46,7 +46,7 @@ const default_config = debug => ({
     output: {
         file: `${destDir}/${deployFileName}`,
         format: "iife",
-        sourcemap: false,
+        sourcemap: debug ? "inline" : false,
         banner: ``,
     },
     treeshake: true,
@@ -71,8 +71,6 @@ const plugins_debug = deploySite => [
             }
         ]
     }),
-    typescript({ exclude: ["**/__tests__", "**/*.test.ts"], tsconfig: `${relativeDir}/tsconfig.json` }),
-    commonjs(),
     replace({
         __mod_name__: modInfo.name,
         __mod_version__: modInfo.version,
@@ -81,6 +79,8 @@ const plugins_debug = deploySite => [
         __script_id__: scriptId,
         preventAssignment: false
     }),
+    typescript({ exclude: ["**/__tests__", "**/*.test.ts"], tsconfig: `${relativeDir}/tsconfig.json` }),
+    commonjs(),
     resolve({ browser: true }),
     cleanup(),
 ]

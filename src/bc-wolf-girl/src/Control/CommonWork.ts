@@ -82,7 +82,7 @@ export class CommonWork {
 
 export class CheckItemsWork extends TimedWork {
     _target: OutfitItemType[];
-    constructor(target: (string | OutfitItemType)[], readonly callback: (player: PlayerCharacter, result: { missing: OutfitItemType[] }) => TimedWorkState | void) {
+    constructor(target: (string | OutfitItemType)[], readonly callback: (player: PlayerCharacter, result: { missing: OutfitItemType[] }) => TimedWorkState | void, readonly checkLock?: boolean) {
         super();
         this._target = target.map(e => typeof e === "string" ? OutfitItemsMap.get(e) : e).filter(e => e !== undefined) as OutfitItemType[];
     }
@@ -92,7 +92,7 @@ export class CheckItemsWork extends TimedWork {
         const missing = this._target.filter(e => {
             const i = app_map.get(e.Asset.Group);
             if (!i) return false;
-            return !DefaultCheckOutfitItem(i, e);
+            return !DefaultCheckOutfitItem(i, e, this.checkLock);
         })
 
         const result = this.callback(player, { missing });

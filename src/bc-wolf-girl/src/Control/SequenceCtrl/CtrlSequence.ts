@@ -14,9 +14,9 @@ export function ExitFixSequence(player: PlayerCharacter) {
         }, (pl, result) => {
             if (!result.passed) return { mode: "chat-action", msg: "错误：未处于维护模式中。" }
         }),
-        new MessageWork("chat-action", "已收到指令，退出维护模式"),
+        new MessageWork({ mode: "chat-action", msg: "已收到指令，退出维护模式" }),
         new DelayWork(5000),
-        new MessageWork("action", "维护舱仓门打开，机械臂将{player_wg}推出，随后开始渐渐变得扭曲，透明，最终仅留下小小的气旋"),
+        new MessageWork({ mode: "action", msg: "维护舱仓门打开，机械臂将{player_wg}推出，随后开始渐渐变得扭曲，透明，最终仅留下小小的气旋" }),
         new ItemRemoveWork(player, [ToolsCrate]),
     ]
 

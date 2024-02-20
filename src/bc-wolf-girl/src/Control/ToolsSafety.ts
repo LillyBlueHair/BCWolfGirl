@@ -13,22 +13,22 @@ export function InitSafetyUndressSequence(player: PlayerCharacter): void {
             } else {
                 ParseMessage({ mode: "local", msg: "发现长时间未使用注册安装道具，开始自动收纳过程。" });
             }
-        }),
+        }, false),
         new CommonWork((player) => {
-            if (CheckItem(player, ToolsInjector)) {
+            if (CheckItem(player, ToolsInjector, false)) {
                 player.Appearance = player.Appearance.filter(i => i.Asset.Group.Name !== ToolsInjector.Asset.Group);
                 AppearanceUpdate(player, ToolsInjector.Asset.Group);
                 ParseMessage({ mode: "local", msg: `${ToolsInjector.Craft.Name}已经完成收纳` });
             }
         }),
         new CommonWork((player) => {
-            if (CheckItem(player, ToolsVisor)) {
+            if (CheckItem(player, ToolsVisor, false)) {
                 player.Appearance = player.Appearance.filter(i => i.Asset.Group.Name !== ToolsVisor.Asset.Group);
                 AppearanceUpdate(player, ToolsVisor.Asset.Group);
                 ParseMessage({ mode: "local", msg: `${ToolsVisor.Craft.Name}已经完成收纳` });
             }
         }),
-        new MessageWork("local", "系统提醒您：不要手持工具玩耍，这样很危险。"),
+        new MessageWork({ mode: "local", msg: "系统提醒您：不要手持工具玩耍，这样很危险。" }),
     ]
     TimedWorker.global.push({ description: "InitSafetyUndressSequence", works: work_sequence });
 }
@@ -40,7 +40,7 @@ export class ToolsSafety {
             if (Player && Player.MemberNumber) {
                 if (TimedWorker.global.cur_description !== undefined) {
                     this.holdStart = 0;
-                } else if (CheckItem(Player, ToolsVisor) && CheckItem(Player, ToolsInjector)) {
+                } else if (CheckItem(Player, ToolsVisor, false) && CheckItem(Player, ToolsInjector)) {
                     if (this.holdStart === 0) this.holdStart = Date.now();
                     else if (Date.now() - this.holdStart > 300000) {
                         InitSafetyUndressSequence(Player);

@@ -14,27 +14,27 @@ export function ItemFromOutfit(player: Character, wearer: Character, v: OutfitIt
     });
 }
 
-export function DefaultCheckOutfitItem(item: Item, v: OutfitItemType | undefined) {
+export function DefaultCheckOutfitItem(item: Item, v: OutfitItemType | undefined, lock: boolean = true) {
     const ecraft = EILNetwork.Access.craft;
-    return CheckOutfitItem(item, v, { craft: { MemberName: ecraft.name, MemberNumber: ecraft.uid } });
+    return CheckOutfitItem(item, v, { craft: { MemberName: ecraft.name, MemberNumber: ecraft.uid }, lock });
 }
 
-export function DefaultCheckItemOnTarget(target: Character, item: OutfitItemType) {
+export function DefaultCheckItemOnTarget(target: Character, item: OutfitItemType, lock?: boolean) {
     const i = target.Appearance.find(e => e.Asset.Group.Name === item.Asset.Group);
     if (!i) return false;
-    return DefaultCheckOutfitItem(i, item);
+    return DefaultCheckOutfitItem(i, item, lock);
 }
 
-export function DefaultCheckItemByGroup(target: Character, group: AssetGroupItemName) {
+export function DefaultCheckItemByGroup(target: Character, group: AssetGroupItemName, lock?: boolean) {
     const oi = OutfitItemsMap.get(group);
     if (!oi) return false;
-    return DefaultCheckItemOnTarget(target, oi);
+    return DefaultCheckItemOnTarget(target, oi, lock);
 }
 
-export function DefaultCheckItems(target: Character, item: (OutfitItemType | AssetGroupName)[]) {
+export function DefaultCheckItems(target: Character, item: (OutfitItemType | AssetGroupName)[], lock?: boolean) {
     const items_map = buildAppMap(target);
     const ecraft = EILNetwork.Access.craft;
-    const option = { craft: { MemberName: ecraft.name, MemberNumber: ecraft.uid } };
+    const option = { craft: { MemberName: ecraft.name, MemberNumber: ecraft.uid }, lock };
 
     return item.every(e => {
         const group = typeof e === "string" ? e : e.Asset.Group;
@@ -46,10 +46,10 @@ export function DefaultCheckItems(target: Character, item: (OutfitItemType | Ass
     });
 }
 
-export function CheckMissingItems(player: PlayerCharacter) {
+export function CheckMissingItems(player: PlayerCharacter, lock?: boolean) {
     const app_map = buildAppMap(player);
     const ecraft = EILNetwork.Access.craft;
-    const option = { craft: { MemberName: ecraft.name, MemberNumber: ecraft.uid } };
+    const option = { craft: { MemberName: ecraft.name, MemberNumber: ecraft.uid }, lock };
 
     const missing = new Set<string>();
     OutfitItems.forEach(e => {

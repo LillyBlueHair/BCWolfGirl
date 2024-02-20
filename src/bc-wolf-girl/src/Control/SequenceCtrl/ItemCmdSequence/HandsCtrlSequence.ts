@@ -1,4 +1,3 @@
-import { EILNetwork } from "../../../Network";
 import { CommonWork, DelayWork } from "../../CommonWork";
 import { MessageSimWrongCoding, ParseMessage } from "../../Message";
 import { MessageWork } from "../../MessageWork";
@@ -77,20 +76,20 @@ export function HandsCtrlSequence(player: PlayerCharacter, mode: CtrlType) {
 
         if (CheckMissingItems(player).size >= 5) {
             const err_works: TimedWork[] = [
-                new MessageWork("chat-action", "收到指令，手臂限制已关闭"),
+                new MessageWork({ mode: "chat-action", msg: "收到指令，手臂限制已关闭" }),
                 new CommonWork(() => ParseMessage(StdMissingMsgNPart, { player }, { missing_formated })),
-                new MessageWork("chat-action", "收到指令，手臂限限限限限限限限......"),
-                new MessageWork("action", "{player_wg}的中央控制核心发出了尖锐的持续嘟声，但很快重回寂静"),
-                new MessageWork("action", MessageSimWrongCoding(StdMissingMsgBase.msg, 0.5)),
+                new MessageWork({ mode: "chat-action", msg: "收到指令，手臂限限限限限限限限......" }),
+                new MessageWork({ mode: "action", msg: "{player_wg}的中央控制核心发出了尖锐的持续嘟声，但很快重回寂静" }),
+                new MessageWork({ mode: "action", msg: MessageSimWrongCoding(StdMissingMsgBase.msg, 0.5) }),
                 new RandomSinglePunishWork(),
-                new MessageWork("action", MessageSimWrongCoding(StdMissingMsgBase.msg, 0.9)),
-                new RandomSinglePunishWork(),
-                new DelayWork(1000),
+                new MessageWork({ mode: "action", msg: MessageSimWrongCoding(StdMissingMsgBase.msg, 0.9) }),
                 new RandomSinglePunishWork(),
                 new DelayWork(1000),
                 new RandomSinglePunishWork(),
-                new MessageWork("action", "{player_wg}的中央控制核心再次发出一声尖锐的鸣响，但很快又一次重回沉寂"),
-                new MessageWork("chat-action", "检测到指令的错误执行，已终止该指令的执行重试"),
+                new DelayWork(1000),
+                new RandomSinglePunishWork(),
+                new MessageWork({ mode: "action", msg: "{player_wg}的中央控制核心再次发出一声尖锐的鸣响，但很快又一次重回沉寂" }),
+                new MessageWork({ mode: "chat-action", msg: "检测到指令的错误执行，已终止该指令的执行重试" }),
             ];
             TimedWorker.global.insert_after_first({ description: `SetItemSequence${type}`, works: err_works });
             return TimedWorkState.interrupted;

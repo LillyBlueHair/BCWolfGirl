@@ -1,8 +1,7 @@
-import { InjectionExtend } from "../../../ChatRoom/Activity/InjectionExtend";
-import { CheckItemsWork, CheckWork, DelayWork } from "../../CommonWork";
+import { CheckItemsWork, DelayWork } from "../../CommonWork";
 import { IMessage, ParseMessage } from "../../Message";
 import { MessageWork } from "../../MessageWork";
-import { CheckItem, ToolsInjector } from "../../OutfitCtrl";
+import { ToolsInjector } from "../../OutfitCtrl";
 import { TimedWork, TimedWorkState, TimedWorker } from "../../Worker";
 import { StdMissingMsgBase } from "../ItemCmdSequence/CmdSequenceMessage";
 import { InjectionType } from "../../Injection/IInjection";
@@ -27,8 +26,8 @@ export function SwitchInjector(mode: string, type: SwitchAvailableType | undefin
                 return TimedWorkState.interrupted;
             }
         }),
-        new MessageWork("chat-action", `注射器已经切换到 ${mode} 模式`),
-        new MessageWork("chat-action", switchInjectorMessages[type || "chips"].msg),
+        new MessageWork({ mode: "chat-action", msg: `注射器已经切换到 ${mode} 模式` }),
+        new MessageWork({ mode: "chat-action", msg: switchInjectorMessages[type || "chips"].msg }),
     ];
     TimedWorker.global.push({ description: `SwitchInjector${mode}`, works: work_sequence });
 }
@@ -41,24 +40,24 @@ export function UniversalDispersalSwitchInjection() {
                 return TimedWorkState.interrupted;
             }
         }),
-        new MessageWork("chat-action", "模式切换完毕，当前模式，泛用驱散剂注射"),
-        new MessageWork("action", "以此未曾献与统领世界的影之王的外法之力，将其化为无上珍品"),
+        new MessageWork({ mode: "chat-action", msg: "模式切换完毕，当前模式，泛用驱散剂注射" }),
+        new MessageWork({ mode: "action", msg: "以此未曾献与统领世界的影之王的外法之力，将其化为无上珍品" }),
         new DelayWork(2500),
-        new MessageWork("action", "祈愿五谷丰登，歌颂神圣礼赞"),
+        new MessageWork({ mode: "action", msg: "祈愿五谷丰登，歌颂神圣礼赞" }),
         new DelayWork(2500),
-        new MessageWork("action", "圣赏崇高赋赐，令其名留青史"),
+        new MessageWork({ mode: "action", msg: "圣赏崇高赋赐，令其名留青史" }),
         new DelayWork(2500),
-        new MessageWork("action", "将蔓延的污秽以吾等之澎湃魔力蚀化为泥"),
+        new MessageWork({ mode: "action", msg: "将蔓延的污秽以吾等之澎湃魔力蚀化为泥" }),
         new DelayWork(2500),
-        new MessageWork("action", "将泛滥的疯狂以吾等之坚定理念遏制无余"),
+        new MessageWork({ mode: "action", msg: "将泛滥的疯狂以吾等之坚定理念遏制无余" }),
         new DelayWork(2500),
-        new MessageWork("action", "实现意念对物质的彻底干预"),
+        new MessageWork({ mode: "action", msg: "实现意念对物质的彻底干预" }),
         new DelayWork(2500),
-        new MessageWork("chat-action", "检测的到当前加载的固件出现异常，正在重新载入默认固件"),
+        new MessageWork({ mode: "chat-action", msg: "检测的到当前加载的固件出现异常，正在重新载入默认固件" }),
         new DelayWork(5000),
-        new MessageWork("chat-action", "固件恢复完成"),
-        new MessageWork("chat-action", "模式切换完毕，当前模式，泛用驱散剂注射"),
-        new MessageWork("action", "复杂的魔力回路，传承的古老血统，繁琐的施术准备，数十年才能成就的大魔法师怎么躲过科技的追赶，科技的低使用门槛从来不是那些需求所谓血脉与出身的魔法侧能相比拟的")
+        new MessageWork({ mode: "chat-action", msg: "固件恢复完成" }),
+        new MessageWork({ mode: "chat-action", msg: "模式切换完毕，当前模式，泛用驱散剂注射" }),
+        new MessageWork({ mode: "action", msg: "复杂的魔力回路，传承的古老血统，繁琐的施术准备，数十年才能成就的大魔法师怎么躲过科技的追赶，科技的低使用门槛从来不是那些需求所谓血脉与出身的魔法侧能相比拟的" })
     ];
     TimedWorker.global.push({ description: `UniversalDispersalInjectionSwitchSequence`, works: work_sequence });
 } 

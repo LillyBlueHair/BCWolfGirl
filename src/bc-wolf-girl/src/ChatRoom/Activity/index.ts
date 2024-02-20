@@ -32,7 +32,7 @@ export function RegisterActivities(mod: ModSDKModAPI, lateHook: (callback: () =>
     mod.hookFunction("ActivityCheckPrerequisite", 1, (args, next) => {
         const [prereq, acting, acted, group] = args as [string, Character, Character, AssetGroup];
         if (prereq === "IsActedWolfGirl") {
-            if (!CheckOutfitItemCE(acted, OutfitItemsMap.get(group.Name))) return false;
+            if (!CheckOutfitItemCE(acted, OutfitItemsMap.get(group.Name), { lock: true })) return false;
             if (acted.IsPlayer()) {
                 return DataManager.points.points > 10;
             }

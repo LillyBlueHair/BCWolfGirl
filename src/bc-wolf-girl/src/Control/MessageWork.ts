@@ -1,20 +1,17 @@
 import { ExtractMemberNumber } from "../utils/Character";
 import { ParseMessage } from "./Message";
-import { IMessageMode } from "./Message";
 import { IMessage } from "./Message";
 import { TimedWork } from "./Worker";
 import { TimedWorkState } from "./Worker";
 
 export class MessageWork extends TimedWork {
-    private _target?: number;
-    constructor(readonly mode: IMessageMode, readonly message: string, readonly target?: number | Character) {
+    constructor(readonly message: IMessage, readonly config?: { target?: number | Character, args?: Record<string, any> }) {
         super();
-        this._target = target ? ExtractMemberNumber(target) : undefined;
     }
 
     run(player: PlayerCharacter): TimedWorkState {
-        const target = ChatRoomCharacter.find(c => c.MemberNumber === this._target);
-        ParseMessage({ mode: this.mode, msg: this.message }, { player, target });
+        const target = ChatRoomCharacter.find(c => c.MemberNumber === this.config?.target);
+        ParseMessage(this.message, { player, target }, this.config?.args);
         return TimedWorkState.finished;
     }
 }

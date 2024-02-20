@@ -1,4 +1,4 @@
-import { CheckItem, OutfitItems } from "../Control/OutfitCtrl";
+import { OutfitItems } from "../Control/OutfitCtrl";
 import { DefaultCheckItemOnTarget, DefaultCheckOutfitItem } from "../Control/OutfitCtrl/Utils";
 import { ModName, ModVersion } from "../Definition";
 import { EILNetwork } from "../Network";

@@ -2,10 +2,9 @@ import { ActivityInfo } from "bc-utilities";
 import { InitDressSequence } from "../../Control/SequenceCtrl/DressSequence";
 import { ActivityTriggerMode, IActivityExtened } from "./IActivity";
 import { InjectionType } from "../../Control/Injection/IInjection";
-import { ModSDKModAPI } from "bondage-club-mod-sdk";
 import { DoInjection } from "../../Control/SequenceCtrl/InjectionSequence";
 import { IsPlayerWolfGirl } from "../../Control/WolfGirlCtrl";
-import { CheckItem, ToolsInjector, ToolsVisor } from "../../Control/OutfitCtrl";
+import { ToolsInjector, ToolsVisor } from "../../Control/OutfitCtrl";
 import { DefaultCheckItems } from "../../Control/OutfitCtrl/Utils";
 
 export class InjectionExtend implements IActivityExtened {
@@ -15,7 +14,7 @@ export class InjectionExtend implements IActivityExtened {
     on(player: PlayerCharacter, sender: Character, info: ActivityInfo) {
         const target = ChatRoomCharacter.find(c => c.MemberNumber === info.TargetCharacter.MemberNumber);
         if (!target) return;
-        if (!DefaultCheckItems(player, [ToolsVisor, ToolsInjector])) return;
+        if (!DefaultCheckItems(player, [ToolsVisor, ToolsInjector], false)) return;
         if (this.type === undefined)
             InitDressSequence(player, target);
     }

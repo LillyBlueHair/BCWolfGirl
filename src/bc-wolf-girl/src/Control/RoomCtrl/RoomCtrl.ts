@@ -3,7 +3,7 @@ import { EILNetwork } from "../../Network";
 import { ExtractMemberNumber } from "../../utils/Character";
 import { CheckItemsWork, CheckWork, CommonWork, DelayWork } from "../CommonWork";
 import { ParseMessage, RouteIM } from "../Message";
-import { MessageWork } from "../MessageWork";
+import { MessageWork, } from "../MessageWork";
 import { OutfitItemsMap } from "../OutfitCtrl/Definition";
 import { DefaultCheckOutfitItem } from "../OutfitCtrl/Utils";
 import { StdMissingAction, StdMissingMsgN } from "../SequenceCtrl/ItemCmdSequence/CmdSequenceMessage";
@@ -12,7 +12,7 @@ import { ChatRoomWork } from "./Work";
 
 export function RoomLeaveSequence(player: PlayerCharacter, cmd_src: { sender: number | Character, type: CommandType }) {
     const work_sequence: TimedWork[] = [
-        new MessageWork("action", "接收到离开房间指令，开始运动学检查"),
+        new MessageWork({ mode: "action", msg: "接收到离开房间指令，开始运动学检查" }),
         new CheckItemsWork(["ItemLegs", "ItemFeet", "ItemBoots"], (pl, result) => {
             const missing_formated = result.missing.map(g => g.Craft.Name).join("、");
             if (result.missing.length === 3) {
@@ -57,13 +57,13 @@ export function RoomForceLeaveSequence(player: PlayerCharacter, cmd_src: { sende
             CurryRouteIM(`强制离开程序已激活，信标布设完毕，准备传送至EIL设施`);
         }),
         new DelayWork(5000),
-        new MessageWork("action", "{player_wg}身后的空间泛起了一阵小小的涟漪，而在近乎瞬间的眩目白光之后，她的身形已经完全消失，只留下小小的气旋"),
+        new MessageWork({ mode: "action", msg: "{player_wg}身后的空间泛起了一阵小小的涟漪，而在近乎瞬间的眩目白光之后，她的身形已经完全消失，只留下小小的气旋" }),
         new ChatRoomWork(EILNetwork.Access.room, (pl, reason) => {
             CurryRouteIM("无法进入EIL设施，房间满员或锁定");
         }, (pl, dest) => {
             ParseMessage({ mode: "action", msg: "{player_wg}随着一瞬眩目的白光出现在传送机之中，稍稍扰乱了设施内舒适的气温" }, { player });
         }),
-        new MessageWork("chat-action", "欢迎来到EIL设施，维护服务请自助，寄存服务请寻找猫女仆，新晋狼女训练请寻找训练师，祝玩的开心"),
+        new MessageWork({ mode: "chat-action", msg: "欢迎来到EIL设施，维护服务请自助，寄存服务请寻找猫女仆，新晋狼女训练请寻找训练师，祝玩的开心" }),
     ];
     TimedWorker.global.push({ description: "Room Force Leave Sequence", works: work_sequence });
 }
@@ -108,7 +108,7 @@ export function RoomComeHereSequence(player: PlayerCharacter, cmd_src: { sender:
                 CurryRouteIM(`正在前往`);
             }
         }),
-        new MessageWork("action", "{player_wg}的行走姿态控制器缓缓点亮，操纵着{player_wg}慢慢走向房门外"),
+        new MessageWork({ mode: "action", msg: "{player_wg}的行走姿态控制器缓缓点亮，操纵着{player_wg}慢慢走向房门外" }),
         new ChatRoomWork(cmd_src.room, (pl, reason) => {
             CurryRouteIM(`已离开先前房间，但无法进入{sender_num}所在房间，房间满员或锁定`, { sender_num: cmd_src.sender });
         }, (pl, dest) => {
