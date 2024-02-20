@@ -144,8 +144,6 @@ export function DressSequence(net: EILNetwork, player: PlayerCharacter, target: 
 }
 
 export function InitDressSequence(player: PlayerCharacter, target: Character) {
-    if (!CheckItem(player, ToolsVisor) || !CheckItem(player, ToolsInjector)) return;
-
     ChatRoomAction.instance.LocalInfo(">> 正在连接Wolf Girl网络...");
     EILNetwork.force_fetch().then(net => {
         const work_sequence: TimedWork[] = [

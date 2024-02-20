@@ -46,7 +46,7 @@ const default_config = debug => ({
     output: {
         file: `${destDir}/${deployFileName}`,
         format: "iife",
-        sourcemap: debug,
+        sourcemap: false,
         banner: ``,
     },
     treeshake: true,

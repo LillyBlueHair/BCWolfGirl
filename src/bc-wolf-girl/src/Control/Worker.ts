@@ -76,6 +76,11 @@ export class TimedWorker {
         }
     }
 
+    get cur_description(): string | undefined {
+        if (this.work_suites.length === 0) return undefined;
+        return this.work_suites[0].description;
+    }
+
     private static _global: TimedWorker | undefined;
 
     static init(time_reso: number) {

@@ -16,6 +16,7 @@ import { DrinkHook } from './Control/Drink';
 import { InitChatCmds } from './ChatRoom/OutfitCheckChatCmd';
 import { TaskCtrlInit } from './Control/TaskCtrl';
 import { TimedSummary } from './Control/TimedSummary';
+import { ToolsSafety } from './Control/ToolsSafety';
 
 (function () {
     if (window.__load_flag__) return;
@@ -43,6 +44,7 @@ import { TimedSummary } from './Control/TimedSummary';
     TimedWorker.init(1000);
     TimedSummary.init(1000);
     TaskCtrlInit(1000);
+    ToolsSafety.init(10000);
     EILNetwork.init(asset_url);
     ChatRoomAction.init(CUSTOM_ACTION_TAG);
 
