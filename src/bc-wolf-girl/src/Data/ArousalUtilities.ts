@@ -2,10 +2,7 @@ import { DataManager } from ".";
 
 
 export class ArousalUtilities {
-    private readonly parent: DataManager;
-    constructor(parent: DataManager) {
-        this.parent = parent;
-    }
+    constructor(readonly parent: DataManager) { }
 
     get data() {
         return this.parent.data.arousal;

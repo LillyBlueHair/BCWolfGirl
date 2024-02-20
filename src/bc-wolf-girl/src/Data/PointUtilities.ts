@@ -3,11 +3,7 @@ import { DataManager } from ".";
 type points_callback = (cur_points: number) => void;
 
 export class PointsUtilities {
-    private readonly parent: DataManager;
-
-    constructor(parent: DataManager) {
-        this.parent = parent;
-    }
+    constructor(readonly parent: DataManager) { }
 
     get data() {
         return this.parent.data.points;

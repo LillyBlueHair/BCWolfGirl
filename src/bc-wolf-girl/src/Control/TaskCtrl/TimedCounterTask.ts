@@ -6,18 +6,12 @@ import { TaskState } from "./ITask";
 
 
 export abstract class TimedCounterTask extends ITask {
-    time_limit_rate: number;
-    time_out: number;
-    bonus: number;
+    readonly time_out: number;
     cur: number;
-    expected: number;
 
-    constructor(time_limit_rate: number, counter: number, bonus: number) {
+    constructor(readonly time_limit_rate: number, readonly expected: number, readonly bonus: number) {
         super();
-        this.time_limit_rate = time_limit_rate;
         this.time_out = DataManager.points.task_time * time_limit_rate + Date.now();
-        this.expected = counter;
-        this.bonus = bonus;
         this.cur = 0;
     }
 
@@ -30,5 +24,6 @@ export abstract class TimedCounterTask extends ITask {
     finalize(player: PlayerCharacter, s: TaskState): void {
         if (s === TaskState.Success) IncreaseAndMessage(player, this.bonus);
         else StartPunish(player);
+        DataManager.statistics.task_finished(s === TaskState.Success);
     }
 }

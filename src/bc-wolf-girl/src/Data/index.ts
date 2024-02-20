@@ -5,6 +5,7 @@ import { OutfitUtilities } from "./OutfitUtilities";
 import { Validate, defaultValue } from "./DefaultValue";
 import { PointsUtilities } from "./PointUtilities";
 import { ArousalUtilities } from "./ArousalUtilities";
+import { StatUtilities } from "./StatUtilities";
 
 export class DataManager {
     private static _instance: DataManager | undefined = undefined;
@@ -13,6 +14,7 @@ export class DataManager {
     private _outfit: OutfitUtilities;
     private _points: PointsUtilities;
     private _arousal: ArousalUtilities;
+    private _stat: StatUtilities;
 
     constructor(player: PlayerCharacter) {
         this.load(player);
@@ -20,6 +22,7 @@ export class DataManager {
         this._outfit = new OutfitUtilities(this);
         this._points = new PointsUtilities(this);
         this._arousal = new ArousalUtilities(this);
+        this._stat = new StatUtilities(this);
     }
 
     public static get instance(): DataManager {
@@ -40,6 +43,10 @@ export class DataManager {
 
     public static get arousal(): ArousalUtilities {
         return this.instance._arousal;
+    }
+
+    public static get statistics(): StatUtilities {
+        return this.instance._stat;
     }
 
     public get data(): WolfGrilData {

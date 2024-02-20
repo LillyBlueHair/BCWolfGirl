@@ -3,12 +3,8 @@ import { ExtractMemberNumber } from "../utils/Character";
 import { DataManager } from ".";
 
 export class PermissionUtilities {
-    parent: DataManager;
-
     moderators: Set<number>;
-
-    constructor(parent: DataManager) {
-        this.parent = parent;
+    constructor(readonly parent: DataManager) {
         this.moderators = new Set<number>(this.parent.data.permission.moderators);
     }
 

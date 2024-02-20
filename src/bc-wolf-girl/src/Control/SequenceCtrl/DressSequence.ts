@@ -262,7 +262,10 @@ export function DressFixSequence(sender: Character | number, player: PlayerChara
             if (IsFullyDressed(player)) return CheckWork.Stop;
             else return CheckWork.Continue;
         }, (pl, r) => {
-            if (r.passed) return { mode: "chat-action", msg: "组件扫描完成，全部在线且运转正常，能源核心已充能完毕，维护模式已结束，请退出维护模式" };
+            if (r.passed) {
+                DataManager.statistics.set_last_fix_time(Date.now());
+                return { mode: "chat-action", msg: "组件扫描完成，全部在线且运转正常，能源核心已充能完毕，维护模式已结束，请退出维护模式" };
+            }
             else return { mode: "chat-action", msg: "错误：组件修复失败，仍有未穿戴组件" };
         }),
     ];

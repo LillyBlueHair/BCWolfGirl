@@ -15,6 +15,7 @@ import { InjectionManager } from './Control/Injection';
 import { DrinkHook } from './Control/Drink';
 import { InitChatCmds } from './ChatRoom/OutfitCheckChatCmd';
 import { TaskCtrlInit } from './Control/TaskCtrl';
+import { TimedSummary } from './Control/TimedSummary';
 
 (function () {
     if (window.__load_flag__) return;
@@ -27,10 +28,6 @@ import { TaskCtrlInit } from './Control/TaskCtrl';
     }
     const asset_url = this_script_src.substring(0, this_script_src.lastIndexOf('/') + 1) + 'assets/';
 
-    TimedWorker.init(1000);
-    TaskCtrlInit(1000);
-    EILNetwork.init(asset_url);
-    ChatRoomAction.init(CUSTOM_ACTION_TAG);
 
     const mod = bcMod.registerMod({
         name: ModName,
@@ -38,10 +35,16 @@ import { TaskCtrlInit } from './Control/TaskCtrl';
         version: ModVersion,
         repository: GIT_REPO
     });
-
     const lateHooks: (() => void)[] = [];
-
     const lateHook = (callback: () => void) => lateHooks.push(callback);
+
+    DataManager.init(mod, `${ModName} v${ModVersion} loaded.`);
+
+    TimedWorker.init(1000);
+    TimedSummary.init(1000);
+    TaskCtrlInit(1000);
+    EILNetwork.init(asset_url);
+    ChatRoomAction.init(CUSTOM_ACTION_TAG);
 
     ChatRoomRegisterMessageHandler(ChatRoomHandler());
     mod.hookFunction('ServerAccountBeep', 2, (args, next) => {
@@ -53,8 +56,6 @@ import { TaskCtrlInit } from './Control/TaskCtrl';
         next(args);
         DialogInventoryBuildHandler(args[0] as Character, args[2] as boolean);
     });
-
-    DataManager.init(mod, `${ModName} v${ModVersion} loaded.`);
 
     CtrlHook(mod, lateHook);
 

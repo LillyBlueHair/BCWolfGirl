@@ -2,10 +2,7 @@ import { DataManager } from ".";
 
 
 export class OutfitUtilities {
-    private parent: DataManager;
-
-    constructor(parent: DataManager) {
-        this.parent = parent;
+    constructor(readonly parent: DataManager) {
         this._items = new Map<string, DataOutfitItem>(parent.data.outfit.items.map(i => [i.asset.group, i]));
         this._color_store = new Map<string, ColorStoreItem>(parent.data.outfit.color_store.map(i => [i.group, i]));
     }

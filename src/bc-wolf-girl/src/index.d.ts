@@ -13,6 +13,8 @@ interface ColorStoreItem {
     color: string | string[];
 }
 
+type TaskCounterType = "Resisted" | "Orgasmed" | "BreastPlayed" | "VulvaPlayed" | "Spanked";
+
 interface WolfGrilData {
     outfit: {
         lite_mode: boolean;
@@ -22,6 +24,19 @@ interface WolfGrilData {
     permission: {
         moderators: number[];
         loverModerators: boolean;
+    },
+    stat: {
+        script_run_time: number;
+        wolfgirl_time: number;
+        stash_time: number;
+        last_fix_time: number;
+        task: {
+            finished: number;
+            failed: number;
+            counter: {
+                [k in TaskCounterType]?: number;
+            },
+        }
     },
     points: {
         current: number;
