@@ -26,7 +26,8 @@ export function DefaultCheckOutfitItem(item: Item | undefined, v: OutfitItemType
     return CheckOutfitItem(item, v, { craft: { MemberName: ecraft.name, MemberNumber: ecraft.uid }, lock: lock ?? true });
 }
 
-export function DefaultCheckItemOnTarget(target: Character, item: OutfitItemType, lock?: boolean) {
+export function DefaultCheckItemOnTarget(target: Character, item: OutfitItemType | undefined, lock?: boolean) {
+    if (!item) return false;
     const i = target.Appearance.find(e => e.Asset.Group.Name === item.Asset.Group);
     if (!i) return false;
     return DefaultCheckOutfitItem(i, item, lock);

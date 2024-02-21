@@ -14,7 +14,7 @@ export function GatherDataOutfitItem(player: PlayerCharacter): DataOutfitItem[] 
         if (ti && DefaultCheckOutfitItem(item, ti)) {
             result.push({
                 asset: {
-                    group: item.Asset.Group.Name,
+                    group: item.Asset.Group.Name as AssetGroupItemName,
                     name: item.Asset.Name,
                 },
                 color: item.Color ?? "Default",
@@ -33,7 +33,7 @@ export function GatherColorStoreItem(player: PlayerCharacter): ColorStoreItem[] 
         if (ti && DefaultCheckOutfitItem(item, ti)) {
             result.push({
                 asset: item.Asset.Name,
-                group: item.Asset.Group.Name,
+                group: item.Asset.Group.Name as AssetGroupItemName,
                 color: item.Color ?? "Default",
             });
         }
@@ -50,7 +50,7 @@ export function StashOutfit(player: PlayerCharacter) {
         if (ti && DefaultCheckOutfitItem(item, ti)) {
             saved.push({
                 asset: {
-                    group: item.Asset.Group.Name,
+                    group: item.Asset.Group.Name as AssetGroupItemName,
                     name: item.Asset.Name,
                 },
                 color: item.Color ?? "Default",

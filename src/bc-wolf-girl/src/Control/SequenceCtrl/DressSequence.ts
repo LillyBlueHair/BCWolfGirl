@@ -54,7 +54,7 @@ export function DressSequence(net: EILNetwork, player: PlayerCharacter, target: 
         }),
         new DelayWork(5000),
         new MessageWork({ mode: "action", msg: "在机械臂的辅助下，数个精巧的铐环被安装到了{target}身上，小小的机械锁定声响虽然微弱，但却清晰可辨" }, { target }),
-        ...['ItemArms', 'ItemFeet', 'ItemLegs'].map(e => new ItemWearWork([e], target, craft)),
+        ...(['ItemArms', 'ItemFeet', 'ItemLegs'] as AssetGroupItemName[]).map(e => new ItemWearWork([e], target, craft)),
         new DelayWork(5000),
         new MessageWork({ mode: "chat-action", msg: "拘束自检中" }),
         new DelayWork(5000),

@@ -82,7 +82,7 @@ export class CommonWork {
 
 export class CheckItemsWork extends TimedWork {
     _target: OutfitItemType[];
-    constructor(target: (string | OutfitItemType)[], readonly callback: (player: PlayerCharacter, result: { missing: OutfitItemType[] }) => TimedWorkState | void, readonly checkLock?: boolean) {
+    constructor(target: (AssetGroupItemName | OutfitItemType)[], readonly callback: (player: PlayerCharacter, result: { missing: OutfitItemType[] }) => TimedWorkState | void, readonly checkLock?: boolean) {
         super();
         this._target = target.map(e => typeof e === "string" ? OutfitItemsMap.get(e) : e).filter(e => e !== undefined) as OutfitItemType[];
     }

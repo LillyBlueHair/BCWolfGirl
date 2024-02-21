@@ -10,10 +10,10 @@ export class ItemWearWork extends TimedWork {
     readonly _items: OutfitItemType[];
     readonly _target: number;
     readonly _craft?: { uid: number, name: string };
-    constructor(readonly items: string[] | OutfitItemType[], target: number | Character, craft?: { uid: number, name: string }) {
+    constructor(readonly items: AssetGroupItemName[] | OutfitItemType[], target: number | Character, craft?: { uid: number, name: string }) {
         super();
         if (items.length === 0) this._items = [];
-        else if (typeof items[0] === "string") this._items = (items as string[]).map(e => OutfitItemsMap.get(e) as OutfitItemType);
+        else if (typeof items[0] === "string") this._items = (items as AssetGroupItemName[]).map(e => OutfitItemsMap.get(e) as OutfitItemType);
         else this._items = items as OutfitItemType[];
         this._target = ExtractMemberNumber(target);
         this._craft = craft;

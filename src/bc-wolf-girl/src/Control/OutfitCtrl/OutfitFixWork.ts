@@ -15,7 +15,7 @@ interface OutfitCheckWorkItem {
 }
 
 interface OutfitCheckStringWorkItem {
-    readonly target: string;
+    readonly target: AssetGroupItemName;
     readonly option?: TypeRecord;
     readonly property?: ItemProperties;
 }
@@ -45,7 +45,7 @@ export class OutfitFixWork extends TimedWork {
     private readonly _message?: (passed: OutfitFixWorkResult) => IMessage | undefined | void;
     private readonly _acting_chara: Character | number;
 
-    constructor(acting_chara: Character | number, target: (string | OutfitItemType | OutfitCheckWorkParamItem)[], message?: (result: OutfitFixWorkResult) => IMessage | undefined | void) {
+    constructor(acting_chara: Character | number, target: (AssetGroupItemName | OutfitItemType | OutfitCheckWorkParamItem)[], message?: (result: OutfitFixWorkResult) => IMessage | undefined | void) {
         super();
         this._target = target.map(i => {
             if (typeof i === "string") return { target: OutfitItemsMap.get(i) as OutfitItemType };

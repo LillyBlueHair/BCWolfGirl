@@ -1,4 +1,4 @@
-import { OutfitItemType } from "bc-utilities";
+import { OutfitItemType, buildOutfitItemMap } from "bc-utilities";
 
 export const OutfitItems: OutfitItemType[] = [
     {
@@ -259,8 +259,7 @@ export const OutfitItems: OutfitItemType[] = [
     },
 ]
 
-
-export const OutfitItemsMap = new Map<string, OutfitItemType>(OutfitItems.map(e => [e.Asset.Group, e]));
+export const OutfitItemsMap = buildOutfitItemMap(OutfitItems);
 
 export const ToolsCrate: OutfitItemType = {
     Asset: {

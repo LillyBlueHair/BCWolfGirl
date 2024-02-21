@@ -1,19 +1,23 @@
 interface DataOutfitItem {
     asset: {
         name: string;
-        group: string;
+        group: AssetGroupItemName;
     },
-    color: string | string[];
+    color: ItemColor;
     property: any;
 }
 
 interface ColorStoreItem {
     asset: string;
-    group: string;
-    color: string | string[];
+    group: AssetGroupItemName;
+    color: ItemColor;
 }
 
 type TaskCounterType = "Resisted" | "Orgasmed" | "BreastPlayed" | "VulvaPlayed" | "Spanked";
+
+interface WolfGirlDataSettings {
+    orgasmPunishMode: 0 | 1 | 2;
+}
 
 interface WolfGrilData {
     outfit: {
@@ -38,9 +42,7 @@ interface WolfGrilData {
             },
         }
     },
-    settings: {
-        orgasmPunishMode: 0 | 1 | 2;
-    },
+    settings: WolfGirlDataSettings,
     points: {
         current: number;
         punish_time: number;
