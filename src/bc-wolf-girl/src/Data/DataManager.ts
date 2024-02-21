@@ -27,6 +27,19 @@ function serialize(data: FrequentData | DefaultData): string {
     return LZString.compressToBase64(JSON.stringify(data));
 }
 
+class SettingUtilities {
+    constructor(private readonly _data: DataManager) { }
+
+    query(key: keyof WolfGirlDataSettings) {
+        return this._data.data.settings[key];
+    }
+
+    update(key: keyof WolfGirlDataSettings, value: WolfGirlDataSettings[typeof key]) {
+        this._data.data.settings[key] = value;
+        this._data.save("settings");
+    }
+}
+
 export class DataManager {
     private static _instance: DataManager | undefined = undefined;
     private _data: Partial<WolfGrilData> = {};
@@ -35,6 +48,7 @@ export class DataManager {
     private _points: PointsUtilities;
     private _arousal: ArousalUtilities;
     private _stat: StatUtilities;
+    private _setting: SettingUtilities;
 
     constructor(player: PlayerCharacter) {
         this.load(player);
@@ -43,6 +57,7 @@ export class DataManager {
         this._points = new PointsUtilities(this);
         this._arousal = new ArousalUtilities(this);
         this._stat = new StatUtilities(this);
+        this._setting = new SettingUtilities(this);
     }
 
     public static get instance(): DataManager {
@@ -69,15 +84,24 @@ export class DataManager {
         return this.instance._stat;
     }
 
+    public static get settings(): SettingUtilities {
+        return this.instance._setting;
+    }
+
     public get data(): WolfGrilData {
         return this._data as WolfGrilData;
     }
 
-    public static init(mod: ModSDKModAPI, msg?: string): void {
+    public static init(mod: ModSDKModAPI, msg?: string) {
+        let then_: ((mod: ModSDKModAPI) => void) | undefined = undefined;
+
         const load_then_message = (C: PlayerCharacter | null | undefined) => {
             if (this._instance) return;
-            if (C) this._instance = new DataManager(C);
-            if (msg) console.log(msg);
+            if (C) {
+                this._instance = new DataManager(C);
+                if (msg) console.log(msg);
+                if (then_) then_(mod);
+            }
         };
 
         mod.hookFunction('LoginResponse', 1, (args, next) => {
@@ -88,6 +112,8 @@ export class DataManager {
         if (Player && Player.MemberNumber) {
             load_then_message(Player);
         }
+
+        return { then: (cb: (mod: ModSDKModAPI) => void) => then_ = cb };
     }
 
     load(C: PlayerCharacter) {
