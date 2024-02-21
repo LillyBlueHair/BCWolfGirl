@@ -38,6 +38,9 @@ interface WolfGrilData {
             },
         }
     },
+    settings: {
+        orgasmPunishMode: 0 | 1 | 2;
+    },
     points: {
         current: number;
         punish_time: number;

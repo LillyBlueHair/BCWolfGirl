@@ -1,6 +1,6 @@
 import { EILNetwork } from "../Network";
 import { ExtractMemberNumber } from "../utils/Character";
-import { DataManager } from ".";
+import { DataManager } from "./DataManager";
 
 export class PermissionUtilities {
     moderators: Set<number>;
@@ -8,9 +8,13 @@ export class PermissionUtilities {
         this.moderators = new Set<number>(this.parent.data.permission.moderators);
     }
 
+    private save() {
+        this.parent.save("permission");
+    }
+
     setLoverMode(arg: boolean) {
         this.parent.data.permission.loverModerators = arg;
-        this.parent.save();
+        this.save();
     }
 
     setModerator(id: number, add: boolean) {
@@ -18,13 +22,13 @@ export class PermissionUtilities {
             if (!this.moderators.has(id)) {
                 this.moderators.add(id);
                 this.parent.data.permission.moderators.push(id);
-                this.parent.save();
+                this.save();
             }
         } else {
             if (this.moderators.has(id)) {
                 this.moderators.delete(id);
                 this.parent.data.permission.moderators = Array.from(this.moderators);
-                this.parent.save();
+                this.save();
             }
         }
     }

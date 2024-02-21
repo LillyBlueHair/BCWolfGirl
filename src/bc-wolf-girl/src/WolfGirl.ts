@@ -7,7 +7,7 @@ import { ChatRoomAction } from 'bc-utilities';
 import { EILNetwork } from './Network';
 import { CtrlHook, IsPlayerWolfGirl } from './Control/WolfGirlCtrl';
 import { OrgasmMonitor } from 'bc-utilities';
-import { DataManager } from './Data';
+import { DataManager } from "./Data";
 import { TaskCtrl } from "./Control/TaskCtrl/TaskCtrl";
 import { RegisterActivities } from './ChatRoom/Activity';
 import { ChatRoomWork } from './Control/RoomCtrl/Work';

@@ -1,10 +1,14 @@
-import { DataManager } from ".";
+import { DataManager } from "./DataManager";
 
 
 export class OutfitUtilities {
     constructor(readonly parent: DataManager) {
         this._items = new Map<string, DataOutfitItem>(parent.data.outfit.items.map(i => [i.asset.group, i]));
         this._color_store = new Map<string, ColorStoreItem>(parent.data.outfit.color_store.map(i => [i.group, i]));
+    }
+
+    private save() {
+        this.parent.save("outfit");
     }
 
     private get data() {
@@ -17,7 +21,7 @@ export class OutfitUtilities {
 
     set lite_mode(arg: boolean) {
         this.data.lite_mode = arg;
-        this.parent.save();
+        this.save();
     }
 
     private _items: Map<string, DataOutfitItem>;
@@ -28,7 +32,7 @@ export class OutfitUtilities {
             this._items.set(item.asset.group, item);
         }
         this.data.items = [...this._items.values()];
-        this.parent.save();
+        this.save();
     }
 
     get items(): Map<string, DataOutfitItem> {
@@ -43,7 +47,7 @@ export class OutfitUtilities {
             this.data.items = [...arg.values()];
             this._items = arg;
         }
-        this.parent.save();
+        this.save();
     }
 
     private _color_store: Map<string, ColorStoreItem>;
@@ -59,6 +63,6 @@ export class OutfitUtilities {
             this.data.color_store = [...arg.values()];
             this._color_store = arg;
         }
-        this.parent.save();
+        this.save();
     }
 }

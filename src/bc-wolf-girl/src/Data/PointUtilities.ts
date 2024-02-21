@@ -1,9 +1,13 @@
-import { DataManager } from ".";
+import { DataManager } from "./DataManager";
 
 type points_callback = (cur_points: number) => void;
 
 export class PointsUtilities {
     constructor(readonly parent: DataManager) { }
+
+    private save() {
+        this.parent.save("points");
+    }
 
     get data() {
         return this.parent.data.points;
@@ -15,7 +19,7 @@ export class PointsUtilities {
 
     set points(arg: number) {
         this.parent.data.points.current = arg;
-        this.parent.save();
+        this.save();
     }
 
     get punish_time() {
@@ -24,7 +28,7 @@ export class PointsUtilities {
 
     set punish_time(arg: number) {
         this.parent.data.points.punish_time = arg;
-        this.parent.save();
+        this.save();
     }
 
     get task_time() {
@@ -33,7 +37,7 @@ export class PointsUtilities {
 
     set task_time(arg: number) {
         this.parent.data.points.task_time = arg;
-        this.parent.save();
+        this.save();
     }
 
     use_points(arg: number) {

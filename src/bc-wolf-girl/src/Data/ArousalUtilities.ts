@@ -1,8 +1,12 @@
-import { DataManager } from ".";
+import { DataManager } from "./DataManager";
 
 
 export class ArousalUtilities {
     constructor(readonly parent: DataManager) { }
+
+    private save() {
+        this.parent.save("arousal");
+    }
 
     get data() {
         return this.parent.data.arousal;
@@ -14,7 +18,7 @@ export class ArousalUtilities {
 
     set ruined(num: number) {
         this.data.ruined = num;
-        this.parent.save();
+        this.save();
     }
 
     get orgasm() {
@@ -23,7 +27,7 @@ export class ArousalUtilities {
 
     set orgasm(num: number) {
         this.data.orgasm = num;
-        this.parent.save();
+        this.save();
     }
 
     get resist() {
@@ -32,6 +36,6 @@ export class ArousalUtilities {
 
     set resist(num: number) {
         this.data.resist = num;
-        this.parent.save();
+        this.save();
     }
 }

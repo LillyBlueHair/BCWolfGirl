@@ -9,6 +9,9 @@ export function defaultValue(): WolfGrilData {
             moderators: [],
             loverModerators: true
         },
+        settings: {
+            orgasmPunishMode: 0
+        },
         stat: {
             script_run_time: 0,
             wolfgirl_time: 0,
@@ -92,6 +95,13 @@ export function Validate(data: any): WolfGrilData {
         if (typeof data.loverModerators === "boolean") dvalue.loverModerators = data.loverModerators;
         return dvalue;
     })(xd.permission);
+
+    ret.settings = ((data: Partial<WolfGrilData["settings"]> | undefined) => {
+        const dvalue = defaultData.settings;
+        if (data === undefined) return dvalue;
+        if (typeof data.orgasmPunishMode === "number") dvalue.orgasmPunishMode = data.orgasmPunishMode;
+        return dvalue;
+    })(xd.settings);
 
     ret.stat = ((data: Partial<WolfGrilData["stat"]> | undefined) => {
         const dvalue = defaultData.stat;

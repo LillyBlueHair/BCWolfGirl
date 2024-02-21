@@ -1,5 +1,4 @@
 import { IsPlayerWolfGirl } from "../Control/WolfGirlCtrl";
-import { IsCollarOn } from "../Control/WolfGirlCtrl/Check";
 import { DataManager } from "../Data";
 
 export type Prerequisite = (player: PlayerCharacter, sender: Character | number) => boolean;
