@@ -25,7 +25,7 @@ export function SwitchInjector(mode: string, type: SwitchAvailableType | undefin
                 ParseMessage(StdMissingMsgBase, { player }, { missing_formated: ToolsInjector.Craft.Name });
                 return TimedWorkState.interrupted;
             }
-        }),
+        }, false),
         new MessageWork({ mode: "chat-action", msg: `注射器已经切换到 ${mode} 模式` }),
         new MessageWork({ mode: "chat-action", msg: switchInjectorMessages[type || "chips"].msg }),
     ];
