@@ -1,4 +1,4 @@
-import { FormatMessage, ParseMessage } from "../../Control/Message";
+import { ParseMessage } from "../../Control/Message";
 import { ItemOptionWork } from "../../Control/OutfitCtrl";
 import { StopPunish } from "../../Control/PunishWork";
 import { StartPunish } from "../../Control/SequenceCtrl/StartPunishSequence";
@@ -13,6 +13,9 @@ import { DataManager } from "../../Data";
 import { CommandTemplate } from "../ICmds";
 import { RouteIM } from "../../Control/Message";
 import { BasicPrerequisites, SelfPrerequisites } from "../Prerequistes";
+import { TimedWorker } from "../../Control/Worker";
+import { MessageWork } from "../../Control/MessageWork";
+import { CommonWork } from "../../Control/CommonWork";
 
 const PushTask = (player: PlayerCharacter, t: ITask) => {
     ParseMessage({ mode: "action", msg: `${GetWolfGrilName(player)}接收任务：\n${t.summary()}` });
@@ -89,6 +92,29 @@ export const TaskPointsCmds: CommandTemplate[] = [
         run(player, sender, content) {
             if (content[1] === "进入") StartPunish(player);
             else StopPunish(player);
+        }
+    }, {
+        match: /^(打开(严厉)?|关闭)高潮惩罚模式/,
+        prerequisite: BasicPrerequisites,
+        run(player, sender, content) {
+            if (content[1].startsWith("打开")) {
+                TimedWorker.global.push({
+                    description: "OrgasmPunishMode", works: [
+                        new MessageWork({ mode: "action", msg: "收到指令，高潮惩罚模式已开启" }),
+                        new CommonWork(() => DataManager.settings.update("orgasmPunishMode", content[2] ? 2 : 1)),
+                        new MessageWork({ mode: "chat-action", msg: "{player_wg}的训练内裤上的显示器亮起了小小的图标，是一枚粉红色的爱心叠加着一个小小的闪电，意味着什么呢，为什么不试一试呢，兴许{player_wg}会喜欢上那样的感觉" }),
+                    ]
+                });
+            } else {
+                TimedWorker.global.push({
+                    description: "OrgasmPunishMode", works: [
+                        new MessageWork({ mode: "action", msg: "收到指令，高潮惩罚模式已关闭" }),
+                        new CommonWork(() => DataManager.settings.update("orgasmPunishMode", 0)),
+                        new MessageWork({ mode: "chat-action", msg: "{player_wg}的训练内裤的显示器上那个小小的惩罚图标渐渐熄灭，之后{player_wg}就能自由高潮了...吗？紧束着迎来一波又一波快感的浪尖是不是{player_wg}的心头所好呢？" }),
+                    ]
+                });
+
+            }
         }
     },
     {

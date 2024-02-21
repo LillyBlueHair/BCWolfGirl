@@ -11,7 +11,7 @@ function ChatRoomInterceptMessage(cur_msg: string, msg: string) {
     ChatRoomSendChat();
 }
 
-export function DoSinglePunish(player: PlayerCharacter, item: Item | undefined) {
+export function DoShockPunish(player: PlayerCharacter, item: Item | undefined) {
     if (CurrentCharacter !== null)
         CurrentCharacter.FocusGroup = null;
     CurrentCharacter = null;
@@ -66,7 +66,7 @@ export class PunishWork extends TimedWork {
         const collar = InventoryGet(player, "ItemNeck");
         if (!collar) return TimedWorkState.interrupted;
 
-        DoSinglePunish(player, collar);
+        DoShockPunish(player, collar);
 
         if (Date.now() > this._timer) return TimedWorkState.finished;
         return TimedWorkState.running;
@@ -79,7 +79,7 @@ export class RandomSinglePunishWork extends TimedWork {
         const item = items[Math.floor(Math.random() * items.length)];
         const oi = OutfitItemsMap.get(item.Asset.Group.Name);
         if (oi) {
-            DoSinglePunish(player, item);
+            DoShockPunish(player, item);
         }
         return TimedWorkState.finished;
     }

@@ -17,6 +17,7 @@ import { InitChatCmds } from './ChatRoom/OutfitCheckChatCmd';
 import { TaskCtrlInit } from './Control/TaskCtrl';
 import { TimedSummary } from './Control/TimedSummary';
 import { ToolsSafety } from './Control/ToolsSafety';
+import { OrgasmPunishMode } from './Control/OrgasmPunishMode';
 
 (function () {
     if (window.__load_flag__) return;
@@ -85,6 +86,8 @@ import { ToolsSafety } from './Control/ToolsSafety';
         if (IsPlayerWolfGirl(player))
             DataManager.arousal.ruined += 1;
     });
+
+    OrgasmPunishMode.init(orgasm);
 
     lateHooks.push(() => InitChatCmds());
 
