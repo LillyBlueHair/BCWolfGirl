@@ -1,4 +1,4 @@
-import { OutfitItemType } from "bc-utilities";
+import { OutfitItemType, buildItemsMap } from "bc-utilities";
 import { IMessage, IMessageMode, ParseMessage } from "./Message";
 import { OutfitItemsMap } from "./OutfitCtrl";
 import { TimedWork, TimedWorkState } from "./Worker";
@@ -88,11 +88,9 @@ export class CheckItemsWork extends TimedWork {
     }
 
     run(player: PlayerCharacter): TimedWorkState {
-        const app_map = new Map(player.Appearance.map(e => [e.Asset.Group.Name, e]));
+        const app_map = buildItemsMap(player);
         const missing = this._target.filter(e => {
-            const i = app_map.get(e.Asset.Group);
-            if (!i) return false;
-            return !DefaultCheckOutfitItem(i, e, this.checkLock);
+            return !DefaultCheckOutfitItem(app_map.get(e.Asset.Group), e, this.checkLock);
         })
 
         const result = this.callback(player, { missing });

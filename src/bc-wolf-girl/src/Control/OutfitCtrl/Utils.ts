@@ -14,6 +14,13 @@ export function ItemFromOutfit(player: Character, wearer: Character, v: OutfitIt
     });
 }
 
+/**
+ * Check if the bc item matches the outfit item
+ * @param item The bc item, if undefined, return false
+ * @param v The outfit item, if undefined, return false
+ * @param lock whether to check the lock status
+ * @returns return true if the item matches the outfit item
+ */
 export function DefaultCheckOutfitItem(item: Item | undefined, v: OutfitItemType | undefined, lock?: boolean) {
     const ecraft = EILNetwork.Access.craft;
     return CheckOutfitItem(item, v, { craft: { MemberName: ecraft.name, MemberNumber: ecraft.uid }, lock: lock ?? true });
