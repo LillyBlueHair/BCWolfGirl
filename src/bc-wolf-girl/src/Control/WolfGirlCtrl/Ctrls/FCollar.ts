@@ -21,7 +21,7 @@ const props = {
 
 export class FCollarPublic extends IController {
     readonly type = "FuturisticPublicCtrl";
-    readonly target_item = ["ItemNeck"];
+    readonly target_item: AssetGroupItemName[] = ["ItemNeck"];
     readonly available_ctrls: CtrlType[] = ["open", "close"];
 
     set(player: PlayerCharacter, item: (Item | undefined)[], type: CtrlType): void {

@@ -10,7 +10,7 @@ export type TestCtrlResult = Partial<TestCtrlMissingResult> & {
 
 export abstract class IController {
     abstract readonly type: ControllerType;
-    abstract readonly target_item: string[];
+    abstract readonly target_item: AssetGroupItemName[];
     abstract readonly available_ctrls: CtrlType[];
     abstract set(player: PlayerCharacter, item: (Item | undefined)[], type: CtrlType): void;
     abstract test(player: PlayerCharacter, item: Item[], type: CtrlType): TestCtrlResult;

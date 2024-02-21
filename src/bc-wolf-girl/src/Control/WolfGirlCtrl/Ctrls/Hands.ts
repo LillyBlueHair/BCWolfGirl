@@ -17,7 +17,7 @@ function calcRecordValue(type: CtrlType): TypeRecord[] {
 
 export class HandsCtrl extends IController {
     readonly type = "HandsCtrl";
-    readonly target_item = ["ItemHands", "ItemArms"];
+    readonly target_item: AssetGroupItemName[] = ["ItemHands", "ItemArms"];
     available_ctrls: CtrlType[] = ["off", "base", "total"];
     set(player: PlayerCharacter, item: (Item | undefined)[], type: CtrlType): void {
         StandardItemSetRecords(player, item, calcRecordValue(type));

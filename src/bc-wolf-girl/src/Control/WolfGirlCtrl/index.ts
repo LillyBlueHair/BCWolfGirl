@@ -13,6 +13,9 @@ import { TestCtrlResult } from "./IController";
 import { ControllerType } from "./IController";
 import { CtrlType } from "./IController";
 import { TReject } from "./IController";
+import { buildAppMap, buildItemsMap } from "bc-utilities";
+import { CheckItem, OutfitItemsMap } from "../OutfitCtrl";
+import { DefaultCheckOutfitItem } from "../OutfitCtrl/Utils";
 
 export { IsPlayerWolfGirl } from "./Check";
 
@@ -37,8 +40,8 @@ export function TestRunControls(player: PlayerCharacter, type: ControllerType, m
     if (!ctrl) return TReject("type");
     if (!ctrl.available_ctrls.includes(mode)) return TReject("mode");
 
-    const app_map = new Map(player.Appearance.map(e => [e.Asset.Group.Name, e] as [string, Item]));
-    const missing = ctrl.target_item.filter(e => !app_map.has(e));
+    const app_map = buildItemsMap(player);
+    const missing = ctrl.target_item.filter(e => !DefaultCheckOutfitItem(app_map.get(e), OutfitItemsMap.get(e)));
 
     if (missing.length > 0) return { missing } as TestCtrlResult;
     return ctrl.test(player, ctrl.target_item.map(e => app_map.get(e) as Item), mode);

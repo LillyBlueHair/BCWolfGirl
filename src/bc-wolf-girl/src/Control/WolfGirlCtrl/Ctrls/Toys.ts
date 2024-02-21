@@ -14,7 +14,7 @@ function calcValue(type: CtrlType): number {
 
 export class ToysCtrl extends IController {
     readonly type = "ToysCtrl";
-    readonly target_item = ["ItemVulva", "ItemPelvis", "ItemVulvaPiercings", "ItemButt", "ItemNipples", "ItemNipplesPiercings"];
+    readonly target_item: AssetGroupItemName[] = ["ItemVulva", "ItemPelvis", "ItemVulvaPiercings", "ItemButt", "ItemNipples", "ItemNipplesPiercings"];
     readonly available_ctrls: CtrlType[] = ["open", "max", "off", "random"];
 
     set(player: PlayerCharacter, item: (Item | undefined)[], type: CtrlType): void {

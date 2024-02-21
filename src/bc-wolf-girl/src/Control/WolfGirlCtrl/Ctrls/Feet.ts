@@ -13,7 +13,7 @@ function calcRecordValue(type: CtrlType) {
 
 export class FeetCtrl extends IController {
     readonly type = "FeetCtrl";
-    readonly target_item = ["ItemFeet", "ItemLegs", "ItemBoots"];
+    readonly target_item: AssetGroupItemName[] = ["ItemFeet", "ItemLegs", "ItemBoots"];
     available_ctrls: CtrlType[] = ["off", "base", "total"];
 
     set(player: PlayerCharacter, item: (Item | undefined)[], type: CtrlType): void {

@@ -27,7 +27,7 @@ function calcRecordValue(type: CtrlType): TypeRecord[] {
 
 export class HearingCtrl extends IController {
     readonly type = "HearingCtrl";
-    readonly target_item = ["ItemEars"];
+    readonly target_item: AssetGroupItemName[] = ["ItemEars"];
     readonly available_ctrls: CtrlType[] = ["off", "base", "total"];
 
     set(player: PlayerCharacter, item: (Item | undefined)[], type: CtrlType) {

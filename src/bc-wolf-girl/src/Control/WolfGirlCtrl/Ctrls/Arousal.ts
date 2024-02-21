@@ -14,7 +14,7 @@ function calcRecordValue(type: CtrlType) {
 
 export class ArousalCtrl extends IController {
     readonly type = "ArousalCtrl";
-    readonly target_item = ["ItemPelvis"];
+    readonly target_item: AssetGroupItemName[] = ["ItemPelvis"];
     readonly available_ctrls: CtrlType[] = ["off", "edge", "deny"];
     set(player: PlayerCharacter, item: (Item | undefined)[], type: CtrlType): void {
         const [pelvis] = item;
