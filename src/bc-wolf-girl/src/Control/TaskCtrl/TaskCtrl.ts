@@ -2,22 +2,23 @@ import { ActivityInfo } from "bc-utilities";
 import { CommandType } from "../../ChatRoom/ICmds";
 import { TaskState } from "./ITask";
 import { ITask } from "./ITask";
+import { IsPlayerWolfGirl } from "../WolfGirlCtrl";
 
 export class TaskCtrl {
     private _active_task: ITask | undefined;
 
     constructor(time_reso: number) {
         setInterval(() => {
-            if (this._active_task) {
-                if (Player && Player.MemberNumber) {
+            if (Player && Player.MemberNumber && IsPlayerWolfGirl(Player)) {
+                if (this._active_task) {
                     const s = this._active_task.run(Player);
                     if (s !== TaskState.Running) {
                         this._active_task.finalize(Player, s);
                         this._active_task = undefined;
                     }
-                } else {
-                    this._active_task = undefined;
                 }
+            } else {
+                this._active_task = undefined;
             }
         }, time_reso);
     }
