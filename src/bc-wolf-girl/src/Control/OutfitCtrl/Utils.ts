@@ -14,9 +14,9 @@ export function ItemFromOutfit(player: Character, wearer: Character, v: OutfitIt
     });
 }
 
-export function DefaultCheckOutfitItem(item: Item, v: OutfitItemType | undefined, lock: boolean = true) {
+export function DefaultCheckOutfitItem(item: Item | undefined, v: OutfitItemType | undefined, lock?: boolean) {
     const ecraft = EILNetwork.Access.craft;
-    return CheckOutfitItem(item, v, { craft: { MemberName: ecraft.name, MemberNumber: ecraft.uid }, lock });
+    return CheckOutfitItem(item, v, { craft: { MemberName: ecraft.name, MemberNumber: ecraft.uid }, lock: lock ?? true });
 }
 
 export function DefaultCheckItemOnTarget(target: Character, item: OutfitItemType, lock?: boolean) {
