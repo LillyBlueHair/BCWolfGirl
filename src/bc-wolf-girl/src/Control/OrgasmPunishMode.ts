@@ -231,6 +231,8 @@ export class OrgasmPunishMode {
             const itemsMap = buildItemsMap(Player);
 
             for (const [key, value] of Object.entries(SavedItemMode)) {
+                if (value === undefined) continue;
+
                 const item = itemsMap.get(key as AssetGroupItemName);
 
                 if (item === undefined || !DefaultCheckOutfitItem(item, OutfitItemsMap.get(item.Asset.Group.Name))) {
