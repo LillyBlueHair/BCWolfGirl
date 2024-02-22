@@ -35,9 +35,9 @@ export class WolfGirlItemsSwitch implements IActivity {
         if (info.TargetCharacter.MemberNumber === player.MemberNumber) {
             if (ModOrSelfPrerequisites(player, sender)) {
                 if (DataManager.outfit.items.size > 0) {
-                    StartStashPopSequence(player, sender);
+                    StartStashPopSequence(player);
                 } else {
-                    StartStashSequence(player, sender);
+                    StartStashSequence(player);
                 }
             }
         }

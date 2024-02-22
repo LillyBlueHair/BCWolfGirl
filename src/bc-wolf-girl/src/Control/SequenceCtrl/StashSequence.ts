@@ -7,7 +7,7 @@ import { TimedWork, TimedWorkState, TimedWorker } from "../Worker";
 import { StdMissingAction, StdMissingMsgN } from "./ItemCmdSequence/CmdSequenceMessage";
 import { PushMissingStopSequence } from "./StopSequence";
 
-export function StartStashSequence(player: PlayerCharacter, sender: Character) {
+export function StartStashSequence(player: PlayerCharacter) {
     const work_sequence: TimedWork[] = [
         new CheckItemsWork(["ItemNeck", "ItemPelvis"], (player, result) => {
             if (result.missing.length > 0) {
@@ -29,7 +29,7 @@ export function StartStashSequence(player: PlayerCharacter, sender: Character) {
     TimedWorker.global.push({ description: "StartStashSequence", works: work_sequence });
 }
 
-export function StartStashPopSequence(player: PlayerCharacter, sender: Character) {
+export function StartStashPopSequence(player: PlayerCharacter) {
     const work_sequence: TimedWork[] = [
         new CheckItemsWork(["ItemNeck", "ItemPelvis"], (player, result) => {
             if (result.missing.length > 0) {
