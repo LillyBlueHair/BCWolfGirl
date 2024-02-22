@@ -1,10 +1,10 @@
 import { DataManager } from "../../Data";
 import { EILNetwork } from "../../Network";
 import { ChatRoomAction, CheckOutfitItemCE } from "bc-utilities";
-import { CheckWork, CommonWork, DelayWork } from "../CommonWork";
+import { CheckItemsWork, CheckWork, CommonWork, DelayWork } from "../CommonWork";
 import { IMessage, ParseMessage } from "../Message";
 import { MessageWork, WaitResponseWork } from "../MessageWork";
-import { OutfitItemsMap, ToolsCrate } from "../OutfitCtrl";
+import { OutfitItems, OutfitItemsMap, ToolsCrate } from "../OutfitCtrl";
 import { ClothRemoveWork, ClothRestoreWork, ItemLockWork, ItemOptionWork, ItemPropertyWork, ItemRemoveWork, ItemWearWork } from "../OutfitCtrl";
 import { OutfitFixWorkResult, OutfitFixWork } from "../OutfitCtrl/OutfitFixWork";
 import { IsFullyDressed } from "../WolfGirlCtrl/Check";
@@ -256,16 +256,16 @@ export function DressFixSequence(sender: Character | number, player: PlayerChara
             ParseMessage({ mode: "local", msg: `已扣除${cumm_counter}点数，当前点数${DataManager.points.points}` });
         }),
         new DelayWork(5000),
-        new CheckWork(() => {
-            if (IsFullyDressed(player)) return CheckWork.Stop;
-            else return CheckWork.Continue;
-        }, (pl, r) => {
-            if (r.passed) {
-                DataManager.statistics.set_last_fix_time(Date.now());
-                return { mode: "chat-action", msg: "组件扫描完成，全部在线且运转正常，能源核心已充能完毕，维护模式已结束，请退出维护模式" };
+        new CheckItemsWork(OutfitItems, (player, result) => {
+            DataManager.statistics.set_last_fix_time(Date.now());
+            DataManager.outfit.items = [];
+            if (result.missing.length === 0) {
+                ParseMessage({ mode: "chat-action", msg: "组件扫描完成，全部在线且运转正常，能源核心已充能完毕，维护模式已结束，请退出维护模式" }, { player });
+            } else {
+                const missing_formated = result.missing.map(g => g.Craft.Name).join("、");
+                ParseMessage({ mode: "chat-action", msg: "错误：组件修复失败，仍有未穿戴组件： {missing_formated}" }, { player }, { missing_formated });
             }
-            else return { mode: "chat-action", msg: "错误：组件修复失败，仍有未穿戴组件" };
-        }),
+        })
     ];
 
     TimedWorker.global.push({ description: "DressFixSequence", works: work_sequence });
