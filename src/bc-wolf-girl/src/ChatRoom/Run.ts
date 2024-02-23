@@ -1,8 +1,7 @@
 import { GetWolfGrilName } from "../Control/WolfGirlCtrl";
-import { DataManager } from "../Data";
 import { AppearanceUpdate } from "bc-utilities";
 import { Commands, InjectionSwCommands, PointCommands } from "./Commands";
-import { CommandArgs, CommandTemplate, CommandType } from "./ICmds";
+import { CommandArgs, CommandTemplate } from "./ICmds";
 
 
 function Strip(src: string) {

@@ -1,23 +1,21 @@
 import bcMod from 'bondage-club-mod-sdk'
 import { CUSTOM_ACTION_TAG, GIT_REPO, ModName, ModVersion, SCRIPT_ID } from './Definition';
-import { BeepRawHandler, ChatRoomHandler } from './ChatRoom/Handler';
+import { BeepRawHandler, ChatRoomHandler, OnlineMessageHandlerInit } from './ChatRoom/Handler';
 import { TimedWorker } from "./Control/Worker";
-import { DialogInventoryBuildHandler } from './Control/OutfitCtrl';
 import { ChatRoomAction } from 'bc-utilities';
 import { EILNetwork } from './Network';
-import { CtrlHook, IsPlayerWolfGirl } from './Control/WolfGirlCtrl';
+import { WolfGirlCtrlInit, IsPlayerWolfGirl } from './Control/WolfGirlCtrl';
 import { OrgasmMonitor } from 'bc-utilities';
 import { DataManager } from "./Data";
-import { TaskCtrl } from "./Control/TaskCtrl/TaskCtrl";
-import { RegisterActivities } from './ChatRoom/Activity';
 import { ChatRoomWork } from './Control/RoomCtrl/Work';
 import { InjectionManager } from './Control/Injection';
-import { DrinkHook } from './Control/Drink';
 import { InitChatCmds } from './ChatRoom/OutfitCheckChatCmd';
 import { TaskCtrlInit } from './Control/TaskCtrl';
-import { TimedSummary } from './Control/TimedSummary';
+import { TimeStat } from './Control/TimeStat';
 import { ToolsSafety } from './Control/ToolsSafety';
 import { OrgasmPunishMode } from './Control/OrgasmPunishMode';
+import { AdditionalInventoryInit } from './Control/OutfitCtrl/Inventory';
+import { ActivityProvider } from './ChatRoom/Activity';
 
 (function () {
     if (window.__load_flag__) return;
@@ -40,56 +38,38 @@ import { OrgasmPunishMode } from './Control/OrgasmPunishMode';
     const lateHooks: (() => void)[] = [];
     const lateHook = (callback: () => void) => lateHooks.push(callback);
 
+    const orgasm = new OrgasmMonitor(mod);
     DataManager.init(mod, `${ModName} v${ModVersion} loaded.`);
 
     TimedWorker.init(1000);
-    TimedSummary.init(1000);
-    TaskCtrlInit(1000);
+    TimeStat.init(1000);
     ToolsSafety.init(10000);
     EILNetwork.init(asset_url);
     ChatRoomAction.init(CUSTOM_ACTION_TAG);
 
-    ChatRoomRegisterMessageHandler(ChatRoomHandler());
-    mod.hookFunction('ServerAccountBeep', 2, (args, next) => {
-        next(args);
-        if (Player) BeepRawHandler(Player, args[0]);
-    });
+    OnlineMessageHandlerInit(mod);
+    AdditionalInventoryInit(mod);
 
-    mod.hookFunction('DialogInventoryBuild', 1, (args, next) => {
-        next(args);
-        DialogInventoryBuildHandler(args[0] as Character, args[2] as boolean);
-    });
+    WolfGirlCtrlInit(mod, lateHook);
 
-    CtrlHook(mod, lateHook);
-
-    RegisterActivities(mod, lateHook);
+    ActivityProvider.init(mod);
 
     ChatRoomWork.init(mod, lateHook);
     InjectionManager.init(mod, lateHook);
-    DrinkHook(mod, lateHook);
 
-    const orgasm = new OrgasmMonitor(mod);
-
-    orgasm.AddOrgasmEvent((player) => {
-        if (IsPlayerWolfGirl(player))
-            DataManager.arousal.orgasm += 1;
-        TaskCtrl.instance.onOrgasm(player);
+    let initial_notify_not_shown = true;
+    mod.hookFunction('ChatRoomRun', 20, (args, next) => {
+        next(args);
+        if (initial_notify_not_shown) {
+            ChatRoomAction.instance.LocalAction(`EIL狼女训练套装智能化辅助系统 ${ModVersion} 已加载。`);
+            initial_notify_not_shown = false;
+        }
     });
 
-    orgasm.AddResistEvent((player) => {
-        if (IsPlayerWolfGirl(player))
-            DataManager.arousal.resist += 1;
-        TaskCtrl.instance.onResist(player);
-    });
-
-    orgasm.AddRuinedEvent((player) => {
-        if (IsPlayerWolfGirl(player))
-            DataManager.arousal.ruined += 1;
-    });
-
+    TaskCtrlInit(1000, orgasm);
+    DataManager.arousal.setMonitor((pl) => IsPlayerWolfGirl(pl), orgasm);
     OrgasmPunishMode.init(orgasm);
-
-    lateHooks.push(() => InitChatCmds());
+    InitChatCmds(lateHook);
 
     (async () => {
         while (typeof (window as any).Player === 'undefined')

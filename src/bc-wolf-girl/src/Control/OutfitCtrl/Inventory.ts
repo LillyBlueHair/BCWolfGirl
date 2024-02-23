@@ -1,8 +1,8 @@
+import { ModSDKModAPI } from "bondage-club-mod-sdk";
 import { Tools } from "./Definition";
 import { ItemFromOutfit } from "./Utils";
 
-
-export function DialogInventoryBuildHandler(C: Character, lock: boolean) {
+function DialogInventoryBuildHandler(C: Character, lock: boolean) {
     if (lock) return;
 
     Tools.forEach(e => {
@@ -17,4 +17,11 @@ export function DialogInventoryBuildHandler(C: Character, lock: boolean) {
     })
 
     DialogInventorySort();
+}
+
+export function AdditionalInventoryInit(mod: ModSDKModAPI) {
+    mod.hookFunction('DialogInventoryBuild', 1, (args, next) => {
+        next(args);
+        DialogInventoryBuildHandler(args[0] as Character, args[2] as boolean);
+    });
 }

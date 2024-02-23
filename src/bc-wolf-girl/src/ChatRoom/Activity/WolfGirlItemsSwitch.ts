@@ -1,9 +1,9 @@
 import { DataManager } from "../../Data";
-import { ActivityInfo } from "bc-utilities";
+import { ActivityInfo, ActivityTriggerMode, CheckOutfitItemCE, CustomBCActivity, ExtendedActivityPrerequisite, ExtendedBCActivity, IActivityCustom, IActivityPrerequisite } from "bc-utilities";
 import { StartStashPopSequence } from "../../Control/SequenceCtrl/StashSequence";
 import { StartStashSequence } from "../../Control/SequenceCtrl/StashSequence";
 import { ModOrSelfPrerequisites } from "../Prerequistes";
-import { ActivityTriggerMode, ExtendedActivity, IActivity } from "./IActivity";
+import { OutfitItemsMap } from "../../Control/OutfitCtrl";
 
 const strings: { [index: string]: string } = {
     "Label-ChatOther-ItemNeck-WolfGirlItemsSwitch": "切换狼女物品模式",
@@ -17,19 +17,23 @@ const strings: { [index: string]: string } = {
     "ChatSelf-ItemPelvis-WolfGirlItemsSwitch": "SourceCharacter 轻轻触碰自己的训练内裤，微弱的提示灯光微微亮起。",
 };
 
-export class WolfGirlItemsSwitch implements IActivity {
-    activity: ExtendedActivity = {
-        Name: "WolfGirlItemsSwitch",
-        MaxProgress: 0,
-        Prerequisite: ["NotSuspended", "CanInteract", "IsActedWolfGirl"],
-        Target: ['ItemNeck', 'ItemPelvis'],
-        TargetSelf: ['ItemNeck', 'ItemPelvis']
-    };
+const bodyParts: AssetGroupItemName[] = ["ItemNeck", "ItemPelvis"];
 
-    mode: ActivityTriggerMode = "onself";
-    onBodyparts: AssetGroupItemName[] = ["ItemNeck", "ItemPelvis"];
-
-    image = "Assets/Female3DCG/ItemNeck/Preview/FuturisticCollar.png";
+export class WolfGirlItemsSwitch extends IActivityCustom<CustomActivities, CustomPrerequisites> {
+    constructor() {
+        super(
+            "onself",
+            bodyParts,
+            {
+                Name: "WolfGirlItemsSwitch",
+                MaxProgress: 0,
+                Prerequisite: ["UseHands", "CanSwitchWGItem"],
+                Target: bodyParts,
+                TargetSelf: bodyParts
+            },
+            "Assets/Female3DCG/ItemNeck/Preview/FuturisticCollar.png"
+        )
+    }
 
     on(player: PlayerCharacter, sender: Character, info: ActivityInfo): void {
         if (info.TargetCharacter.MemberNumber === player.MemberNumber) {
@@ -53,5 +57,16 @@ export class WolfGirlItemsSwitch implements IActivity {
 
     text(keyword: string) {
         return strings[keyword] ?? keyword;
+    }
+}
+
+export class CanSwitchWGItem extends IActivityPrerequisite<CustomPrerequisites> {
+    name: CustomPrerequisites = "CanSwitchWGItem";
+    test(acting: Character, acted: Character, group: AssetGroup): boolean {
+        if (!CheckOutfitItemCE(acted, OutfitItemsMap.get(group.Name), { lock: true })) return false;
+        if (acted.IsPlayer()) {
+            return DataManager.points.points > 10;
+        }
+        return true;
     }
 }

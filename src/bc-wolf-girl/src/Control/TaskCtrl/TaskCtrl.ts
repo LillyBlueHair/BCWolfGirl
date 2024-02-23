@@ -1,4 +1,4 @@
-import { ActivityInfo } from "bc-utilities";
+import { ActivityInfo, OrgasmMonitor } from "bc-utilities";
 import { CommandType } from "../../ChatRoom/ICmds";
 import { TaskState } from "./ITask";
 import { ITask } from "./ITask";
@@ -7,7 +7,7 @@ import { IsPlayerWolfGirl } from "../WolfGirlCtrl";
 export class TaskCtrl {
     private _active_task: ITask | undefined;
 
-    constructor(time_reso: number) {
+    constructor(time_reso: number, om: OrgasmMonitor) {
         setInterval(() => {
             if (Player && Player.MemberNumber && IsPlayerWolfGirl(Player)) {
                 if (this._active_task) {
@@ -21,6 +21,9 @@ export class TaskCtrl {
                 this._active_task = undefined;
             }
         }, time_reso);
+
+        om.AddOrgasmEvent((player) => this.onOrgasm(player));
+        om.AddResistEvent((player) => this.onResist(player));
     }
 
     push_task(t: ITask, reject?: (cur: ITask) => void) {
@@ -64,8 +67,8 @@ export class TaskCtrl {
         return TaskCtrl._instance as TaskCtrl;
     }
 
-    static init(time_reso: number) {
+    static init(time_reso: number, om: OrgasmMonitor) {
         if (this._instance) return;
-        this._instance = new TaskCtrl(time_reso);
+        this._instance = new TaskCtrl(time_reso, om);
     }
 }

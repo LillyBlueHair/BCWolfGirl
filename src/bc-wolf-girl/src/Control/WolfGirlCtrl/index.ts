@@ -51,7 +51,7 @@ export function GetWolfGrilName(target: Character): string {
     return `狼女${target.MemberNumber ?? ""}`;
 }
 
-export function CtrlHook(mod: ModSDKModAPI, lateHook: (callback: () => void) => void) {
+export function WolfGirlCtrlInit(mod: ModSDKModAPI, lateHook: (callback: () => void) => void) {
     WolfGirlCtrls.forEach(item => item.hook(mod, lateHook));
     FuturisticBypass.init(mod, lateHook);
 }

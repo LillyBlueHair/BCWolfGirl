@@ -1,7 +1,7 @@
 import { DataManager } from "../Data";
 import { IsPlayerWolfGirl } from "./WolfGirlCtrl";
 
-export class TimedSummary {
+export class TimeStat {
     private timer: number;
 
     constructor(readonly resolution: number) {
@@ -17,12 +17,12 @@ export class TimedSummary {
         }, resolution);
     }
 
-    private static _instance: TimedSummary | undefined = undefined;
+    private static _instance: TimeStat | undefined = undefined;
     static init(resolution: number) {
-        if (TimedSummary._instance) return;
-        TimedSummary._instance = new TimedSummary(resolution);
+        if (TimeStat._instance) return;
+        TimeStat._instance = new TimeStat(resolution);
     }
     static get instance() {
-        return TimedSummary._instance as TimedSummary;
+        return TimeStat._instance as TimeStat;
     }
 }

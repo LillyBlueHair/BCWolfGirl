@@ -12,7 +12,7 @@ const WolfGirlCmds: ICommand[] = [
     }
 ]
 
-const CmdDetails: Map<string, (...args: string[]) => void> = new Map()
+const CmdDetails: Map<string, (...args: string[]) => void> = new Map([["check", ChatCmdOutfitCheck]])
 
 function ChatCmdRouter(args: string, command: string) {
     const [, ...parts] = command.split(" ");
@@ -76,7 +76,6 @@ function ChatCmdOutfitCheck(...args: string[]) {
     })
 }
 
-export function InitChatCmds() {
-    CmdDetails.set("check", ChatCmdOutfitCheck);
-    CommandCombine(WolfGirlCmds);
+export function InitChatCmds(lateHook: (callback: () => void) => void) {
+    lateHook(() => CommandCombine(WolfGirlCmds))
 }

@@ -1,16 +1,14 @@
-import { ActivityInfo } from "bc-utilities";
+import { ActivityInfo, ActivityTriggerMode, IActivityExtended } from "bc-utilities";
 import { InitDressSequence } from "../../Control/SequenceCtrl/DressSequence";
-import { ActivityTriggerMode, IActivityExtened } from "./IActivity";
 import { InjectionType } from "../../Control/Injection/IInjection";
 import { DoInjection } from "../../Control/SequenceCtrl/InjectionSequence";
 import { IsPlayerWolfGirl } from "../../Control/WolfGirlCtrl";
 import { ToolsInjector, ToolsVisor } from "../../Control/OutfitCtrl";
 import { DefaultCheckItems } from "../../Control/OutfitCtrl/Utils";
 
-export class InjectionExtend implements IActivityExtened {
-    activity = "Inject";
-    mode: ActivityTriggerMode = "selfonother";
-    onBodyparts = undefined;
+export class InjectingExtend extends IActivityExtended<CustomActivities, CustomPrerequisites> {
+    constructor() { super("selfonother", undefined, "Inject"); }
+
     on(player: PlayerCharacter, sender: Character, info: ActivityInfo) {
         const target = ChatRoomCharacter.find(c => c.MemberNumber === info.TargetCharacter.MemberNumber);
         if (!target) return;
@@ -19,17 +17,7 @@ export class InjectionExtend implements IActivityExtened {
             InitDressSequence(player, target);
     }
 
-    type: InjectionType | undefined = undefined;
-
-    static _instance: InjectionExtend;
-    static get global() {
-        if (!this._instance) this._instance = new InjectionExtend();
-        return this._instance;
-    }
-
-    static setType(type: InjectionType | undefined) {
-        this.global.type = type;
-    }
+    public type: InjectionType | undefined = undefined;
 
     adjustDict(Content: string, dict: any[]): any[] {
         if (this.type) {
@@ -42,10 +30,9 @@ export class InjectionExtend implements IActivityExtened {
     }
 }
 
-export class InjectionExtendInjected implements IActivityExtened {
-    activity = "Inject";
-    mode: ActivityTriggerMode = "onself";
-    onBodyparts = undefined;
+export class InjectedExtend extends IActivityExtended<CustomActivities, CustomPrerequisites> {
+    constructor() { super("onself", undefined, "Inject"); }
+
     on(player: PlayerCharacter, sender: Character, info: ActivityInfo) {
         const v = info.BCDictionary.find(i => i.Tag === "WolfGirlInjectType");
         if (v && IsPlayerWolfGirl(player)) {

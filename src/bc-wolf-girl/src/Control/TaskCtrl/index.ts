@@ -5,10 +5,11 @@ import { InteractTask } from "./InteractTask";
 import { BegOrgasmTask } from "./BegOrgasmTask";
 import { ParseMessage } from "../Message";
 import { ITask } from "./ITask";
+import { OrgasmMonitor } from "bc-utilities";
 
 
-export function TaskCtrlInit(time_reso: number) {
-    TaskCtrl.init(time_reso);
+export function TaskCtrlInit(time_reso: number, om: OrgasmMonitor) {
+    TaskCtrl.init(time_reso, om);
 
     const PushTask = (player: PlayerCharacter, t: ITask) => {
         ParseMessage({ mode: "action", msg: `{player_wg}由于奖励点数过低，自动接收任务：\n${t.summary()}` }, { player });
