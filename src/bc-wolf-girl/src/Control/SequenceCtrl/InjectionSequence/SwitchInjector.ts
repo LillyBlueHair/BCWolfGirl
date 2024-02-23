@@ -5,6 +5,7 @@ import { ToolsInjector } from "../../OutfitCtrl";
 import { TimedWork, TimedWorkState, TimedWorker } from "../../Worker";
 import { StdMissingMsgBase } from "../ItemCmdSequence/CmdSequenceMessage";
 import { InjectionType } from "../../Injection/IInjection";
+import { ActivityProvider } from "../../../ChatRoom/Activity";
 
 export type SwitchAvailableType = Exclude<InjectionType, "EasterUniversalDispersal">;
 
@@ -25,6 +26,7 @@ export function SwitchInjector(mode: string, type: SwitchAvailableType | undefin
                 ParseMessage(StdMissingMsgBase, { player }, { missing_formated: ToolsInjector.Craft.Name });
                 return TimedWorkState.interrupted;
             }
+            ActivityProvider.instance.injector.type = type
         }, false),
         new MessageWork({ mode: "chat-action", msg: `注射器已经切换到 ${mode} 模式` }),
         new MessageWork({ mode: "chat-action", msg: switchInjectorMessages[type || "chips"].msg }),
