@@ -253,7 +253,7 @@ export function DressFixSequence(sender: Character | number, player: PlayerChara
         new MessageWork({ mode: "chat-action", msg: "组件修复完毕，依据组件丢失情况，已扣相应奖励积分。重新扫描并自检中" }),
         new CommonWork((player) => {
             DataManager.points.points -= cumm_counter;
-            ParseMessage({ mode: "local", msg: `已扣除${cumm_counter}点数，当前点数${DataManager.points.points}` });
+            ParseMessage({ mode: "local", msg: `已扣除${cumm_counter}积分，当前积分${DataManager.points.points}` });
         }),
         new DelayWork(5000),
         new CheckItemsWork(OutfitItems, (player, result) => {

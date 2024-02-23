@@ -12,7 +12,7 @@ export function TaskCtrlInit(time_reso: number, om: OrgasmMonitor) {
     TaskCtrl.init(time_reso, om);
 
     const PushTask = (player: PlayerCharacter, t: ITask) => {
-        ParseMessage({ mode: "action", msg: `{player_wg}由于奖励点数过低，自动接收任务：\n${t.summary()}` }, { player });
+        ParseMessage({ mode: "action", msg: `{player_wg}由于奖励积分过低，自动接收任务：\n${t.summary()}` }, { player });
         TaskCtrl.instance.push_task(t);
     }
 
