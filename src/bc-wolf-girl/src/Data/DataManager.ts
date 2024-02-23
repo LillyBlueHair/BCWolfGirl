@@ -43,21 +43,17 @@ class SettingUtilities {
 const WrongDataKeyName = "BCWolfGrilData";
 const WrongFrequentDataKeyName = "BCWolfGrilFrequentData";
 
-function load(C: PlayerCharacter) {
+function load(C: PlayerCharacter, mod: ModSDKModAPI) {
     const wrongDefaultData = C.ExtensionSettings[WrongDataKeyName];
     const wrongFrequentData = C.ExtensionSettings[WrongFrequentDataKeyName];
     if (wrongDefaultData || wrongFrequentData) {
         const ret = deserialize([wrongDefaultData, wrongFrequentData]);
-        C.ExtensionSettings[WrongDataKeyName] = null;
-        C.ExtensionSettings[WrongFrequentDataKeyName] = null;
-
+        delete C.ExtensionSettings[WrongDataKeyName];
+        delete C.ExtensionSettings[WrongFrequentDataKeyName];
         C.ExtensionSettings[DataKeyName] = wrongDefaultData;
         C.ExtensionSettings[FrequentDataKeyName] = wrongFrequentData;
 
-        ServerPlayerExtensionSettingsSync(WrongDataKeyName);
-        ServerPlayerExtensionSettingsSync(WrongFrequentDataKeyName);
-        ServerPlayerExtensionSettingsSync(DataKeyName);
-        ServerPlayerExtensionSettingsSync(FrequentDataKeyName);
+        mod.callOriginal("ServerSend", ["AccountUpdate", { ExtensionSettings: C.ExtensionSettings }]);
         return ret;
     }
 
@@ -135,7 +131,7 @@ export class DataManager {
         const load_then_message = (C: PlayerCharacter | null | undefined) => {
             if (this._instance) return;
             if (C) {
-                const data = load(C);
+                const data = load(C, mod);
                 this._instance = new DataManager(data);
                 if (msg) console.log(msg);
                 if (then_) then_(this._instance);
