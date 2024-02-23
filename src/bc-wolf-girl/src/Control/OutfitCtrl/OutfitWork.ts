@@ -5,6 +5,7 @@ import { TimedWorkState } from "../Worker";
 import { CalculateLocks, ItemFromOutfit } from "./Utils";
 import { ExtractMemberNumber } from "../../utils/Character";
 import { AppearanceUpdate, OutfitItemType } from "bc-utilities";
+import { FuturisticBypass } from "../WolfGirlCtrl/Ctrls/FuturisticBypass";
 
 export class ItemWearWork extends TimedWork {
     readonly _items: OutfitItemType[];
@@ -73,11 +74,13 @@ export class ItemOptionWork extends TimedWork {
         const target = ChatRoomCharacter.find(c => c.MemberNumber === this._target);
         if (!target) return TimedWorkState.interrupted;
 
+        FuturisticBypass.instance.on = true;
         const app_map = GatherAppMap(target);
         (this._options.map(i => { return { target: typeof i.target === "string" ? app_map.get(i.target) : i.target, option: i.option } })
             .filter(i => i.target) as ItemOptionWorkIUnit[])
             .forEach(option => ItemOptionWork.ItemOptionSingleI(target, option));
         if (this._options.length > 0) AppearanceUpdate(target);
+        FuturisticBypass.instance.on = false;
         return TimedWorkState.finished;
     }
 }
