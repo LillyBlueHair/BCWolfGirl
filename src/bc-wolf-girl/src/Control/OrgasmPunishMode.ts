@@ -183,11 +183,11 @@ export class OrgasmPunishMode {
             const v = 1;
             DataManager.points.points -= v;
             ParseMessage({ mode: "action", msg: "{player_wg}扣除了{v}积分，当前积分{points}" }, { player }, { v, points: DataManager.points.points });
+        } else {
+            const target = randomPick(canPunishList);
+            doPunish(player, target, ItemMode[target.Asset.Group.Name as AssetGroupItemName] as ModeStashType);
+            ParseMessage({ mode: "chat-action", msg: "喔，感觉如何呢？{player_wg}，这个图标意味着什么，现在知道了吗？究竟是会为了自由而苦苦保持着忍耐，还是放纵着就这么沉沦下去成为一个玩偶呢？" }, { player })
         }
-        const target = randomPick(canPunishList);
-
-        doPunish(player, target, ItemMode[target.Asset.Group.Name as AssetGroupItemName] as ModeStashType);
-        ParseMessage({ mode: "chat-action", msg: "喔，感觉如何呢？{player_wg}，这个图标意味着什么，现在知道了吗？究竟是会为了自由而苦苦保持着忍耐，还是放纵着就这么沉沦下去成为一个玩偶呢？" }, { player })
     }
 
     private resistCounter = 0;
