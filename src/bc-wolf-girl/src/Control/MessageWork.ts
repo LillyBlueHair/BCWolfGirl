@@ -10,7 +10,12 @@ export class MessageWork extends TimedWork {
     }
 
     run(player: PlayerCharacter): TimedWorkState {
-        const target = ChatRoomCharacter.find(c => c.MemberNumber === this.config?.target);
+        const target = (() => {
+            if (!this.config?.target) return undefined;
+            const t = this.config.target;
+            if (typeof t === 'number') return ChatRoomCharacter.find(c => c.MemberNumber === t);
+            return t;
+        })();
         ParseMessage(this.message, { player, target }, this.config?.args);
         return TimedWorkState.finished;
     }
