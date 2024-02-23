@@ -8,7 +8,7 @@ import { BegOrgasmTask } from "../../Control/TaskCtrl/BegOrgasmTask";
 import { InteractTask } from "../../Control/TaskCtrl/InteractTask";
 import { ResistTask } from "../../Control/TaskCtrl/ResistTask";
 import { TaskCtrl } from "../../Control/TaskCtrl/TaskCtrl";
-import { GetWolfGrilName, RunControls } from "../../Control/WolfGirlCtrl";
+import { GetWolfGirlName, RunControls } from "../../Control/WolfGirlCtrl";
 import { DataManager } from "../../Data";
 import { CommandTemplate } from "../ICmds";
 import { RouteIM } from "../../Control/Message";
@@ -18,7 +18,7 @@ import { MessageWork } from "../../Control/MessageWork";
 import { CommonWork } from "../../Control/CommonWork";
 
 const PushTask = (player: PlayerCharacter, t: ITask) => {
-    ParseMessage({ mode: "action", msg: `${GetWolfGrilName(player)}接收任务：\n${t.summary()}` });
+    ParseMessage({ mode: "action", msg: `${GetWolfGirlName(player)}接收任务：\n${t.summary()}` });
     TaskCtrl.instance.push_task(t, () => {
         ParseMessage({ mode: "action", msg: `接受任务失败：有运行中任务。` });
     });

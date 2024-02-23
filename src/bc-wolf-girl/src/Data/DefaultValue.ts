@@ -1,4 +1,4 @@
-export function defaultValue(): WolfGrilData {
+export function defaultValue(): WolfGirlData {
     return {
         outfit: {
             lite_mode: false,
@@ -47,13 +47,13 @@ function IsNumberArray(data: any): data is number[] {
     return data.every((item) => typeof item === "number");
 }
 
-export function Validate(data: any): WolfGrilData {
+export function Validate(data: any): WolfGirlData {
     const defaultData = defaultValue();
-    const xd = data as Partial<WolfGrilData>;
+    const xd = data as Partial<WolfGirlData>;
 
-    const ret: Partial<WolfGrilData> = {};
+    const ret: Partial<WolfGirlData> = {};
 
-    ret.outfit = ((data: Partial<WolfGrilData["outfit"]> | undefined) => {
+    ret.outfit = ((data: Partial<WolfGirlData["outfit"]> | undefined) => {
         const dvalue = defaultData.outfit;
         if (data === undefined) return dvalue;
 
@@ -88,7 +88,7 @@ export function Validate(data: any): WolfGrilData {
         return dvalue;
     })(xd.outfit);
 
-    ret.permission = ((data: Partial<WolfGrilData["permission"]> | undefined) => {
+    ret.permission = ((data: Partial<WolfGirlData["permission"]> | undefined) => {
         const dvalue = defaultData.permission;
         if (data === undefined) return dvalue;
         if (IsNumberArray(data.moderators)) dvalue.moderators = data.moderators;
@@ -96,14 +96,14 @@ export function Validate(data: any): WolfGrilData {
         return dvalue;
     })(xd.permission);
 
-    ret.settings = ((data: Partial<WolfGrilData["settings"]> | undefined) => {
+    ret.settings = ((data: Partial<WolfGirlData["settings"]> | undefined) => {
         const dvalue = defaultData.settings;
         if (data === undefined) return dvalue;
         if (typeof data.orgasmPunishMode === "number") dvalue.orgasmPunishMode = data.orgasmPunishMode;
         return dvalue;
     })(xd.settings);
 
-    ret.stat = ((data: Partial<WolfGrilData["stat"]> | undefined) => {
+    ret.stat = ((data: Partial<WolfGirlData["stat"]> | undefined) => {
         const dvalue = defaultData.stat;
         if (data === undefined) return dvalue;
         if (typeof data.script_run_time === "number") dvalue.script_run_time = data.script_run_time;
@@ -125,7 +125,7 @@ export function Validate(data: any): WolfGrilData {
         return dvalue;
     })(xd.stat);
 
-    ret.points = ((data: Partial<WolfGrilData["points"]> | undefined) => {
+    ret.points = ((data: Partial<WolfGirlData["points"]> | undefined) => {
         const dvalue = defaultData.points;
         if (data === undefined) return dvalue;
         if (typeof data.current === "number") dvalue.current = data.current;
@@ -134,7 +134,7 @@ export function Validate(data: any): WolfGrilData {
         return dvalue;
     })(xd.points);
 
-    ret.arousal = ((data: Partial<WolfGrilData["arousal"]> | undefined) => {
+    ret.arousal = ((data: Partial<WolfGirlData["arousal"]> | undefined) => {
         const dvalue = defaultData.arousal;
         if (data === undefined) return dvalue;
         if (typeof data.orgasm === "number") dvalue.orgasm = data.orgasm;
@@ -144,5 +144,5 @@ export function Validate(data: any): WolfGrilData {
         return dvalue;
     })(xd.arousal);
 
-    return ret as WolfGrilData;
+    return ret as WolfGirlData;
 }

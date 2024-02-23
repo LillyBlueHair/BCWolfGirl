@@ -19,7 +19,7 @@ interface WolfGirlDataSettings {
     orgasmPunishMode: 0 | 1 | 2;
 }
 
-interface WolfGrilData {
+interface WolfGirlData {
     outfit: {
         lite_mode: boolean;
         items: DataOutfitItem[];

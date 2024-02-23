@@ -47,7 +47,7 @@ export function TestRunControls(player: PlayerCharacter, type: ControllerType, m
     return ctrl.test(player, ctrl.target_item.map(e => app_map.get(e) as Item), mode);
 }
 
-export function GetWolfGrilName(target: Character): string {
+export function GetWolfGirlName(target: Character): string {
     return `狼女${target.MemberNumber ?? ""}`;
 }
 

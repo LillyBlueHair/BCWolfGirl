@@ -1,4 +1,4 @@
-import { GetWolfGrilName } from "../Control/WolfGirlCtrl";
+import { GetWolfGirlName } from "../Control/WolfGirlCtrl";
 import { AppearanceUpdate } from "bc-utilities";
 import { Commands, InjectionSwCommands, PointCommands } from "./Commands";
 import { CommandArgs, CommandTemplate } from "./ICmds";
@@ -12,7 +12,7 @@ export function RunCommands(player: PlayerCharacter, sender: number | Character,
     content = Strip(content);
     const usepoints = "使用奖励积分";
     const switchInjector = "注射枪模式切换";
-    const wgname = GetWolfGrilName(player);
+    const wgname = GetWolfGirlName(player);
 
     let cmdSeries: CommandTemplate[] | undefined = undefined;
 

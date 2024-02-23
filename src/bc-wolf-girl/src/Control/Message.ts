@@ -1,7 +1,7 @@
 import { CommandType } from "../ChatRoom/ICmds";
 import { ExtractMemberNumber } from "../utils/Character";
 import { ChatRoomAction } from "bc-utilities";
-import { GetWolfGrilName } from "./WolfGirlCtrl";
+import { GetWolfGirlName } from "./WolfGirlCtrl";
 
 export interface IMessage {
     mode: IMessageMode;
@@ -16,12 +16,12 @@ export function FormatMessage(msg: string, src?: { player?: Character, target?: 
         if (src?.target) {
             if (p1 === "target") return CharacterNickname(src.target);
             if (p1 === "target_id") return src.target.MemberNumber?.toString() ?? "";
-            if (p1 === "target_wg") return GetWolfGrilName(src.target);
+            if (p1 === "target_wg") return GetWolfGirlName(src.target);
         }
         if (src?.player) {
             if (p1 === "player") return CharacterNickname(src.player);
             if (p1 === "player_id") return src.player.MemberNumber?.toString() ?? "";
-            if (p1 === "player_wg") return GetWolfGrilName(src.player);
+            if (p1 === "player_wg") return GetWolfGirlName(src.player);
         }
         if (args && args[p1]) {
             return args[p1].toString();
