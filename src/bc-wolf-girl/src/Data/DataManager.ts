@@ -9,7 +9,7 @@ import { StatUtilities } from "./StatUtilities";
 import { FrequentData, DefaultData, isDefaultDataKey, PickDefaultData, isFrequentDataKey, PickFrequenceData, DataKeys } from "./DataCategory";
 
 
-function deserialize(str: (string | undefined)[]): WolfGrilData {
+function deserialize(str: (string | undefined)[]): WolfGirlData {
     const data = str.reduce((prev, cur) => {
         if (!cur) return prev;
         let d = LZString.decompressFromBase64(cur);
@@ -19,7 +19,7 @@ function deserialize(str: (string | undefined)[]): WolfGrilData {
         } catch {
             return prev;
         }
-    }, {} as Partial<WolfGrilData>);
+    }, {} as Partial<WolfGirlData>);
     return Validate(data);
 }
 
@@ -40,9 +40,47 @@ class SettingUtilities {
     }
 }
 
+const WrongDataKeyName = "BCWolfGrilData";
+const WrongFrequentDataKeyName = "BCWolfGrilFrequentData";
+
+function load(C: PlayerCharacter) {
+    const wrongDefaultData = C.ExtensionSettings[WrongDataKeyName];
+    const wrongFrequentData = C.ExtensionSettings[WrongFrequentDataKeyName];
+    if (wrongDefaultData || wrongFrequentData) {
+        const ret = deserialize([wrongDefaultData, wrongFrequentData]);
+        C.ExtensionSettings[WrongDataKeyName] = null;
+        C.ExtensionSettings[WrongFrequentDataKeyName] = null;
+
+        C.ExtensionSettings[DataKeyName] = wrongDefaultData;
+        C.ExtensionSettings[FrequentDataKeyName] = wrongFrequentData;
+
+        ServerPlayerExtensionSettingsSync(WrongDataKeyName);
+        ServerPlayerExtensionSettingsSync(WrongFrequentDataKeyName);
+        ServerPlayerExtensionSettingsSync(DataKeyName);
+        ServerPlayerExtensionSettingsSync(FrequentDataKeyName);
+        return ret;
+    }
+
+    const defaultData = C.ExtensionSettings[DataKeyName];
+    const frequentData = C.ExtensionSettings[FrequentDataKeyName];
+    return deserialize([defaultData, frequentData]);
+}
+
+function save(data: WolfGirlData, key?: DataKeys) {
+    if (Player && Player.ExtensionSettings) {
+        if (key === undefined || isDefaultDataKey(key)) {
+            Player.ExtensionSettings[DataKeyName] = serialize(PickDefaultData(data));
+            ServerPlayerExtensionSettingsSync(DataKeyName);
+        }
+        if (key === undefined || isFrequentDataKey(key)) {
+            Player.ExtensionSettings[FrequentDataKeyName] = serialize(PickFrequenceData(data));
+            ServerPlayerExtensionSettingsSync(FrequentDataKeyName);
+        }
+    }
+}
+
 export class DataManager {
     private static _instance: DataManager | undefined = undefined;
-    private _data: Partial<WolfGrilData> = {};
     private _permission: PermissionUtilities;
     private _outfit: OutfitUtilities;
     private _points: PointsUtilities;
@@ -50,14 +88,17 @@ export class DataManager {
     private _stat: StatUtilities;
     private _setting: SettingUtilities;
 
-    constructor(player: PlayerCharacter) {
-        this.load(player);
+    constructor(readonly data: WolfGirlData) {
         this._permission = new PermissionUtilities(this);
         this._outfit = new OutfitUtilities(this);
         this._points = new PointsUtilities(this);
         this._arousal = new ArousalUtilities(this);
         this._stat = new StatUtilities(this);
         this._setting = new SettingUtilities(this);
+    }
+
+    save(key?: DataKeys) {
+        save(this.data, key);
     }
 
     public static get instance(): DataManager {
@@ -88,19 +129,16 @@ export class DataManager {
         return this.instance._setting;
     }
 
-    public get data(): WolfGrilData {
-        return this._data as WolfGrilData;
-    }
-
     public static init(mod: ModSDKModAPI, msg?: string) {
-        let then_: ((mod: ModSDKModAPI) => void) | undefined = undefined;
+        let then_: ((data: DataManager) => void) | undefined = undefined;
 
         const load_then_message = (C: PlayerCharacter | null | undefined) => {
             if (this._instance) return;
             if (C) {
-                this._instance = new DataManager(C);
+                const data = load(C);
+                this._instance = new DataManager(data);
                 if (msg) console.log(msg);
-                if (then_) then_(mod);
+                if (then_) then_(this._instance);
             }
         };
 
@@ -113,25 +151,6 @@ export class DataManager {
             load_then_message(Player);
         }
 
-        return { then: (cb: (mod: ModSDKModAPI) => void) => then_ = cb };
-    }
-
-    load(C: PlayerCharacter) {
-        const defaultData = C.ExtensionSettings[DataKeyName];
-        const frequentData = C.ExtensionSettings[FrequentDataKeyName];
-        this._data = deserialize([defaultData, frequentData]);
-    }
-
-    save(key?: DataKeys) {
-        if (Player && Player.ExtensionSettings) {
-            if (key === undefined || isDefaultDataKey(key)) {
-                Player.ExtensionSettings[DataKeyName] = serialize(PickDefaultData(this._data));
-                ServerPlayerExtensionSettingsSync(DataKeyName);
-            }
-            if (key === undefined || isFrequentDataKey(key)) {
-                Player.ExtensionSettings[FrequentDataKeyName] = serialize(PickFrequenceData(this._data));
-                ServerPlayerExtensionSettingsSync(FrequentDataKeyName);
-            }
-        }
+        return { accepted: (cb: (data: DataManager) => void) => then_ = cb };
     }
 }

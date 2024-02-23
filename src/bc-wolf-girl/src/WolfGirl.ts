@@ -39,7 +39,9 @@ import { ActivityProvider } from './ChatRoom/Activity';
     const lateHook = (callback: () => void) => lateHooks.push(callback);
 
     const orgasm = new OrgasmMonitor(mod);
-    DataManager.init(mod, `${ModName} v${ModVersion} loaded.`);
+    DataManager.init(mod, `${ModName} v${ModVersion} loaded.`).accepted(data => {
+        DataManager.arousal.setMonitor((pl) => IsPlayerWolfGirl(pl), orgasm);
+    });
 
     TimedWorker.init(1000);
     TimeStat.init(1000);
@@ -67,7 +69,6 @@ import { ActivityProvider } from './ChatRoom/Activity';
     });
 
     TaskCtrlInit(1000, orgasm);
-    DataManager.arousal.setMonitor((pl) => IsPlayerWolfGirl(pl), orgasm);
     OrgasmPunishMode.init(orgasm);
     InitChatCmds(lateHook);
 

@@ -7,7 +7,7 @@ export const HTMLIDPrefix = "BCWG_";
 
 export const DebugMode = false;
 
-export const FrequentDataKeyName = "BCWolfGrilFrequentData";
-export const DataKeyName = "BCWolfGrilData";
+export const FrequentDataKeyName = "BCWolfGirlFrequentData";
+export const DataKeyName = "BCWolfGirlData";
 
 export const CUSTOM_ACTION_TAG = "SSCustomAction";
