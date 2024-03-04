@@ -7,7 +7,7 @@ export function IsFullyDressed(player: Character): boolean {
     );
     return OutfitItems.every(e => {
         const item = items_map.get(e.Asset.Group);
-        if (!item || !CheckOutfitItem(item, e, { craft: true })) return false;
+        if (!item || !CheckOutfitItem(item, e, { craft: true, lock: true })) return false;
         return true;
     });
 }
@@ -17,7 +17,7 @@ export function IsCollarOn(target: Character): boolean {
     const item = target.Appearance.find(e => e.Asset.Group.Name === group);
     const outfit = OutfitItemsMap.get(group);
     if (!item || !outfit) return false;
-    if (!CheckOutfitItem(item, outfit, { craft: true })) return false;
+    if (!CheckOutfitItem(item, outfit, { craft: true, lock: true })) return false;
     return true;
 }
 
@@ -26,7 +26,7 @@ function IsGroupsDressed(player: PlayerCharacter, groups: AssetGroupItemName[]) 
     if (tItems.length !== groups.length) return false;
     return tItems.every(e => {
         const outfit = OutfitItemsMap.get(e.Asset.Group.Name);
-        if (!CheckOutfitItem(e, outfit, { craft: true })) return false;
+        if (!CheckOutfitItem(e, outfit, { craft: true, lock: true })) return false;
         return true;
     });
 }

@@ -6,6 +6,7 @@ import { IMessage, ParseMessage } from "../Message";
 import { TimedWork, TimedWorkState } from "../Worker";
 import { OutfitItemsMap } from "./Definition";
 import { CalculateLocks, DefaultCheckItemOnTarget, DefaultCheckOutfitItem, ItemFromOutfit } from "./Utils";
+import { FuturisticBypass } from "../WolfGirlCtrl/Ctrls/FuturisticBypass";
 
 
 interface OutfitCheckWorkItem {
@@ -42,10 +43,8 @@ export interface OutfitFixWorkResult {
 
 export class OutfitFixWork extends TimedWork {
     private readonly _target: OutfitCheckWorkItem[];
-    private readonly _message?: (passed: OutfitFixWorkResult) => IMessage | undefined | void;
-    private readonly _acting_chara: Character | number;
 
-    constructor(acting_chara: Character | number, target: (AssetGroupItemName | OutfitItemType | OutfitCheckWorkParamItem)[], message?: (result: OutfitFixWorkResult) => IMessage | undefined | void) {
+    constructor(private readonly acting: Character | number, target: (AssetGroupItemName | OutfitItemType | OutfitCheckWorkParamItem)[], private readonly message?: (result: OutfitFixWorkResult) => IMessage | undefined | void) {
         super();
         this._target = target.map(i => {
             if (typeof i === "string") return { target: OutfitItemsMap.get(i) as OutfitItemType };
@@ -53,8 +52,6 @@ export class OutfitFixWork extends TimedWork {
             else if (IsStringWorkItem(i)) return { ...i, target: OutfitItemsMap.get(i.target) as OutfitItemType };
             else return { target: i };
         });
-        this._message = message;
-        this._acting_chara = acting_chara;
     }
 
     run(player: PlayerCharacter): TimedWorkState {
@@ -73,7 +70,7 @@ export class OutfitFixWork extends TimedWork {
         const locked_items = result.blocked.map(i => i.target.Asset.Group).map(i => (app_map.get(i) as Item).Asset.Description).join("、");
 
         const do_message = (result: OutfitFixWorkResult) =>
-            (((msg) => msg && ParseMessage(msg, { player }, { locked_items }))(this._message?.(result)));
+            (((msg) => msg && ParseMessage(msg, { player }, { locked_items }))(this.message?.(result)));
 
         if (result.blocked.length > 0) {
             do_message({ ret: "blocked", blocked: result.blocked.map(i => i.target.Asset.Group) });
@@ -87,11 +84,12 @@ export class OutfitFixWork extends TimedWork {
 
         const saved_item = DataManager.outfit.color_store;
 
-        const lock = CalculateLocks(this._acting_chara, player);
+        const lock = CalculateLocks(this.acting, player);
 
-        player.Appearance = player.Appearance.concat(this._target.map(i => {
+        FuturisticBypass.instance.on = true;
+        player.Appearance = player.Appearance.concat(result.canRepair.map(i => {
             const existed_i = app_map.get(i.target.Asset.Group);
-            const expected_i = ItemFromOutfit(player, player, i.target);
+            const expected_i = ItemFromOutfit(this.acting, player, i.target);
             if (!expected_i) return undefined;
 
             const saved = saved_item.get(i.target.Asset.Group);
@@ -105,6 +103,7 @@ export class OutfitFixWork extends TimedWork {
             if (!existed_i) return expected_i;
             else Object.assign(existed_i, expected_i);
         }).filter(i => i !== undefined) as Item[]);
+        FuturisticBypass.instance.on = false;
         AppearanceUpdate(player);
         do_message({ ret: "canfix", counter: result.canRepair.length });
         return TimedWorkState.finished;

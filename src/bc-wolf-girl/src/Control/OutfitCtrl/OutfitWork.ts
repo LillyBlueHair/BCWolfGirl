@@ -7,33 +7,48 @@ import { ExtractMemberNumber } from "../../utils/Character";
 import { AppearanceUpdate, OutfitItemType } from "bc-utilities";
 import { FuturisticBypass } from "../WolfGirlCtrl/Ctrls/FuturisticBypass";
 
+enum TargetMode {
+    TARGET_ACTING,
+    TARGET_ACTED
+}
+
 export class ItemWearWork extends TimedWork {
     readonly _items: OutfitItemType[];
-    readonly _target: number;
-    readonly _craft?: { uid: number, name: string };
-    constructor(readonly items: AssetGroupItemName[] | OutfitItemType[], target: number | Character, craft?: { uid: number, name: string }) {
+    readonly target_num: number;
+
+    static readonly TARGET_ACTING = TargetMode.TARGET_ACTING;
+    static readonly TARGET_ACTED = TargetMode.TARGET_ACTED;
+    constructor(readonly items: AssetGroupItemName[] | OutfitItemType[], private readonly target: number | Character, private readonly mode: TargetMode = TargetMode.TARGET_ACTED) {
         super();
         if (items.length === 0) this._items = [];
         else if (typeof items[0] === "string") this._items = (items as AssetGroupItemName[]).map(e => OutfitItemsMap.get(e) as OutfitItemType);
         else this._items = items as OutfitItemType[];
-        this._target = ExtractMemberNumber(target);
-        this._craft = craft;
+        this.target_num = ExtractMemberNumber(target);
     }
 
-    static ItemWearSingle(item: OutfitItemType, target: Character) {
-        const item_ = ItemFromOutfit(target, target, item);
+    static ItemWearSingle(item: OutfitItemType, acting: number, acted: Character) {
+        const item_ = ItemFromOutfit(acting, acted, item);
         if (!item_) return;
-        const oldIdx = target.Appearance.findIndex(e => e.Asset.Group === item_.Asset.Group);
-        if (oldIdx >= 0) target.Appearance[oldIdx] = item_;
-        else target.Appearance.push(item_);
+        const oldIdx = acted.Appearance.findIndex(e => e.Asset.Group === item_.Asset.Group);
+        if (oldIdx >= 0) acted.Appearance[oldIdx] = item_;
+        else acted.Appearance.push(item_);
     }
 
     run(player: PlayerCharacter): TimedWorkState {
-        const target = ChatRoomCharacter.find(c => c.MemberNumber === this._target);
-        if (!target) return TimedWorkState.interrupted;
+        const player_num = player.MemberNumber;
+        if (!player_num) return TimedWorkState.interrupted;
 
-        this._items.forEach(outfit => ItemWearWork.ItemWearSingle(outfit, target));
-        AppearanceUpdate(target);
+        if (this.mode === TargetMode.TARGET_ACTING) {
+            this._items.forEach(outfit => ItemWearWork.ItemWearSingle(outfit, this.target_num, player));
+            AppearanceUpdate(player);
+        } else {
+            const acted = ChatRoomCharacter.find(c => c.MemberNumber === this.target_num);
+            if (!acted) return TimedWorkState.interrupted;
+
+            this._items.forEach(outfit => ItemWearWork.ItemWearSingle(outfit, player_num, acted));
+            AppearanceUpdate(acted);
+        }
+
         return TimedWorkState.finished;
     }
 }

@@ -19,12 +19,14 @@ export class FuturisticBypass {
 
     constructor(mod: ModSDKModAPI) {
         mod.hookFunction('InventoryItemFuturisticValidate', 2, (args, next) => {
-            if (!args[1]) args[1] = DialogFocusItem;
-            if (!args[2]) args[2] = false;
-
-            if (this._state) args[2] = true;
-
+            if (this._state) return "";
             return next(args);
         });
+
+        mod.hookFunction('ExtendedItemValidate', 2, (args, next) => {
+            const item = args[2] as Item;
+            if (item.Asset.Name.startsWith("Futuristic") && this._state) return "";
+            return next(args);
+        })
     }
 }

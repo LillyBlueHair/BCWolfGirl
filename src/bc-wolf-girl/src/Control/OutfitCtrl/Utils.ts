@@ -3,13 +3,14 @@ import { ExtractMemberNumber } from "../../utils/Character";
 import { OutfitItems, OutfitItemsMap } from "./Definition";
 import { CheckOutfitItem, OutfitItemManifest, OutfitItemType, buildAppMap } from "bc-utilities";
 
-export function ItemFromOutfit(player: Character, wearer: Character, v: OutfitItemType) {
-    const lock = CalculateLocks(player, wearer);
+export function ItemFromOutfit(acting: number | Character, acted: Character, v: OutfitItemType) {
+    const num = ExtractMemberNumber(acting);
+    const lock = CalculateLocks(num, acted);
     const ecraft = EILNetwork.Access.craft;
-    return OutfitItemManifest(wearer, v, {
+    return OutfitItemManifest(acted, v, {
         craft: { MemberName: ecraft.name, MemberNumber: ecraft.uid }, lock: {
             Lock: lock,
-            MemberNumber: player.MemberNumber,
+            MemberNumber: num,
         }
     });
 }
