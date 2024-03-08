@@ -22,8 +22,8 @@ export class TaskCtrl {
             }
         }, time_reso);
 
-        om.onOrgasm(this.onOrgasm);
-        om.onResist(this.onResist);
+        om.onOrgasm(p => this.onOrgasm(p));
+        om.onResist(p => this.onResist(p));
     }
 
     push_task(t: ITask, reject?: (cur: ITask) => void) {
@@ -38,27 +38,19 @@ export class TaskCtrl {
     }
 
     onChat(player: PlayerCharacter, sender: Character, msg: string, type: CommandType) {
-        if (this._active_task) {
-            this._active_task.onChat(player, sender, msg, type);
-        }
+        this._active_task?.onChat(player, sender, msg, type);
     }
 
     onActivity(player: PlayerCharacter, sender: Character, activity: ActivityInfo) {
-        if (this._active_task) {
-            this._active_task.onActivity(player, sender, activity);
-        }
+        this._active_task?.onActivity(player, sender, activity);
     }
 
     onOrgasm(player: PlayerCharacter) {
-        if (this._active_task) {
-            this._active_task.onOrgasm(player);
-        }
+        this._active_task?.onOrgasm(player);
     }
 
     onResist(player: PlayerCharacter) {
-        if (this._active_task) {
-            this._active_task.onResist(player);
-        }
+        this._active_task?.onResist(player);
     }
 
     private static _instance: TaskCtrl | undefined = undefined;

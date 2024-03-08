@@ -215,9 +215,6 @@ export class OrgasmPunishMode {
     }
 
     constructor(readonly org: OrgasmMonitor, readonly time_reso: number = 200) {
-        org.onOrgasm(this.onOrgasm);
-        org.onResist(this.onResist);
-
         setInterval(() => {
             if (!Player || !IsPlayerWolfGirl(Player)) {
                 Object.keys(SavedItemMode).forEach(key => SavedItemMode[key as AssetGroupItemName] = undefined);
@@ -246,6 +243,9 @@ export class OrgasmPunishMode {
                 }
             }
         }, time_reso);
+
+        org.onOrgasm(p => this.onOrgasm(p));
+        org.onResist(p => this.onResist(p));
     }
 
     static _instance: OrgasmPunishMode | undefined = undefined;
