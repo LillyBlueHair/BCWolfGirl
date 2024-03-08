@@ -22,8 +22,8 @@ export class TaskCtrl {
             }
         }, time_reso);
 
-        om.AddOrgasmEvent((player) => this.onOrgasm(player));
-        om.AddResistEvent((player) => this.onResist(player));
+        om.onOrgasm(this.onOrgasm);
+        om.onResist(this.onResist);
     }
 
     push_task(t: ITask, reject?: (cur: ITask) => void) {

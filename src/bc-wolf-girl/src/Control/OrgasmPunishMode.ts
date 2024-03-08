@@ -215,8 +215,8 @@ export class OrgasmPunishMode {
     }
 
     constructor(readonly org: OrgasmMonitor, readonly time_reso: number = 200) {
-        org.AddOrgasmEvent((player) => this.onOrgasm(player));
-        org.AddResistEvent((player) => this.onResist(player));
+        org.onOrgasm(this.onOrgasm);
+        org.onResist(this.onResist);
 
         setInterval(() => {
             if (!Player || !IsPlayerWolfGirl(Player)) {

@@ -126,27 +126,25 @@ export class DataManager {
     }
 
     public static init(mod: ModSDKModAPI, msg?: string) {
-        let then_: ((data: DataManager) => void) | undefined = undefined;
+        return new Promise<DataManager>((resolve) => {
+            const load_then_message = (C: PlayerCharacter | null | undefined) => {
+                if (this._instance) return;
+                if (C) {
+                    const data = load(C, mod);
+                    this._instance = new DataManager(data);
+                    if (msg) console.log(msg);
+                    resolve(this._instance);
+                }
+            };
 
-        const load_then_message = (C: PlayerCharacter | null | undefined) => {
-            if (this._instance) return;
-            if (C) {
-                const data = load(C, mod);
-                this._instance = new DataManager(data);
-                if (msg) console.log(msg);
-                if (then_) then_(this._instance);
+            mod.hookFunction('LoginResponse', 1, (args, next) => {
+                next(args);
+                load_then_message(args[0] as PlayerCharacter);
+            });
+
+            if (Player && Player.MemberNumber) {
+                load_then_message(Player);
             }
-        };
-
-        mod.hookFunction('LoginResponse', 1, (args, next) => {
-            next(args);
-            load_then_message(args[0] as PlayerCharacter);
         });
-
-        if (Player && Player.MemberNumber) {
-            load_then_message(Player);
-        }
-
-        return { accepted: (cb: (data: DataManager) => void) => then_ = cb };
     }
 }

@@ -41,8 +41,8 @@ export class ArousalUtilities {
 
     setMonitor(filter: (player: PlayerCharacter) => boolean, orgasm: OrgasmMonitor) {
         const rfilter = (player: PlayerCharacter, cb: () => void) => { if (filter(player)) cb(); }
-        orgasm.AddOrgasmEvent((player) => rfilter(player, () => this.orgasm += 1));
-        orgasm.AddResistEvent((player) => rfilter(player, () => this.resist += 1));
-        orgasm.AddRuinedEvent((player) => rfilter(player, () => this.ruined += 1));
+        orgasm.onOrgasm((player) => rfilter(player, () => this.orgasm += 1));
+        orgasm.onResist((player) => rfilter(player, () => this.resist += 1));
+        orgasm.onRuined((player) => rfilter(player, () => this.ruined += 1));
     }
 }

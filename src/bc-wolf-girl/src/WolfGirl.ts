@@ -1,8 +1,8 @@
 import bcMod from 'bondage-club-mod-sdk'
 import { CUSTOM_ACTION_TAG, GIT_REPO, ModName, ModVersion, SCRIPT_ID } from './Definition';
-import { BeepRawHandler, ChatRoomHandler, OnlineMessageHandlerInit } from './ChatRoom/Handler';
+import { BeepHandler, BeepRawHandler, ChatHandler } from './ChatRoom/Handler';
 import { TimedWorker } from "./Control/Worker";
-import { ChatRoomAction } from 'bc-utilities';
+import { ChatRoomAction, ChatRoomHandler } from 'bc-utilities';
 import { EILNetwork } from './Network';
 import { WolfGirlCtrlInit, IsPlayerWolfGirl } from './Control/WolfGirlCtrl';
 import { OrgasmMonitor } from 'bc-utilities';
@@ -38,10 +38,13 @@ import { ActivityProvider } from './ChatRoom/Activity';
     const lateHooks: (() => void)[] = [];
     const lateHook = (callback: () => void) => lateHooks.push(callback);
 
-    const orgasm = new OrgasmMonitor(mod);
-    DataManager.init(mod, `${ModName} v${ModVersion} loaded.`).accepted(data => {
-        DataManager.arousal.setMonitor((pl) => IsPlayerWolfGirl(pl), orgasm);
-    });
+    OrgasmMonitor.init(mod).then(orgasm =>
+        DataManager.init(mod, `${ModName} v${ModVersion} loaded.`).then(
+            _ => {
+                DataManager.arousal.setMonitor((pl) => IsPlayerWolfGirl(pl), orgasm);
+                TaskCtrlInit(1000, orgasm);
+                OrgasmPunishMode.init(orgasm);
+            }));
 
     TimedWorker.init(1000);
     TimeStat.init(1000);
@@ -49,7 +52,8 @@ import { ActivityProvider } from './ChatRoom/Activity';
     EILNetwork.init(asset_url);
     ChatRoomAction.init(CUSTOM_ACTION_TAG);
 
-    OnlineMessageHandlerInit(mod);
+    BeepHandler(mod);
+    ChatRoomHandler.init(mod).then(handler => ChatHandler(handler));
     AdditionalInventoryInit(mod);
 
     WolfGirlCtrlInit(mod, lateHook);
@@ -68,8 +72,6 @@ import { ActivityProvider } from './ChatRoom/Activity';
         }
     });
 
-    TaskCtrlInit(1000, orgasm);
-    OrgasmPunishMode.init(orgasm);
     InitChatCmds(lateHook);
 
     (async () => {
