@@ -116,6 +116,15 @@ export const TaskPointsCmds: CommandTemplate[] = [
 
             }
         }
+    }, {
+        match: /^设置高潮惩罚时间为([1-9]\d{0,2})分钟/,
+        prerequisite: BasicPrerequisites,
+        run(player, sender, content, args) {
+            const v = parseInt(content[1]);
+            DataManager.points.orgasm_punish_time = v * 60 * 1000;
+            RouteIM(args.type, player, sender, `收到指令，{player_wg}的高潮惩罚时间为 ${DataManager.points.orgasm_punish_time / 60 / 1000} 分钟`);
+            ParseMessage({ mode: "local", msg: "机械播报的冰冷声响复述了一遍{player_wg}随意高潮后需要付出怎样的代价，也许在足够的欲望与饥渴之下，{player_wg}会选择放纵自己的身体沉入欲望呢？" }, { player })
+        }
     },
     {
         match: /^(扣除|奖励)([1-9]\d{0,2})积分/,

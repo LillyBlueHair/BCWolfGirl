@@ -27,6 +27,7 @@ export function defaultValue(): WolfGirlData {
             current: 0,
             punish_time: 5 * 60 * 1000,
             task_time: 15 * 60 * 1000,
+            orgasm_punish_time: 5 * 60 * 1000
         },
         arousal: {
             orgasm: 0,
@@ -131,6 +132,7 @@ export function Validate(data: any): WolfGirlData {
         if (typeof data.current === "number") dvalue.current = data.current;
         if (typeof data.punish_time === "number") dvalue.punish_time = data.punish_time;
         if (typeof data.task_time === "number") dvalue.task_time = data.task_time;
+        if (typeof data.orgasm_punish_time === "number") dvalue.orgasm_punish_time = data.orgasm_punish_time;
         return dvalue;
     })(xd.points);
 

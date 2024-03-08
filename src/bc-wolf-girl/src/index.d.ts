@@ -47,6 +47,7 @@ interface WolfGirlData {
         current: number;
         punish_time: number;
         task_time: number;
+        orgasm_punish_time: number;
     },
     arousal: {
         orgasm: number;

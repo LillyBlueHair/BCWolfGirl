@@ -31,6 +31,15 @@ export class PointsUtilities {
         this.save();
     }
 
+    get orgasm_punish_time() {
+        return this.parent.data.points.orgasm_punish_time;
+    }
+
+    set orgasm_punish_time(arg: number) {
+        this.parent.data.points.orgasm_punish_time = arg;
+        this.save();
+    }
+
     get task_time() {
         return this.parent.data.points.task_time;
     }

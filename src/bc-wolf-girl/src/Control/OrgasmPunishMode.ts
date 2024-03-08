@@ -226,7 +226,7 @@ export class OrgasmPunishMode {
 
             const pModeValue = DataManager.settings.query("orgasmPunishMode");
             if (pModeValue === 0 || pModeValue === 2) return;
-            const punish_time = DataManager.points.punish_time;
+            const punish_time = DataManager.points.orgasm_punish_time;
             const now = Date.now();
             const itemsMap = buildItemsMap(Player);
 
