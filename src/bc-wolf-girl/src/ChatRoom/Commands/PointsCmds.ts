@@ -72,7 +72,7 @@ export const TaskPointsCmds: CommandTemplate[] = [
         run(player, sender, content, args) {
             const v = parseInt(content[1]);
             DataManager.points.punish_time = v * 60 * 1000;
-            RouteIM(args.type, player, sender, `收到指令，{player_wg}的惩罚时间为 ${DataManager.points.punish_time / 60 / 1000} 分钟`);
+            ParseMessage({ mode: "chat-action", msg: `收到指令，{player_wg}的惩罚时间为 ${DataManager.points.punish_time / 60 / 1000} 分钟` }, { player })
             ParseMessage({ mode: "local", msg: `机械播报的冰冷声响复述了一遍{player_wg}任务失败的后果，似乎完全没有情感，但是却能听出一丝玩味` }, { player })
         }
     },
@@ -82,8 +82,8 @@ export const TaskPointsCmds: CommandTemplate[] = [
         run(player, sender, content, args) {
             const v = parseInt(content[1]);
             DataManager.points.task_time = v * 60 * 1000;
-            RouteIM(args.type, player, sender, `收到指令，{player_wg}的任务基础时间为 ${DataManager.points.task_time / 60 / 1000} 分钟`);
-            ParseMessage({ mode: "local", msg: `机械播报的冰冷声响复述了一遍{player_wg}的任务时间，滴答，滴答，还有时间发呆吗？精准的科技可不会错漏哪怕一秒哦？` }, { player });
+            ParseMessage({ mode: "chat-action", msg: `收到指令，{player_wg}的任务基础时间为 ${DataManager.points.task_time / 60 / 1000} 分钟` }, { player });
+            ParseMessage({ mode: "action", msg: `机械播报的冰冷声响复述了一遍{player_wg}的任务时间，滴答，滴答，还有时间发呆吗？精准的科技可不会错漏哪怕一秒哦？` }, { player });
         }
     },
     {
@@ -122,8 +122,8 @@ export const TaskPointsCmds: CommandTemplate[] = [
         run(player, sender, content, args) {
             const v = parseInt(content[1]);
             DataManager.points.orgasm_punish_time = v * 60 * 1000;
-            RouteIM(args.type, player, sender, `收到指令，{player_wg}的高潮惩罚时间为 ${DataManager.points.orgasm_punish_time / 60 / 1000} 分钟`);
-            ParseMessage({ mode: "local", msg: "机械播报的冰冷声响复述了一遍{player_wg}随意高潮后需要付出怎样的代价，也许在足够的欲望与饥渴之下，{player_wg}会选择放纵自己的身体沉入欲望呢？" }, { player })
+            ParseMessage({ mode: "chat-action", msg: `收到指令，{player_wg}的高潮惩罚时间为 ${DataManager.points.orgasm_punish_time / 60 / 1000} 分钟` }, { player });
+            ParseMessage({ mode: "action", msg: "机械播报的冰冷声响复述了一遍{player_wg}随意高潮后需要付出怎样的代价，也许在足够的欲望与饥渴之下，{player_wg}会选择放纵自己的身体沉入欲望呢？" }, { player })
         }
     },
     {
