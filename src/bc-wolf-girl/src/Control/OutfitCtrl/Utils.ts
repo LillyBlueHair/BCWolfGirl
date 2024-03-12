@@ -11,7 +11,8 @@ export function ItemFromOutfit(acting: number | Character, acted: Character, v: 
         craft: { MemberName: ecraft.name, MemberNumber: ecraft.uid }, lock: {
             Lock: lock,
             MemberNumber: num,
-        }
+        },
+        difficulty: 42
     });
 }
 
