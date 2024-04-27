@@ -40,7 +40,7 @@ export class DrinkExtend extends IActivityExtended<CustomActivities, CustomPrere
         this.RedbullDrinkTimeout = Date.now() + 15 * 60 * 1000;
     }
 
-    init(mod: ModSDKModAPI<any>): void {
+    init(mod: ModSDKModAPI): void {
         mod.hookFunction("DialogStruggleStart", 1, (args, next) => {
             const [C, Action, PrevItem, NextItem] = args as [Character, string, Item, Item];
             if (C.MemberNumber === Player?.MemberNumber && this.RedbullDrinkTimeout > Date.now() && Action === "ActionStruggle") {

@@ -12,7 +12,7 @@ function DialogInventoryBuildHandler(C: Character, lock: boolean) {
         const item = ItemFromOutfit(C, C, e);
 
         if (!item || !item.Craft) return;
-        if (DialogCanUseCraftedItem(C, item.Craft))
+        if (DialogCanUseCraftedItem(C, item.Craft, item.Asset))
             DialogInventoryAdd(C, { Asset: item.Asset, Craft: item.Craft }, false);
     })
 
