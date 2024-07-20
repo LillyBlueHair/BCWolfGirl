@@ -139,7 +139,7 @@ export class DataManager {
 
             mod.hookFunction('LoginResponse', 1, (args, next) => {
                 next(args);
-                load_then_message(args[0] as PlayerCharacter);
+                load_then_message(Player);
             });
 
             if (Player && Player.MemberNumber) {
