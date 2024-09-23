@@ -75,10 +75,10 @@ export const StatCmds: CommandTemplate[] = [
                             ParseMessage({ mode: "action", msg: "扫描数据分析完毕，{player_wg}的性奋中枢处于关闭状态，没有收集到任何身体数据。" }, { player });
                             return TimedWorkState.interrupted;
                         }
-                        const { Zone } = player.ArousalSettings;
-                        const value3Zones = Zone.filter(z => z.Factor === 3).map(z => AssetGroupGet(player.AssetFamily, z.Name)?.Description).filter(z => !!z).join("、");
-                        const value4Zones = Zone.filter(z => z.Factor === 4).map(z => AssetGroupGet(player.AssetFamily, z.Name)?.Description).filter(z => !!z).join("、");
-                        const orgasmZones = Zone.filter(z => z.Orgasm).map(z => AssetGroupGet(player.AssetFamily, z.Name)?.Description).filter(z => !!z).join("、");
+                        const ZoneData = AssetGroup.filter(g => g.IsItem()).map(g => g.Name).map(g => PreferenceGetArousalZone(player, g)).filter(z => !!z) as ArousalZone[];
+                        const value3Zones = ZoneData.filter(z => z.Factor === 3).map(z => AssetGroupGet(player.AssetFamily, z.Name)?.Description).filter(z => !!z).join("、");
+                        const value4Zones = ZoneData.filter(z => z.Factor === 4).map(z => AssetGroupGet(player.AssetFamily, z.Name)?.Description).filter(z => !!z).join("、");
+                        const orgasmZones = ZoneData.filter(z => z.Orgasm).map(z => AssetGroupGet(player.AssetFamily, z.Name)?.Description).filter(z => !!z).join("、");
                         ParseMessage({ mode: "action", msg: `扫描数据已分析完毕，{player_wg}身体较为敏感的部位为 {value3Zones} ，{player_wg}身体十分敏感的部位为 {value4Zones} ，其中，能够使{player_wg}高潮的部位为 {orgasmZones} ，扫描数据总结完成` },
                             { player }, { value3Zones, value4Zones, orgasmZones });
                     })

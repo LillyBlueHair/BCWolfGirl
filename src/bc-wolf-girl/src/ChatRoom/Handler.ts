@@ -5,7 +5,7 @@ import { TaskCtrl } from "../Control/TaskCtrl/TaskCtrl";
 import { ModSDKModAPI } from "bondage-club-mod-sdk";
 import { ActivityProvider } from "./Activity";
 
-export function BeepRawHandler(player: PlayerCharacter, data: ServerBeepData) {
+export function BeepRawHandler(player: PlayerCharacter, data: ServerAccountBeepResponse) {
     if (!data.MemberName || !data.MemberNumber || !data.Message) return;
     if (player.GhostList && player.GhostList.indexOf(data.MemberNumber) >= 0) return;
 

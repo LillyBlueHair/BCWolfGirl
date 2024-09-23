@@ -36,7 +36,7 @@ export class WolfGirlItemsSwitch extends IActivityCustom<CustomActivities, Custo
     }
 
     on(player: PlayerCharacter, sender: Character, info: ActivityInfo): void {
-        if (info.TargetCharacter.MemberNumber === player.MemberNumber) {
+        if (info.TargetCharacter === player.MemberNumber) {
             if (ModOrSelfPrerequisites(player, sender)) {
                 if (DataManager.outfit.items.size > 0) {
                     StartStashPopSequence(player);

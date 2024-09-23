@@ -1,6 +1,6 @@
 import bcMod from 'bondage-club-mod-sdk'
 import { CUSTOM_ACTION_TAG, GIT_REPO, ModName, ModVersion, SCRIPT_ID } from './Definition';
-import { BeepHandler, BeepRawHandler, ChatHandler } from './ChatRoom/Handler';
+import { BeepHandler, ChatHandler } from './ChatRoom/Handler';
 import { TimedWorker } from "./Control/Worker";
 import { ChatRoomAction, ChatRoomHandler } from 'bc-utilities';
 import { EILNetwork } from './Network';
@@ -81,5 +81,4 @@ import { ActivityProvider } from './ChatRoom/Activity';
     })();
 
     window.__load_flag__ = true;
-    console.log(`${ModName} v${ModVersion} loaded.`);
 })()

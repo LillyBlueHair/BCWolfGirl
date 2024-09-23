@@ -19,7 +19,7 @@ export function DoShockPunish(player: PlayerCharacter, item: Item | undefined) {
         CommonSetScreen("Character", "InformationSheet");
     if (CurrentScreen === 'ChatAdmin')
         CommonSetScreen('Online', 'ChatRoom');
-    if (CurrentScreen === 'InformationSheet')
+    if (CurrentScreen === 'InformationSheet' && InformationSheetPreviousModule)
         CommonSetScreen(InformationSheetPreviousModule, InformationSheetPreviousScreen);
     let msg = ElementValue("InputChat");
     if (IsSimpleChat(msg))
@@ -32,12 +32,12 @@ export function DoShockPunish(player: PlayerCharacter, item: Item | undefined) {
     const intensity = 2;
 
     const Dictionary = [
-        { Tag: "DestinationCharacterName", Text: CharacterNickname(player), MemberNumber: MemberNumber },
-        { Tag: "AssetName", AssetName: item?.Asset.Name, GroupName: item?.Asset.Group.Name },
-        { ShockIntensity: intensity * 1.5 },
-        { FocusGroupName: item?.Asset.Group.Name },
-        { Automatic: true }
-    ];
+        { Tag: "DestinationCharacterName", Text: CharacterNickname(player), MemberNumber: MemberNumber } as CharacterReferenceDictionaryEntry,
+        { Tag: "AssetName", AssetName: item?.Asset.Name, GroupName: item?.Asset.Group.Name } as AssetReferenceDictionaryEntry,
+        { ShockIntensity: intensity * 1.5 } as ShockEventDictionaryEntry,
+        { FocusGroupName: item?.Asset.Group.Name } as FocusGroupDictionaryEntry,
+        { Automatic: true } as AutomaticEventDictionaryEntry,
+    ] as ChatMessageDictionary;
 
     if (CurrentScreen == "ChatRoom")
         ChatRoomMessage({ Content: 'TriggerShock' + intensity, Type: "Action", Sender: MemberNumber, Dictionary: Dictionary });

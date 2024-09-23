@@ -13,6 +13,7 @@ function deserialize(str: (string | undefined)[]): WolfGirlData {
     const data = str.reduce((prev, cur) => {
         if (!cur) return prev;
         let d = LZString.decompressFromBase64(cur);
+        if (!d) return prev;
         try {
             let decoded = JSON.parse(d);
             return Object.assign(prev, decoded);
