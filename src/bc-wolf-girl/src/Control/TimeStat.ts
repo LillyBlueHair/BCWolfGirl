@@ -7,7 +7,7 @@ export class TimeStat {
     constructor(readonly resolution: number) {
         this.timer = Date.now();
         setInterval(() => {
-            if (Player && Player.MemberNumber) {
+            if (Player && Player.MemberNumber && DataManager.instance) {
                 const time = Date.now();
                 const isWolfGirl = IsPlayerWolfGirl(Player);
                 const isStashed = DataManager.outfit.items.size > 0;

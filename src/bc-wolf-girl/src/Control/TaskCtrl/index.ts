@@ -27,7 +27,7 @@ export function TaskCtrlInit(time_reso: number, om: OrgasmMonitor) {
 
     let check_timer = Date.now();
     setInterval(() => {
-        if (Player && Player.MemberNumber) {
+        if (Player && Player.MemberNumber && DataManager.instance) {
             const now = Date.now();
             const ten_min_after = 10 * 60 * 1000 + check_timer;
             if (TaskCtrl.instance.has_task() || CurrentScreen !== "ChatRoom") check_timer = now;
