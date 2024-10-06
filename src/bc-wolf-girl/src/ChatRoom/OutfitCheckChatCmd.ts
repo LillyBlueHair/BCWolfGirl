@@ -5,14 +5,15 @@ import { EILNetwork } from "../Network";
 import { GatherAppMap } from "../utils/Apperance";
 import { ChatRoomAction } from "bc-utilities";
 
+const CmdDetails: Map<string, (...args: string[]) => void> = new Map([["check", ChatCmdOutfitCheck]])
+
 const WolfGirlCmds: ICommand[] = [
     {
         Tag: "wolfgirl",
+        Description: `<${[...CmdDetails.keys()].join("|")}> <参数> : WolfGirl Mod指令`,
         Action: ChatCmdRouter
     }
 ]
-
-const CmdDetails: Map<string, (...args: string[]) => void> = new Map([["check", ChatCmdOutfitCheck]])
 
 function ChatCmdRouter(args: string, command: string) {
     const [, ...parts] = command.split(" ");

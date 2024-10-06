@@ -6,7 +6,7 @@
     "serve": "http-server ./public -p 3043 --cors",
     "clean": "rm -r ./node_modules ./public ./packages/*/node_modules ./packages/*/dist ./packages/*/public"
   },
-  "packageManager": "pnpm@8.15.2",
+  "packageManager": "pnpm@9.7.0",
   "author": "Saki Saotome",
   "devDependencies": {
     "http-server": "^14.1.1"
