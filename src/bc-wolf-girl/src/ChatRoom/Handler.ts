@@ -1,12 +1,11 @@
-import { ActivityDeconstruct, ActivityInfo, ChatRoomHandler } from "bc-utilities";
+import { ActivityInfo, ChatRoomHandler } from "bc-utilities";
 import { RunCommands } from "./Run";
-import { CommandType } from "./ICmds";
 import { TaskCtrl } from "../Control/TaskCtrl/TaskCtrl";
 import { ModSDKModAPI } from "bondage-club-mod-sdk";
 import { ActivityProvider } from "./Activity";
 
 export function BeepRawHandler(player: PlayerCharacter, data: ServerAccountBeepResponse) {
-    if (!data.MemberName || !data.MemberNumber || !data.Message) return;
+    if (!data.MemberName || !data.MemberNumber || typeof data.Message !== 'string') return;
     if (player.GhostList && player.GhostList.indexOf(data.MemberNumber) >= 0) return;
 
     const room = (() => {
