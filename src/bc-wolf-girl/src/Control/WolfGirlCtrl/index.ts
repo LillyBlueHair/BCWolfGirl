@@ -51,6 +51,10 @@ export function GetWolfGirlName(target: Character): string {
     return `狼女${target.MemberNumber ?? ""}`;
 }
 
+export function GetCommandPrefix(target: Character): RegExp {
+    return new RegExp(`^狼女 *${target.MemberNumber ?? ""}`);
+}
+
 export function WolfGirlCtrlInit(mod: ModSDKModAPI, lateHook: (callback: () => void) => void) {
     WolfGirlCtrls.forEach(item => item.hook(mod, lateHook));
     FuturisticBypass.init(mod, lateHook);

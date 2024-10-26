@@ -1,4 +1,4 @@
-import { GetWolfGirlName } from "../Control/WolfGirlCtrl";
+import { GetCommandPrefix, GetWolfGirlName } from "../Control/WolfGirlCtrl";
 import { AppearanceUpdate } from "bc-utilities";
 import { Commands, InjectionSwCommands, PointCommands } from "./Commands";
 import { CommandArgs, CommandTemplate } from "./ICmds";
@@ -12,12 +12,14 @@ export function RunCommands(player: PlayerCharacter, sender: number | Character,
     content = Strip(content);
     const usepoints = "使用奖励积分";
     const switchInjector = "注射枪模式切换";
-    const wgname = GetWolfGirlName(player);
+    const testRegex = GetCommandPrefix(player);
 
     let cmdSeries: CommandTemplate[] | undefined = undefined;
 
-    if (content.startsWith(wgname)) {
-        content = content.slice(wgname.length);
+    const match = testRegex.exec(content);
+
+    if (match) {
+        content = content.slice(match[0].length);
         content = Strip(content);
         cmdSeries = Commands;
     } else if (content.startsWith(usepoints)) {
