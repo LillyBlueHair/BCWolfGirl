@@ -20,16 +20,16 @@ export function HandsCtrlSequence(player: PlayerCharacter, mode: CtrlType) {
     const messages: CmdSequenceModeMessage = {
         modes: {
             off: {
-                notify: { mode: "chat-action", msg: "收到指令，手臂限制已关闭" },
-                action: { mode: "action", msg: "{player_wg}手臂上的铐环之间的能量束一点点熄灭，神经干涉模块也关闭了对手臂的控制，而手套上的纳米机械随着小小的震动也尽数回归原位，释放出{player_wg}的手臂与手指令其获得自由，真的是自由吗，亦或者仅仅是片刻的虚妄？" }
+                notify: { mode: "chat-action", msg: "Received command, arm restraints are disabled" },
+                action: { mode: "action", msg: "The energy beams between the cuffs on {player_wg}'s arms gradually extinguish, and the neural interference module also shuts down the control of the arm. The nanomachines on the gloves return to their original positions with a slight vibration, releasing {player_wg}'s arms and hands. Is it really freedom, or is it just a momentary illusion?" }
             },
             base: {
-                notify: { mode: "chat-action", msg: "收到指令，手臂限制已开启" },
-                action: { mode: "action", msg: "{player_wg}手臂上的铐环随着话音落下而产生了互相吸引的力量，而电刺激系统与神经干涉模块的协作令手环束紧{player_wg}的力量始终略大于她挣扎反抗的想法，令她只能看着自己的手臂与手指被一点点收拢并且连接好拘束" }
+                notify: { mode: "chat-action", msg: "Received command, arm restraints have been enabled" },
+                action: { mode: "action", msg: "The handcuffs on {player_wg}'s arms begin to attract each other, and the coordination between the electrical stimulation system and the neural interference module made the force of the handcuffs tightening. {player_wg} was always slightly greater than her thoughts of struggling and resisting, so she can only watch her arms and fingers being gradually gathered and connected." }
             },
             total: {
-                notify: { mode: "chat-action", msg: "收到指令，手臂限制已设置为最强限制模式" },
-                action: { mode: "action", msg: "{player_wg}手臂上的铐环骤然束紧，不容置疑的力量甚至稍稍有些令{player_wg}感到疼痛，甚至令她忽略了手套上一点点收紧压迫双拳的纳米机械，双手手臂紧迫收拢与手指手掌的挤压收束，亦或者对{player_wg}的内心来说，是一种更好的情境呢？" }
+                notify: { mode: "chat-action", msg: "Received command, arm restraints have been set to the strongest mode" },
+                action: { mode: "action", msg: "The cuffs on {player_wg}'s arms suddenly tighten, and the unquestionable force even makes {player_wg} feel a little pain. She even ignored the nanomachines on the gloves that tighten and press her fists a little bit. The tight closure of her arms and the squeezing of her fingers and palms, or perhaps for {player_wg}'s heart, was this a better situation?" }
             }
         }
     };
@@ -39,34 +39,34 @@ export function HandsCtrlSequence(player: PlayerCharacter, mode: CtrlType) {
     let data: CmdData = { type, mode };
 
     const missing_route_01 = (result: TestCtrlMissingResult) => {
-        ParseMessage(StdMissingMsgBase, { player }, { missing_formated: result.missing.map(g => OutfitItemsMap.get(g)?.Craft.Name).join("、") });
+        ParseMessage(StdMissingMsgBase, { player }, { missing_formated: result.missing.map(g => OutfitItemsMap.get(g)?.Craft.Name).join(", ") });
         data.xMessage = StdMissing.action;
     }
 
     const missing_route_02 = (result: TestCtrlMissingResult) => {
         ParseMessage(StdMissingMsgNPart, { player },
-            { missing_formated: result.missing.map(g => OutfitItemsMap.get(g)?.Craft.Name).join("、") });
-        data.xMessage = { mode: "action", msg: "{player_wg}的中央控制核心小小的发出了错误的嘟声，随后手套的手指部分缓缓变形并链接收紧，让她的手团成两块无法抓握的肉球" };
+            { missing_formated: result.missing.map(g => OutfitItemsMap.get(g)?.Craft.Name).join(", ") });
+        data.xMessage = { mode: "action", msg: "{player_wg}'s central control core beeps a little, and then the fingers of the glove slowly deform and tighten, causing her hands to curl into two balls of flesh that could not be grasped." };
         data.mode = "total";
         data.do_work = true;
     }
 
     const missing_route_03 = (result: TestCtrlMissingResult) => {
         ParseMessage(StdMissingMsgNPart, { player },
-            { missing_formated: result.missing.map(g => OutfitItemsMap.get(g)?.Craft.Name).join("、") });
-        data.xMessage = { mode: "action", msg: "{player_wg}手臂上的铐环以一种惩处式的力量快速束起，绷紧{player_wg}的双臂，显然这会造成足够且持续的痛苦" };
+            { missing_formated: result.missing.map(g => OutfitItemsMap.get(g)?.Craft.Name).join(", ") });
+        data.xMessage = { mode: "action", msg: "The cuffs on {player_wg}'s arms are quickly tightened with a punishing force, tightening {player_wg}'s arms, which would obviously cause sufficient and lasting pain." };
         data.mode = "total";
         data.do_work = true;
     }
 
     const missing_route_04 = (result: TestCtrlMissingResult) => {
         ParseMessage(StdMissingMsgN, { player },
-            { missing_formated: result.missing.map(g => OutfitItemsMap.get(g)?.Craft.Name).join("、") });
+            { missing_formated: result.missing.map(g => OutfitItemsMap.get(g)?.Craft.Name).join(", ") });
         data.xMessage = StdMissing.action;
     }
 
     const missing_route_05 = (result: TestCtrlMissingResult) => {
-        const missing_formated = result.missing.map(g => OutfitItemsMap.get(g)?.Craft.Name).join("、");
+        const missing_formated = result.missing.map(g => OutfitItemsMap.get(g)?.Craft.Name).join(", ");
 
         if (DefaultCheckItemByGroup(player, "ItemVulva")) {
             ParseMessage(StdMissingMsgN, { player }, { missing_formated });
@@ -76,10 +76,10 @@ export function HandsCtrlSequence(player: PlayerCharacter, mode: CtrlType) {
 
         if (CheckMissingItems(player).size >= 5) {
             const err_works: TimedWork[] = [
-                new MessageWork({ mode: "chat-action", msg: "收到指令，手臂限制已关闭" }),
+                new MessageWork({ mode: "chat-action", msg: "Received command, arm restraints are disabled" }),
                 new CommonWork(() => ParseMessage(StdMissingMsgNPart, { player }, { missing_formated })),
-                new MessageWork({ mode: "chat-action", msg: "收到指令，手臂限限限限限限限限......" }),
-                new MessageWork({ mode: "action", msg: "{player_wg}的中央控制核心发出了尖锐的持续嘟声，但很快重回寂静" }),
+                new MessageWork({ mode: "chat-action", msg: "Received the instruction, arms limit limit limit limit limit limit limit....." }),
+                new MessageWork({ mode: "action", msg: "{player_wg}'s central control core emits a sharp and continuous beeping sound, but soon returns to silence." }),
                 new MessageWork({ mode: "action", msg: MessageSimWrongCoding(StdMissingMsgBase.msg, 0.5) }),
                 new RandomSinglePunishWork(),
                 new MessageWork({ mode: "action", msg: MessageSimWrongCoding(StdMissingMsgBase.msg, 0.9) }),
@@ -88,14 +88,14 @@ export function HandsCtrlSequence(player: PlayerCharacter, mode: CtrlType) {
                 new RandomSinglePunishWork(),
                 new DelayWork(1000),
                 new RandomSinglePunishWork(),
-                new MessageWork({ mode: "action", msg: "{player_wg}的中央控制核心再次发出一声尖锐的鸣响，但很快又一次重回沉寂" }),
-                new MessageWork({ mode: "chat-action", msg: "检测到指令的错误执行，已终止该指令的执行重试" }),
+                new MessageWork({ mode: "action", msg: "{player_wg}'s central control core once again emits a sharp sound, but soon returns to silence again." }),
+                new MessageWork({ mode: "chat-action", msg: "An error in the execution of a command was detected, and the execution of the command has been terminated and retried." }),
             ];
             TimedWorker.global.insert_after_first({ description: `SetItemSequence${type}`, works: err_works });
             return TimedWorkState.interrupted;
         }
 
-        ParseMessage({ mode: "chat-action", msg: "收到指令，手臂限制已关闭" }, { player });
+        ParseMessage({ mode: "chat-action", msg: "Received command, arm restraints are disabled" }, { player });
         mode = "off";
         data.do_work = true;
     }
@@ -114,7 +114,7 @@ export function HandsCtrlSequence(player: PlayerCharacter, mode: CtrlType) {
                 data.xMessage = msg.action;
                 data.do_work = true;
             } else {
-                ParseMessage({ mode: "chat-action", msg: `[DEBUG] 错误信息: WGException.${data.type}.MissingDialog.${data.mode}` }, { player });
+                ParseMessage({ mode: "chat-action", msg: `[DEBUG] error message: WGException.${data.type}.MissingDialog.${data.mode}` }, { player });
                 return TimedWorkState.interrupted;
             }
         })),

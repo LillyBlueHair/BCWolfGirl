@@ -17,16 +17,16 @@ export function ToysCtrlSequence(player: PlayerCharacter, mode: CtrlType) {
         missing: StdMissing,
         modes: {
             off: {
-                notify: { mode: "chat-action", msg: "收到指令，振动器已关闭" },
-                action: { mode: "action", msg: "{player_wg}身上的振动器尽皆骤停，也许她有了小小的放松时机，是累了吗，亦或者已经被喂饱了？不知道在此前持续的快感浪潮之下有没有令{player_wg}对现如今这样的小小沉寂感到不满呢？可不要求着别人打开哦？" },
+                notify: { mode: "chat-action", msg: "Received command, vibrator turned off" },
+                action: { mode: "action", msg: "All the vibrators on {player_wg}'s body suddenly stop. Maybe she has a little chance to relax. Is she tired? One wonders if {player_wg} is dissatisfied with the current silence after the previous waves of pleasure?" },
             },
             open: {
-                notify: { mode: "chat-action", msg: "收到指令，振动器已开启" },
-                action: { mode: "action", msg: "{player_wg}身上的振动器开始了小小的震动，虽然并不足够强烈，但是也足够将她缓缓推向高潮，这个功率下并不会有多少嗡嗡声，不用担心被发现，当然，高潮了的话就说不定了" },
+                notify: { mode: "chat-action", msg: "Received command, vibrator turned on" },
+                action: { mode: "action", msg: "{player_wg}'s vibrators begin to vibrate slightly. Although it is not strong enough, it is enough to slowly push her towards orgasm. There is not much buzzing sound at this power, so there is no need to worry about being discovered. Of course, if she can orgasm is hard to say." },
             },
             max: {
-                notify: { mode: "chat-action", msg: "收到指令，振动器已设置为最大功率模式" },
-                action: { mode: "action", msg: "{player_wg}身上的振动器顿时发出了清晰的嗡鸣，即使有着身体与衣物的阻隔，稍稍接近即清晰可辨，而{player_wg}显然没有太多精力用来注意这点，毕竟一波又一波浪潮一般的快感冲刷着她的大脑，一点点抹去她的理智与思想" },
+                notify: { mode: "chat-action", msg: "Received command, the vibrator has been set to maximum power mode" },
+                action: { mode: "action", msg: "The vibrators on {player_wg}'s body suddenly emit a clear buzzing sound. Even with the barrier of body and clothes, it is clearly audible if one gets a little closer. However, {player_wg} obviously doesn't have much energy to pay attention to this. After all, wave after wave of pleasure wash over her brain, erasing her reason and thoughts bit by bit." },
             }
         }
     };
@@ -37,10 +37,10 @@ export function ToysCtrlSequence(player: PlayerCharacter, mode: CtrlType) {
 
     const work_sequence: TimedWork[] = [
         new TestControlWork(type, mode, StdResultBranch(player, data, (result, data) => {
-            const missing_formated = result.missing.map(g => OutfitItemsMap.get(g)?.Craft.Name).join("、");
+            const missing_formated = result.missing.map(g => OutfitItemsMap.get(g)?.Craft.Name).join(", ");
             if (!result.missing.includes("ItemVulva")) {
                 ParseMessage(messages.missing.notify, { player }, { missing_formated });
-                data.xMessage = { mode: "action", msg: "{player_wg}身上的振动器虽然显示着设置成功，但是根据声音判断显然出现了错误，震动的嗡鸣如同风暴中的海面一样跌宕起伏，似乎在玩弄着{player_wg}，就仿佛这一个错误是故意不小心的一般" };
+                data.xMessage = { mode: "action", msg: "Although {player_wg}'s vibrator indicates that it had been set up successfully, judging by the sound, something has clearly gone wrong. The humming sound of the vibrations is like the ups and downs of the sea in a storm, as if it is toying with {player_wg}, as if this mistake has been made intentionally and carelessly." };
                 data.mode = "random";
                 data.do_work = true;
             } else {
@@ -54,7 +54,7 @@ export function ToysCtrlSequence(player: PlayerCharacter, mode: CtrlType) {
                 data.xMessage = msg.action;
                 data.do_work = true;
             } else {
-                ParseMessage({ mode: "chat-action", msg: `[DEBUG] 错误信息: WGException.${data.type}.MissingDialog.${data.mode}` }, { player });
+                ParseMessage({ mode: "chat-action", msg: `[DEBUG] error message: WGException.${data.type}.MissingDialog.${data.mode}` }, { player });
                 return TimedWorkState.interrupted;
             }
         })),

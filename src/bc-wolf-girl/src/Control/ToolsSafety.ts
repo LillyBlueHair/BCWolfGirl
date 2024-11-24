@@ -11,24 +11,24 @@ export function InitSafetyUndressSequence(player: PlayerCharacter): void {
             if (result.missing.length == 2) {
                 return TimedWorkState.interrupted;
             } else {
-                ParseMessage({ mode: "local", msg: "发现长时间未使用注册安装道具，开始自动收纳过程。" });
+                ParseMessage({ mode: "local", msg: "It is found that the registered installation props have not been used for a long time, and the automatic storage process begins." });
             }
         }, false),
         new CommonWork((player) => {
             if (CheckItem(player, ToolsInjector, false)) {
                 player.Appearance = player.Appearance.filter(i => i.Asset.Group.Name !== ToolsInjector.Asset.Group);
                 AppearanceUpdate(player, ToolsInjector.Asset.Group);
-                ParseMessage({ mode: "local", msg: `${ToolsInjector.Craft.Name}已经完成收纳` });
+                ParseMessage({ mode: "local", msg: `${ToolsInjector.Craft.Name}Completed storage` });
             }
         }),
         new CommonWork((player) => {
             if (CheckItem(player, ToolsVisor, false)) {
                 player.Appearance = player.Appearance.filter(i => i.Asset.Group.Name !== ToolsVisor.Asset.Group);
                 AppearanceUpdate(player, ToolsVisor.Asset.Group);
-                ParseMessage({ mode: "local", msg: `${ToolsVisor.Craft.Name}已经完成收纳` });
+                ParseMessage({ mode: "local", msg: `${ToolsVisor.Craft.Name}Completed storage` });
             }
         }),
-        new MessageWork({ mode: "local", msg: "系统提醒您：不要手持工具玩耍，这样很危险。" }),
+        new MessageWork({ mode: "local", msg: "The system reminds you: Do not play with tools in your hands, as this is dangerous." }),
     ]
     TimedWorker.global.push({ description: "InitSafetyUndressSequence", works: work_sequence });
 }

@@ -10,7 +10,7 @@ const CmdDetails: Map<string, (...args: string[]) => void> = new Map([["check", 
 const WolfGirlCmds: ICommand[] = [
     {
         Tag: "wolfgirl",
-        Description: `<${[...CmdDetails.keys()].join("|")}> <参数> : WolfGirl Mod指令`,
+        Description: `<${[...CmdDetails.keys()].join("|")}> <Parameters> : WolfGirl Mod Commands`,
         Action: ChatCmdRouter
     }
 ]
@@ -19,44 +19,44 @@ function ChatCmdRouter(args: string, command: string) {
     const [, ...parts] = command.split(" ");
     const cmd = parts?.shift();
     if (!cmd || !CmdDetails.has(cmd)) {
-        ChatRoomAction.instance.LocalInfo(`指令错误，可以使用的指令：wolfgirl <${[...CmdDetails.keys()].join("|")}> <参数>`);
+        ChatRoomAction.instance.LocalInfo(`Command error, you can use the command: wolfgirl<${[...CmdDetails.keys()].join("|")}> <parameter>`);
         return;
     }
     CmdDetails.get(cmd)?.(...parts);
 }
 
-function ChatCmdOutfitCheck(...args: string[]) {
+function ChatCmdOutfitCheck(...args: string[]) { //TODO 
     const targetN = parseInt(args[0]);
     if (isNaN(targetN)) {
-        ChatRoomAction.instance.LocalInfo("指令错误，参数：wolfgirl check <目标ID>");
+        ChatRoomAction.instance.LocalInfo("Command error: Usage: wolfgirl check <target ID>");
         return;
     }
     const target = ChatRoomCharacter.find(c => c.MemberNumber === targetN);
     if (!target) {
-        ChatRoomAction.instance.LocalInfo("指令错误，目标不存在");
+        ChatRoomAction.instance.LocalInfo("Command error: Target not found");
         return;
     }
 
     const app_map = GatherAppMap(target);
     const craft = EILNetwork.Access.craft;
 
-    ChatRoomAction.instance.LocalInfo(`>> ${ModName} ${ModVersion} 调试模式\n`);
+    ChatRoomAction.instance.LocalInfo(`>> ${ModName} ${ModVersion} Debug Mode\n`);
 
     OutfitItems.forEach((i, idx) => {
         const target_item = app_map.get(i.Asset.Group);
         const msglist: string[] = []
 
-        msglist.push(`>> 检查工作 序列${idx + 1}`)
-        msglist.push(`  物品: ${i.Asset.Name}`)
-        msglist.push(`  位置: ${i.Asset.Group}`)
-        msglist.push(`  配置：${i.Craft.Name}`)
+        msglist.push(`>> Check work sequence${idx + 1}`)
+        msglist.push(`  item: ${i.Asset.Name}`)
+        msglist.push(`  position: ${i.Asset.Group}`)
+        msglist.push(`  configuration：${i.Craft.Name}`)
 
         if (!target_item) {
-            msglist.push(`  穿戴: undefined`)
-            msglist.push(`  结论: 未通过`)
+            msglist.push(`  wearing: undefined`)
+            msglist.push(`  concluding: failed`)
         } else {
-            msglist.push(`  穿戴: ${target_item.Asset.Name}`)
-            msglist.push(`  颜色: ${target_item.Color}`)
+            msglist.push(`  wearing: ${target_item.Asset.Name}`)
+            msglist.push(`  color: ${target_item.Color}`)
 
             const check = DefaultCheckItemOnTarget(target, i);
             const checkRaw = DefaultCheckOutfitItem(target_item, i);
@@ -70,7 +70,7 @@ function ChatCmdOutfitCheck(...args: string[]) {
                 msglist.push(`  TypeRecord: ${JSON.stringify(target_item.Property?.TypeRecord)}`)
             }
 
-            msglist.push(`  结论: ${check && checkRaw ? "通过" : "未通过"}`)
+            msglist.push(`  concluding: ${check && checkRaw ? "passed" : "failed"}`)
         }
 
         ChatRoomAction.instance.LocalInfo(msglist.join("\n") + "\n");

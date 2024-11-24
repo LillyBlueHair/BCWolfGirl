@@ -12,11 +12,11 @@ export function ExitFixSequence(player: PlayerCharacter) {
             if (CheckItem(player, ToolsCrate)) return CheckWork.Accepted;
             return CheckWork.Rejected;
         }, (pl, result) => {
-            if (!result.passed) return { mode: "chat-action", msg: "错误：未处于维护模式中。" }
+            if (!result.passed) return { mode: "chat-action", msg: "Error: Not in maintenance mode." }
         }),
-        new MessageWork({ mode: "chat-action", msg: "已收到指令，退出维护模式" }),
+        new MessageWork({ mode: "chat-action", msg: "Received instruction to exit maintenance mode" }),
         new DelayWork(5000),
-        new MessageWork({ mode: "action", msg: "维护舱仓门打开，机械臂将{player_wg}推出，随后开始渐渐变得扭曲，透明，最终仅留下小小的气旋" }),
+        new MessageWork({ mode: "action", msg: "The maintenance cabin door opens, and the robotic arm pushes {player_wg} out. Then it gradually becomes distorted and transparent, and finally only a small cyclone was left." }),
         new ItemRemoveWork(player, [ToolsCrate]),
     ]
 

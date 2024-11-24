@@ -67,7 +67,7 @@ export class OutfitFixWork extends TimedWork {
             return acc;
         }, { canRepair: [], blocked: [] } as { canRepair: OutfitCheckWorkItem[], blocked: OutfitCheckWorkItem[] });
 
-        const locked_items = result.blocked.map(i => i.target.Asset.Group).map(i => (app_map.get(i) as Item).Asset.Description).join("、");
+        const locked_items = result.blocked.map(i => i.target.Asset.Group).map(i => (app_map.get(i) as Item).Asset.Description).join(", ");
 
         const do_message = (result: OutfitFixWorkResult) =>
             (((msg) => msg && ParseMessage(msg, { player }, { locked_items }))(this.message?.(result)));

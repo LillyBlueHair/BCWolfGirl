@@ -17,16 +17,16 @@ export class DrinkExtend extends IActivityExtended<CustomActivities, CustomPrere
             if (!target) return;
             if (!DefaultCheckOutfitItem(tItem, target)) return;
 
-            if (target.Craft.Name === "情欲之水") {
+            if (target.Craft.Name === "情欲之水" || target.Craft.Name === "Water of Desire") {
                 if (IsPlayerWolfGirl(player)) this.DrinkAphrodisiac(player);
-            } else if (target.Craft.Name === "特种红牛") {
+            } else if (target.Craft.Name === "特种红牛" || target.Craft.Name === "Special Redbull") {
                 this.DrinkRedbull(player);
             }
         }
     }
 
     private DrinkAphrodisiac(player: PlayerCharacter) {
-        ParseMessage({ mode: "local", msg: "刚刚喝下的东西让你兴奋异常" });
+        ParseMessage({ mode: "local", msg: "What you just drank makes you feel very aroused" });
         if (player?.ArousalSettings?.Progress !== undefined) {
             player.ArousalSettings.Progress = 100;
             ActivityOrgasmPrepare(player, false);
@@ -36,7 +36,7 @@ export class DrinkExtend extends IActivityExtended<CustomActivities, CustomPrere
     private RedbullDrinkTimeout = 0;
 
     private DrinkRedbull(player: PlayerCharacter) {
-        ParseMessage({ mode: "local", msg: "你喝下了一罐红牛，感觉充满了力量, 似乎能挣脱一切束缚" });
+        ParseMessage({ mode: "local", msg: "You drink a can of Red Bull and feel full of energy, as if you can break free from all constraints" });
         this.RedbullDrinkTimeout = Date.now() + 15 * 60 * 1000;
     }
 

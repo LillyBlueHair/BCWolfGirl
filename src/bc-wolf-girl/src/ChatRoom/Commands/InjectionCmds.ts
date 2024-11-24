@@ -6,35 +6,35 @@ import { BasicPrerequisites, IsSelf } from "../Prerequistes";
 
 export const InjectionCmds: CommandTemplate[] = [
     {
-        match: /^注射麻醉剂/,
+        match: /^(注射麻醉剂)|(anesthetic)/i,
         prerequisite: BasicPrerequisites,
         run(player, sender, content) {
             DoInjection('anesthetic');
         }
     },
     {
-        match: /^注射恢复剂/,
+        match: /^(注射恢复剂)|(pickmeup)/i,
         prerequisite: BasicPrerequisites,
         run(player, sender, content) {
             DoInjection('pickmeup');
         }
     },
     {
-        match: /^注射催情剂/,
+        match: /^(注射催情剂)|(aphrodisiac)/i,
         prerequisite: BasicPrerequisites,
         run(player, sender, content) {
             DoInjection('aphrodisiac');
         }
     },
     {
-        match: /^注射抑制剂/,
+        match: /^(注射抑制剂)|(inhibitor)/i,
         prerequisite: BasicPrerequisites,
         run(player, sender, content) {
             DoInjection('inhibitor');
         }
     },
     {
-        match: /^泛用驱散剂/,
+        match: /^(泛用驱散剂)|(EasterUniversalDispersal)/i,
         prerequisite: BasicPrerequisites,
         run(player, sender, content) {
             DoInjection('EasterUniversalDispersal');
@@ -44,41 +44,41 @@ export const InjectionCmds: CommandTemplate[] = [
 
 export const InjectionSwitchCmds: CommandTemplate[] = [
     {
-        match: /^身份芯片/,
+        match: /^(身份芯片)|(ID chip)/i,
         prerequisite: IsSelf,
         run(player, sender, content) {
-            SwitchInjector('身份芯片', undefined);
+            SwitchInjector('ID chip', undefined);
         }
     },
     {
-        match: /^催情剂/,
+        match: /^(催情剂)|(aphrodisiac)/i,
         prerequisite: IsSelf,
         run(player, sender, content) {
-            SwitchInjector('催情剂', 'aphrodisiac');
+            SwitchInjector('aphrodisiac', 'aphrodisiac');
         }
     },
     {
-        match: /^抑制剂/,
+        match: /^(抑制剂)|(inhibitor)/i,
         prerequisite: IsSelf,
         run(player, sender, content) {
-            SwitchInjector('抑制剂', 'inhibitor');
+            SwitchInjector('inhibitor', 'inhibitor');
         }
     },
     {
-        match: /^麻醉剂/,
+        match: /^(麻醉剂)|(anesthetic)/i,
         prerequisite: IsSelf,
         run(player, sender, content) {
-            SwitchInjector('麻醉剂', 'anesthetic');
+            SwitchInjector('anesthetic', 'anesthetic');
         }
     },
     {
-        match: /^恢复剂/,
+        match: /^(恢复剂)|(pickmeup)/i,
         prerequisite: IsSelf,
         run(player, sender, content) {
-            SwitchInjector('恢复剂', 'pickmeup');
+            SwitchInjector('pickmeup', 'pickmeup');
         }
     }, {
-        match: /^泛用驱散剂/,
+        match: /^(泛用驱散剂)|(EasterUniversalDispersal)/i,
         prerequisite: IsSelf,
         run(player, sender, content) {
             UniversalDispersalSwitchInjection();

@@ -9,16 +9,16 @@ export function HearingCtrlSequence(player: PlayerCharacter, mode: CtrlType) {
         missing: StdMissing,
         modes: {
             "off": {
-                notify: { mode: "chat-action", msg: "收到指令，听觉限制已关闭" },
-                action: { mode: "action", msg: "{player_wg}耳机上的指示灯渐渐褪去红色的光芒，只剩下一丝微不可查的淡蓝色，世界的声音透过这带有体温的机械，朦胧的传入了{player_wg}耳边，没有了方才的死寂，也不需要集中精神阅读唇语，得以放松许多，对吧" },
+                notify: { mode: "chat-action", msg: "Received command, hearing restriction has been turned off" },
+                action: { mode: "action", msg: "The red light on {player_wg}'s headset gradually fades, leaving only a barely detectable light blue. The sounds of the world passed through the machine and hazily entered {player_wg}'s ears. Without the dead silence just now, there is no need to concentrate on reading lips, so she is able to relax a lot now, right?"},
             },
             "base": {
-                notify: { mode: "chat-action", msg: "收到指令，听觉限制已开启" },
-                action: { mode: "action", msg: "{player_wg}的耳边声音骤然减小，并且愈发模糊与朦胧，她耳机上的指示灯亮起小小的红光，虽然被{player_wg}的发丝遮盖，但若是在伸手不见五指的黑夜，还是能隐约发觉的" },
+                notify: { mode: "chat-action", msg: "Received command, hearing restriction has been turned on" },
+                action: { mode: "action", msg: "The sound in {player_wg}'s ears suddenly becomes fainter and more blurred and hazy. The indicator light on her earphones lights up as a small red light. Although it is covered by {player_wg}'s hair, it could still be vaguely detected." },
             },
             "total": {
-                notify: { mode: "chat-action", msg: "收到指令，听觉限制已设置为高功率运转" },
-                action: { mode: "action", msg: "{player_wg}的耳机似乎微微收紧了些，外界的声响似乎在这一瞬间被按下了暂停键一般陷入死寂，方才微弱的光现在已是醒目的红色闪烁，似乎在尝试宣告着什么，但那又如何呢？世间的喧嚣本就太过嘈杂烦扰，也许这样能够静心许多" },
+                notify: { mode: "chat-action", msg: "Received command, hearing limit has been set to high power operation" },
+                action: { mode: "action", msg: "{player_wg}'s headphones seem to tighten slightly, and the outside world seems to have been paused at this moment and fallen into silence. The faint light just now is now a striking red flash, as if trying to announce something, but so what? The hustle and bustle of the world is already too noisy and disturbing, maybe this can help calm down" },
             }
         }
     };

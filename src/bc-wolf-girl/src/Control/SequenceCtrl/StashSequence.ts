@@ -11,18 +11,18 @@ export function StartStashSequence(player: PlayerCharacter) {
     const work_sequence: TimedWork[] = [
         new CheckItemsWork(["ItemNeck", "ItemPelvis"], (player, result) => {
             if (result.missing.length > 0) {
-                PushMissingStopSequence(result.missing.map(g => g.Craft.Name).join("、"));
+                PushMissingStopSequence(result.missing.map(g => g.Craft.Name).join(", "));
                 return TimedWorkState.interrupted;
             } else {
-                ParseMessage({ mode: "chat-action", msg: `正在启动纳米蜂群收纳拘束具进入隐藏模式` });
+                ParseMessage({ mode: "chat-action", msg: `Activating the Nano-bee Swarm Storage Restraint Device to enter hidden mode` });
             }
         }),
         new DelayWork(5000),
-        new MessageWork({ mode: "action", msg: "{player_wg}身上的拘束具似乎在一点点溶解，化作金属银色的小小水流沿着皮肤流向主控核心与训练内裤，随着水流的消逝，本有的拘束具尽皆消逝，仿佛不曾存在过，但显然脖颈上的项圈与身体上的训练内裤显然不同意这样的想法" }),
+        new MessageWork({ mode: "action", msg: "{player_wg}'s restraints seem to be dissolving bit by bit, turning into a small stream of metallic silver water flowing along her skin to the main control core and training underwear. As the water flow disappears, the original restraints disappear as if they had never existed. However, the collar on her neck and the training underwear on her body obviously disagreed with this idea." }),
         new CommonWork((player) => {
             StashOutfit(player);
             DataManager.outfit.lite_mode = true;
-            ParseMessage({ mode: "chat-action", msg: "已切换到轻量物品模式。" });
+            ParseMessage({ mode: "chat-action", msg: "Switched to lightweight item mode." });
         })
     ];
 
@@ -33,20 +33,20 @@ export function StartStashPopSequence(player: PlayerCharacter) {
     const work_sequence: TimedWork[] = [
         new CheckItemsWork(["ItemNeck", "ItemPelvis"], (player, result) => {
             if (result.missing.length > 0) {
-                PushMissingStopSequence(result.missing.map(g => g.Craft.Name).join("、"));
+                PushMissingStopSequence(result.missing.map(g => g.Craft.Name).join(", "));
                 return TimedWorkState.interrupted;
             } else {
-                ParseMessage({ mode: "chat-action", msg: `正在退出拘束隐藏模式，纳米蜂群工作中` });
+                ParseMessage({ mode: "chat-action", msg: `Exiting restraint hiding mode, nanobee swarm at work` });
             }
         }),
         new DelayWork(5000),
-        new MessageWork({ mode: "action", msg: "主控核心与训练内裤发出了一阵小小的震动，如若是另一人来看则能发现一些金属银色的小小水流正从中流出，淌向{player_wg}的身体各处，缓缓构建成原有的拘束具并重新连接各处组件" }),
+        new MessageWork({ mode: "action", msg: "The main control core and training underwear vibrate slightly. If someone else were to look, they would see some small streams of metallic silver flowing out of them, flowing to all parts of {player_wg}'s body, slowly forming the original restraints and reconnecting the various components." }),
         new CommonWork((player) => {
             if (StashPopOutfit(player) === StashPopResult.Locked) {
-                ParseMessage({ mode: "chat-action", msg: "存在锁定物品，无法切换模式。" });
+                ParseMessage({ mode: "chat-action", msg: "There is a locked item, unable to switch modes." });
             } else {
                 DataManager.outfit.lite_mode = false;
-                ParseMessage({ mode: "chat-action", msg: "已切换到完整物品模式。" });
+                ParseMessage({ mode: "chat-action", msg: "Switched to full item mode." });
             }
         })
     ];
@@ -55,14 +55,14 @@ export function StartStashPopSequence(player: PlayerCharacter) {
 
 export function ColorSaveSequence(player: PlayerCharacter, sender: Character) {
     const work_sequence: TimedWork[] = [
-        new MessageWork({ mode: "chat-action", msg: "收到指令，正在扫描套件外观变动" }),
-        new MessageWork({ mode: "action", msg: "{player_wg}的项圈上涌出了数股金属银色的小小水流，正沿着{player_wg}的身体缓缓流向身体各处的拘束具，短暂的停留过后又原路返回了项圈之中" }),
+        new MessageWork({ mode: "chat-action", msg: "Received command, scanning for changes in package appearance" }),
+        new MessageWork({ mode: "action", msg: "Several small streams of metallic silver water flow out of {player_wg}'s collar, slowly flowing along {player_wg}'s body to the restraints on various parts of her body. After a short stay, they return to the collar along the same path." }),
         new DelayWork(5000),
         new CommonWork((player) => {
             DataManager.outfit.color_store = GatherColorStoreItem(player);
             const collar = player.Appearance.find(a => a.Asset.Group.Name === "ItemNeck");
             const color = (collar?.Color ?? ["#000000"])[0];
-            ParseMessage({ mode: "chat-action", msg: `已完成色彩方案扫描并存储至核心，当前色彩方案标记为(${color})` });
+            ParseMessage({ mode: "chat-action", msg: `The color scheme has been scanned and stored in the core, the current color scheme is marked as (${color})` });
         })
     ];
     TimedWorker.global.push({ description: "ColorSaveSequence", works: work_sequence });

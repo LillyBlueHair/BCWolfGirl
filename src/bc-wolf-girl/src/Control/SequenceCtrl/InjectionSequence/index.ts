@@ -27,7 +27,7 @@ function StdInjectionSequence(type: InjectionType, msg: InjectionSequenceMsg) {
     const work_sequence: TimedWork[] = [
         new CheckItemsWork(["ItemTorso2"], (player, result) => {
             if (result.missing.length > 0) {
-                const missing_formated = result.missing.map(g => g.Craft.Name).join("、");
+                const missing_formated = result.missing.map(g => g.Craft.Name).join(", ");
                 ParseMessage(StdMissingMsgN, { player }, { missing_formated });
                 return TimedWorkState.interrupted;
             } else {
@@ -49,24 +49,24 @@ const messages: {
     [k in InjectionType]: InjectionSequenceMsg;
 } = {
     'aphrodisiac': {
-        finish: { mode: "chat-action", msg: "催情剂注射完毕" },
-        f_action: { mode: "action", msg: "喔，是催情剂，虽然不会直接导致高潮，但是接下来的每次对情欲的撩拨都会更具冲击，希望{player_wg}不要被快感宠坏了脑子哦" }
+        finish: { mode: "chat-action", msg: "Aphrodisiac injection completed" },
+        f_action: { mode: "action", msg: "Oh, it's an aphrodisiac. Although it won't lead to an orgasm directly, subsequent arousal will be more impactful. I hope {player_wg} won't let the pleasure spoil her brain." }
     },
     'inhibitor': {
-        finish: { mode: "chat-action", msg: "抑制剂注射完毕" },
-        f_action: { mode: "action", msg: "{player_wg}的束带为她注射了抑制剂，能短暂的抑制疼痛的效果，但副作用是抑制大脑对快感的感知，如若在发情状态下被注射了这个的话...可不要为了欲望真的太过分对待自己的身体哦？" }
+        finish: { mode: "chat-action", msg: "Inhibitor injection completed" },
+        f_action: { mode: "action", msg: "{player_wg}'s harness injected her with an inhibitor that can temporarily suppress the pain, but the side effect is that it suppresses the brain's perception of pleasure. If this is injected when she is in estrus... don't treat your body too much because of desire, okay?" }
     },
     'anesthetic': {
-        finish: { mode: "chat-action", msg: "麻醉剂注射完毕" },
-        f_action: { mode: "action", msg: "失去了反抗能力的{player_wg}似乎只能被任意玩弄，也许几分钟之后我们需要呼叫EIL的回收处理小队来接走被玩坏的她了" }
+        finish: { mode: "chat-action", msg: "Anesthetic injection completed" },
+        f_action: { mode: "action", msg: "{player_wg}, who has lost her ability to resist, seems to be able to be played with at will. Maybe in a few minutes we need to call the EIL recycling team to pick her up." }
     },
     'pickmeup': {
-        finish: { mode: "chat-action", msg: "恢复剂注射完毕" },
-        f_action: { mode: "action", msg: "随着恢复剂的注射，{player_wg}的身体渐渐有了气力，也逐步得以恢复了对四肢的掌控" }
+        finish: { mode: "chat-action", msg: "Recovery injection completed" },
+        f_action: { mode: "action", msg: "With the injection of the recovery agent, {player_wg}'s body gradually regains strength and she gradually regained control of her limbs." }
     },
     "EasterUniversalDispersal": {
-        finish: { mode: "chat-action", msg: "泛用驱散剂注射完毕" },
-        f_action: { mode: "action", msg: "复杂的魔力回路，传承的古老血统，繁琐的施术准备，数十年才能成就的大魔法师怎么躲过科技的追赶，科技的低使用门槛从来不是那些需求所谓血脉与出身的魔法侧能相比拟的" }
+        finish: { mode: "chat-action", msg: "The injection of general dispersant is completed" },
+        f_action: { mode: "action", msg: "Complex magic circuits, inherited ancient bloodlines, tedious preparations for casting spells, how can a great magician who takes decades to become a master avoid being caught up by technology? The low threshold for using technology has never been comparable to those magicians who require so-called bloodlines and origins." }
     }
 }
 

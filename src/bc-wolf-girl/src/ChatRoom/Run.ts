@@ -9,9 +9,9 @@ function Strip(src: string) {
 }
 
 export function RunCommands(player: PlayerCharacter, sender: number | Character, content: string, args: CommandArgs) {
-    content = Strip(content);
-    const usepoints = "使用奖励积分";
-    const switchInjector = "注射枪模式切换";
+    content = Strip(content).toLowerCase();
+    const usepoints = "use reward points";
+    const switchInjector = "injection gun mode switch";
     const testRegex = GetCommandPrefix(player);
 
     let cmdSeries: CommandTemplate[] | undefined = undefined;

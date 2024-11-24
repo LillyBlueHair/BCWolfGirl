@@ -48,11 +48,11 @@ export function TestRunControls(player: PlayerCharacter, type: ControllerType, m
 }
 
 export function GetWolfGirlName(target: Character): string {
-    return `狼女${target.MemberNumber ?? ""}`;
+    return `wolf girl ${target.MemberNumber ?? ""}`;
 }
 
 export function GetCommandPrefix(target: Character): RegExp {
-    return new RegExp(`^狼女 *${target.MemberNumber ?? ""}`);
+    return new RegExp(`^wolf girl *${target.MemberNumber ?? ""}`);
 }
 
 export function WolfGirlCtrlInit(mod: ModSDKModAPI, lateHook: (callback: () => void) => void) {

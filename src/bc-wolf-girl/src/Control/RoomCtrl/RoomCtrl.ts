@@ -12,15 +12,15 @@ import { ChatRoomWork } from "./Work";
 
 export function RoomLeaveSequence(player: PlayerCharacter, cmd_src: { sender: number | Character, type: CommandType }) {
     const work_sequence: TimedWork[] = [
-        new MessageWork({ mode: "action", msg: "接收到离开房间指令，开始运动学检查" }),
+        new MessageWork({ mode: "action", msg: "Received the command to leave the room and started the kinematic check" }),
         new CheckItemsWork(["ItemLegs", "ItemFeet", "ItemBoots"], (pl, result) => {
-            const missing_formated = result.missing.map(g => g.Craft.Name).join("、");
+            const missing_formated = result.missing.map(g => g.Craft.Name).join(", ");
             if (result.missing.length === 3) {
                 RouteIM(cmd_src.type, player, cmd_src.sender, StdMissingMsgN.msg, { missing_formated });
                 ParseMessage(StdMissingAction, { player });
                 return TimedWorkState.interrupted;
             }
-            RouteIM(cmd_src.type, player, cmd_src.sender, `收到指令，正在规划路径并执行`);
+            RouteIM(cmd_src.type, player, cmd_src.sender, `Received the command, planning the path and executing it`);
         }),
         new CheckWork((pl) => {
             if (pl.Appearance.some(e => {
@@ -31,9 +31,9 @@ export function RoomLeaveSequence(player: PlayerCharacter, cmd_src: { sender: nu
             return CheckWork.Accepted;
         }, (pl, result) => {
             if (result.passed) {
-                ParseMessage({ mode: "action", msg: "{player_wg}身上的行走姿态控制器缓缓点亮，操纵着{player_wg}慢慢走向房门外" }, { player });
+                ParseMessage({ mode: "action", msg: "The walking posture controller on {player_wg} lights up, controlling {player_wg} to slowly walk out of the room." }, { player });
             } else {
-                RouteIM(cmd_src.type, player, cmd_src.sender, `行动路径规划失败，请移除阻碍物或使用强制离开指令`);
+                RouteIM(cmd_src.type, player, cmd_src.sender, `Action path planning failed, please remove obstacles or use forced exit command`);
                 ParseMessage(StdMissingAction, { player });
             }
         }),
@@ -49,21 +49,21 @@ export function RoomForceLeaveSequence(player: PlayerCharacter, cmd_src: { sende
     const work_sequence: TimedWork[] = [
         new CheckItemsWork(["ItemVulvaPiercings", "ItemNipplesPiercings"], (pl, result) => {
             if (result.missing.length === 2) {
-                const missing_formated = result.missing.map(g => g.Craft.Name).join("、");
+                const missing_formated = result.missing.map(g => g.Craft.Name).join(", ");
                 CurryRouteIM(StdMissingMsgN.msg, { missing_formated });
                 ParseMessage(StdMissingAction, { player });
                 return TimedWorkState.interrupted;
             }
-            CurryRouteIM(`强制离开程序已激活，信标布设完毕，准备传送至EIL设施`);
+            CurryRouteIM(`Forced departure procedure activated, beacon deployed, ready to be transmitted to EIL facility`);
         }),
         new DelayWork(5000),
-        new MessageWork({ mode: "action", msg: "{player_wg}身后的空间泛起了一阵小小的涟漪，而在近乎瞬间的眩目白光之后，她的身形已经完全消失，只留下小小的气旋" }),
+        new MessageWork({ mode: "action", msg: "The space behind {player_wg} ripples slightly, and after a nearly instant of blinding white light, her figure completely disappears, leaving only a small cyclone behind." }),
         new ChatRoomWork(EILNetwork.Access.room, (pl, reason) => {
-            CurryRouteIM("无法进入EIL设施，房间满员或锁定");
+            CurryRouteIM("No access to EIL facilities, rooms are full or locked");
         }, (pl, dest) => {
-            ParseMessage({ mode: "action", msg: "{player_wg}随着一瞬眩目的白光出现在传送机之中，稍稍扰乱了设施内舒适的气温" }, { player });
+            ParseMessage({ mode: "action", msg: "{player_wg}A blinding white light suddenly appears in the teleporter, slightly disturbing the comfortable temperature in the facility." }, { player });
         }),
-        new MessageWork({ mode: "chat-action", msg: "欢迎来到EIL设施，维护服务请自助，寄存服务请寻找猫女仆，新晋狼女训练请寻找训练师，祝玩的开心" }),
+        new MessageWork({ mode: "chat-action", msg: "Welcome to the EIL facility. Please do your own maintenance. Please find a cat maid for storage services. Please find a trainer for new wolf girls. Have fun." }),
     ];
     TimedWorker.global.push({ description: "Room Force Leave Sequence", works: work_sequence });
 }
@@ -77,13 +77,13 @@ export function RoomComeHereSequence(player: PlayerCharacter, cmd_src: { sender:
     const work_sequence: TimedWork[] = [
         new CheckItemsWork(["ItemLegs", "ItemFeet", "ItemBoots"], (pl, result) => {
             if (result.missing.length === 3) {
-                const missing_formated = result.missing.map(g => g.Craft.Name).join("、");
+                const missing_formated = result.missing.map(g => g.Craft.Name).join(", ");
                 CurryRouteIM(StdMissingMsgN.msg, { missing_formated });
                 ParseMessage(StdMissingAction, { player });
                 return TimedWorkState.interrupted;
             }
-            CurryRouteIM(`收到指令，正在规划路径并执行`);
-            ParseMessage({ mode: "chat-action", msg: "收到指令，正在规划路径并执行" }, { player })
+            CurryRouteIM(`Received the command, planning the path and executing it`);
+            ParseMessage({ mode: "chat-action", msg: "Received the command, planning the path and executing it" }, { player })
         }),
         new CheckWork((pl) => {
             if (pl.Appearance.some(e => {
@@ -96,7 +96,7 @@ export function RoomComeHereSequence(player: PlayerCharacter, cmd_src: { sender:
             return CheckWork.Accepted;
         }, (pl, result) => {
             if (!result.passed) {
-                CurryRouteIM(`行动路径规划失败，有阻碍物`);
+                CurryRouteIM(`Action path planning failed, there are obstacles`);
                 ParseMessage(StdMissingAction, { player });
             }
         }),
@@ -105,18 +105,18 @@ export function RoomComeHereSequence(player: PlayerCharacter, cmd_src: { sender:
                 data.work = "leave-only";
             } else {
                 data.work = "leave-join";
-                CurryRouteIM(`正在前往`);
+                CurryRouteIM(`Heading to`);
             }
         }),
-        new MessageWork({ mode: "action", msg: "{player_wg}的行走姿态控制器缓缓点亮，操纵着{player_wg}慢慢走向房门外" }),
+        new MessageWork({ mode: "action", msg: "{player_wg}'s walking posture controller lights up, controlling {player_wg} to slowly walk out of the door." }),
         new ChatRoomWork(cmd_src.room, (pl, reason) => {
-            CurryRouteIM(`已离开先前房间，但无法进入{sender_num}所在房间，房间满员或锁定`, { sender_num: cmd_src.sender });
+            CurryRouteIM(`Left the previous room, but cannot enter the room where {sender_num} is located, the room is full or locked`, { sender_num: cmd_src.sender });
         }, (pl, dest) => {
             if (dest === undefined) {
-                CurryRouteIM(`指令中未包含房间信息，无法执行进入房间操作。`, { sender_num: cmd_src.sender });
+                CurryRouteIM(`The command does not contain room information, so the room entry operation cannot be performed.。`, { sender_num: cmd_src.sender });
             } else {
                 if (data.work === "leave-only") {
-                    CurryRouteIM(`身份信标丢失，通行证明异常，已离开先前房间，但无法进入{sender_num}所在房间`, { sender_num: cmd_src.sender });
+                    CurryRouteIM(`The identity beacon is lost, the pass is abnormal, and the previous room has been left, but the room where {sender_num} is located cannot be entered`, { sender_num: cmd_src.sender });
                 }
             }
         }),
@@ -131,7 +131,7 @@ export function RoomComeHereSequence(player: PlayerCharacter, cmd_src: { sender:
                     return friend;
                 }
             })();
-            ParseMessage({ mode: "action", msg: "{player_wg}身上的行走姿态控制器控制着{player_wg}进入了房间，走到{target_name}身边，顺从的用身体蹭了蹭{target_name}" }, { player }, { target_name });
+            ParseMessage({ mode: "action", msg: "{player_wg}'s walking posture controller controlls {player_wg} to enter the room, walk to {target_name}, and obediently rub {target_name} with her body." }, { player }, { target_name });
         }),
     ];
     TimedWorker.global.push({ description: "Room Come Here Sequence", works: work_sequence });

@@ -4,11 +4,11 @@ import { ActivityInfo } from "bc-utilities";
 
 export class InteractTask extends TimedCounterTask {
     summary(): string {
-        const time_report = `在 ${new Date(this.time_out).toLocaleTimeString()} (${this.time_limit_rate}x任务基础时间) 之前`;
-        const group_report = this._check_groups ? `在 ${[...this._check_groups.values()].map(i => AssetGroupGet('Female3DCG', i)?.Description).filter(i => i !== undefined).join("、")} ` : '';
-        const act_report = this._check_act ? `的 ${[...this._check_act.values()].map(i => ActivityDictionaryText(`Activity${i}`)).join("、")} 的互动` : '的互动';
+        const time_report = `Before ${new Date(this.time_out).toLocaleTimeString()} (${this.time_limit_rate}xtask base time)`;
+        const group_report = this._check_groups ? `at ${[...this._check_groups.values()].map(i => AssetGroupGet('Female3DCG', i)?.Description).filter(i => i !== undefined).join(", ")} ` : '';
+        const act_report = this._check_act ? `of ${[...this._check_act.values()].map(i => ActivityDictionaryText(`Activity${i}`)).join(", ")} Interaction` : 'Interaction';
 
-        return `${time_report}，接受${this.expected}个人${group_report}${act_report}，成功后获得${this.bonus}点奖励`
+        return `${time_report}, accept ${this.expected} individual ${group_report}${act_report}, and get ${this.bonus} points reward after success`
     }
     private _interact_list: Set<number> = new Set();
     private _check_act: Set<ActivityName> | undefined;

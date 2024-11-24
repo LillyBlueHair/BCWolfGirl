@@ -182,11 +182,11 @@ export class OrgasmPunishMode {
         if (canPunishList.length === 0) {
             const v = 1;
             DataManager.points.points -= v;
-            ParseMessage({ mode: "action", msg: "{player_wg}扣除了{v}积分，当前积分{points}" }, { player }, { v, points: DataManager.points.points });
+            ParseMessage({ mode: "action", msg: "{player_wg} has deducted {v} points, and the current points are {points}" }, { player }, { v, points: DataManager.points.points });
         } else {
             const target = randomPick(canPunishList);
             doPunish(player, target, ItemMode[target.Asset.Group.Name as AssetGroupItemName] as ModeStashType);
-            ParseMessage({ mode: "chat-action", msg: "喔，感觉如何呢？{player_wg}，这个图标意味着什么，现在知道了吗？究竟是会为了自由而苦苦保持着忍耐，还是放纵着就这么沉沦下去成为一个玩偶呢？" }, { player })
+            ParseMessage({ mode: "chat-action", msg: "Oh, how does it feel? {player_wg}, do you know what this icon means now? Will you endure for the sake of freedom, or will you indulge yourself and sink into depravity and become a puppet?" }, { player })
         }
     }
 
@@ -210,7 +210,7 @@ export class OrgasmPunishMode {
         if (canRestoreList.length === 0) return;
         const pick = randomPick(canRestoreList);
         doRestore(player, pick, SavedItemMode[pick.Asset.Group.Name as AssetGroupItemName] as ModeStashType);
-        ParseMessage({ mode: "chat-action", msg: "做的不错，{player_wg}，看起来苦苦忍耐还是得来了结果，那么，乖孩子自然能得到奖励，要继续努力哦？" }, { player });
+        ParseMessage({ mode: "chat-action", msg: "Well done, {player_wg}. It looks like your hard work and perseverance paid off. So, good kids will naturally be rewarded. Keep up the hard work, ok?" }, { player });
 
     }
 
