@@ -31,7 +31,7 @@ function StdInjectionSequence(type: InjectionType, msg: InjectionSequenceMsg) {
                 ParseMessage(StdMissingMsgN, { player }, { missing_formated });
                 return TimedWorkState.interrupted;
             } else {
-                data.msg = { mode: "chat-action", msg: `收到指令，药物调配中` };
+                data.msg = { mode: "chat-action", msg: `Received the order, the medicine is being prepared` };
             }
         }),
         new CommonWork((player) => ParseMessage(data.msg, { player })),

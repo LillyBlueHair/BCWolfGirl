@@ -18,7 +18,7 @@ import { MessageWork } from "../../Control/MessageWork";
 import { CommonWork } from "../../Control/CommonWork";
 
 const PushTask = (player: PlayerCharacter, t: ITask) => {
-    ParseMessage({ mode: "action", msg: `${GetWolfGirlName(player)}Receive Tasks：\n${t.summary()}` });
+    ParseMessage({ mode: "action", msg: `${GetWolfGirlName(player)} received Tasks：\n${t.summary()}` });
     TaskCtrl.instance.push_task(t, () => {
         ParseMessage({ mode: "action", msg: `Failed to accept task: There is a task running.` });
     });
@@ -131,11 +131,11 @@ export const TaskPointsCmds: CommandTemplate[] = [
         prerequisite: BasicPrerequisites,
         run(player, sender, content, args) {
             const v = parseInt(content[6]);
-            const positive = (content[2] === "奖励" || content[4].toLowerCase() === "reward");
+            const positive = (content[2] === "奖励" || content[3].toLowerCase() === "reward");
             const oper = positive ? "rewarded" : "deducted";
             DataManager.points.points += positive ? v : -v;
             const points = DataManager.points.points;
-            RouteIM(args.type, player, sender, "{player_wg} is {oper} {v}points, current points: {points}", { oper, v, points });
+            RouteIM(args.type, player, sender, "{player_wg} is {oper} {v} points, current points: {points}", { oper, v, points });
         },
     },
     {

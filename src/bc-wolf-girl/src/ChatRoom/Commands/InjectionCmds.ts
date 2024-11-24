@@ -13,7 +13,7 @@ export const InjectionCmds: CommandTemplate[] = [
         }
     },
     {
-        match: /^(注射恢复剂)|(pickmeup)/i,
+        match: /^(注射恢复剂)|(recovery agent)/i,
         prerequisite: BasicPrerequisites,
         run(player, sender, content) {
             DoInjection('pickmeup');
@@ -34,7 +34,7 @@ export const InjectionCmds: CommandTemplate[] = [
         }
     },
     {
-        match: /^(泛用驱散剂)|(EasterUniversalDispersal)/i,
+        match: /^(泛用驱散剂)|(general repellent)/i,
         prerequisite: BasicPrerequisites,
         run(player, sender, content) {
             DoInjection('EasterUniversalDispersal');

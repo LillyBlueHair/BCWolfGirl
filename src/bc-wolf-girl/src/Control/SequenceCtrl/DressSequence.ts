@@ -23,7 +23,7 @@ export function DressSequence(net: EILNetwork, player: PlayerCharacter, target: 
         new MessageWork({ mode: "chat-action", msg: "Target selected, wolf girl identity chip detected, remote device connection opening" }),
         new DelayWork(5000),
         new MessageWork({ mode: "chat-action", msg: "Remote connection activated, deploying portable wolf girl training facility maintenance pod" }),
-        new MessageWork({ mode: "action", msg: "{player} openes a small partition on the side of his glasses, and an auxiliary positioning beacon floats out and soon hovers behind {target}" }, { target }),
+        new MessageWork({ mode: "action", msg: "{player} openes a small partition on the side of her glasses, and an auxiliary positioning beacon floats out and soon hovers behind {target}" }, { target }),
         new DelayWork(5000),
         new MessageWork({ mode: "action", msg: "There seems to be some small ripples in the space, and with a small cyclone, a complex maintenance cabin filled with exquisite equipment appears behind {target}, and several mechanical arms stretch out from it and pull her into the maintenance cabin." }, { target }),
         new ItemWearWork([ToolsCrate], target),
