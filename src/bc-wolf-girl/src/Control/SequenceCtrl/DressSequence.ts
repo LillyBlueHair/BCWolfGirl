@@ -248,7 +248,7 @@ export function DressFixSequence(sender: Character | number, player: PlayerChara
             { target: 'ItemFeet', option: { typed: 2 }, },
             { target: 'ItemLegs', option: { typed: 2 } }], create_result_process({
                 mode: "action",
-                msg: "It looks like {player_wg}'s walking controller is missing. It's really difficult to remove it. Is she trying to escape? But since she became a wolf girl, isn't the freedom she has enough? Unfortunately, unless the master allows it, she can't escape anyway. Well, maybe I should tell the master about this. The maintenance cabin gives {player_wg} a slight electric shock, and then isntalls a new controller for her."
+                msg: "It looks like {player_wg}'s walking controller is missing. It's really difficult to remove it. Is she trying to escape? But since she became a wolf girl, isn't the freedom she has enough? Unfortunately, unless the master allows it, she can't escape anyway. Well, maybe I should tell the master about this. The maintenance cabin gives {player_wg} a slight electric shock, and then installs a new controller for her."
             })),
         new MessageWork({ mode: "chat-action", msg: "The component has been repaired. The corresponding reward points have been deducted according to the component loss situation. Rescanning and self-checking" }),
         new CommonWork((player) => {
