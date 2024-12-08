@@ -120,19 +120,18 @@ export const TaskPointsCmds: CommandTemplate[] = [
         match: /^((设置高潮惩罚时间为)|(Set the penalty time to ))([1-9]\d{0,2})((分钟)|( Minutes))/i,
         prerequisite: BasicPrerequisites,
         run(player, sender, content, args) {
-            const v = parseInt(content[4]);
+            const v = parseInt(content[1]);
             DataManager.points.orgasm_punish_time = v * 60 * 1000;
             ParseMessage({ mode: "chat-action", msg: `Received the command, {player_wg}'s orgasm penalty time is ${DataManager.points.orgasm_punish_time / 60 / 1000} minutes` }, { player });
             ParseMessage({ mode: "action", msg: "The cold voice of the mechanical broadcast repeats the price {player_wg} has to pay after reaching orgasm at will. Perhaps with enough desire and hunger, {player_wg} will choose to indulge her body and sink into desire?" }, { player })
         }
     },
     {
-        match: /^(((扣除)|(奖励))|((Reward )|(Deduct )))([1-9]\d{0,2})((积分)|( Points?))/i,
+        match: /^((扣除|奖励)|((Reward )|(Deduct )))([1-9]\d{0,2})((积分)|( Points))/i,
         prerequisite: BasicPrerequisites,
         run(player, sender, content, args) {
-            const v = parseInt(content[8]);
-            console.log(content);
-            const positive = (content[2] === "奖励" || content[5].toLowerCase() === "reward ");
+            const v = parseInt(content[6]);
+            const positive = (content[2] === "奖励" || content[3].toLowerCase() === "reward");
             const oper = positive ? "rewarded" : "deducted";
             DataManager.points.points += positive ? v : -v;
             const points = DataManager.points.points;

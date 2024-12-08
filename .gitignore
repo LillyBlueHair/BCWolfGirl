@@ -2,6 +2,6 @@
 .pnp.*
 docs
 .vscode
-*.zip
+public
 /node_modules
 /src/*/node_modules
