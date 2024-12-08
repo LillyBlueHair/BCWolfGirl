@@ -14,7 +14,7 @@ export const OutfitCmds: CommandTemplate[] = [
         },
     },
     {
-        match: /^((进入|退出)维护模式)|((Enter|Exit) Maintainance Mode)/i,
+        match: /^((进入|退出)维护模式)|((enter|exit) Maintainance Mode)/i,
         prerequisite: OutfitFixPrerequisites,
         run(player, sender, content) {
             if (content[2] === "进入" || content[4].toLowerCase() === "Enter") DressFixSequence(sender, player);
